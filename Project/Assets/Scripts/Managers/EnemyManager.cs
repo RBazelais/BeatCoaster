@@ -69,7 +69,7 @@ public class EnemyManager : MonoBehaviour
 			_enemies.Add (enemy);
 			enemy.transform.position = new Vector3 (spawnPoint.position.x, Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom (), 0);
 		
-			AudioManager.TrackTypes trackType = _lastType;
+			AudioManager.TrackTypes trackType = Player_Controller.instance.GetLongestDuration();
 			while (trackType == _lastType) {
 				trackType = (AudioManager.TrackTypes)Random.Range (0, 5);
 				yield return null;
@@ -78,6 +78,8 @@ public class EnemyManager : MonoBehaviour
 			enemy.SetTrackType (trackType);
 			enemy.AddPeople (Random.Range (3, 10));
 			enemy.Activate ();
+
+			_lastType = trackType;
 		}
 	}
 }

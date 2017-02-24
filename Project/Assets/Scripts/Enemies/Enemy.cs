@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour {
 
 	private Vector3 GetEndPos() {
 		Vector3 v = EnemyManager.instance.endPoint.position;
-		v.x = v.x + 3;
+		v.x = v.x + 5;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
