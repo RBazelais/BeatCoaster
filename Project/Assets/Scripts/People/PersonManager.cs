@@ -13,7 +13,7 @@ public class PersonManager : MonoBehaviour {
 	}
 
 	private void Start() {
-		ObjectPool.CreatePool(personPrefab, 50);
+		personPrefab.CreatePool(50);
 		AudioManager.instance.BeatOnUpdate += OnBeat;
 	}
 

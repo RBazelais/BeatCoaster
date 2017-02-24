@@ -35,6 +35,7 @@ public class SplineTrailRenderer : MonoBehaviour
 	//public float fadeSpeed = 0f; 
 	public float maxLength = 50f;
 	public bool debugDrawSpline = false;
+	public bool debuggg = false;
 
 	private AdvancedParameters advancedParameters = new AdvancedParameters(); 
 
@@ -154,7 +155,6 @@ public class SplineTrailRenderer : MonoBehaviour
 		int drawingEnd = meshDisposition == MeshDisposition.Fragmented ? nbQuad-1 : nbQuad-1;
 		
 		
-		
 		float startingDist = lastDistance;
 		for(int i=startingQuad; i<drawingEnd; i++)
 		{
@@ -180,6 +180,10 @@ public class SplineTrailRenderer : MonoBehaviour
 
 			if(meshDisposition == MeshDisposition.Continuous)
 			{
+				if (firstVertexIndex < 0 || firstVertexIndex >= vertices.Length) {
+					break;
+				}
+
 				vertices[firstVertexIndex] = transform.InverseTransformPoint(lastPosition - origin + (lastBinormal * (rh * 0.5f)));
 				vertices[firstVertexIndex + 1] = transform.InverseTransformPoint(lastPosition - origin + (-lastBinormal * (rh * 0.5f)));
         		vertices[firstVertexIndex + 2] = transform.InverseTransformPoint(position - origin + (binormal * (rh2 * 0.5f)));

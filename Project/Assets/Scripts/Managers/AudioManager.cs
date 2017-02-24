@@ -82,7 +82,7 @@ public class AudioManager : MonoBehaviour
 					_accent = 1;
 					_amp *= 2.0F;
 				}
-				Debug.Log ("Tick: " + _accent + "/" + _signatureHi);
+//				Debug.Log ("Tick: " + _accent + "/" + _signatureHi);
 				OnBeat();
 			}
 			_phase += _amp * 0.3F;
@@ -92,7 +92,7 @@ public class AudioManager : MonoBehaviour
 	}
 
 	private void OnBeat() {
-		BeatExact();
+		if (BeatExact != null) BeatExact();
 		sendBeatSignal = true;
 	}
 
@@ -109,8 +109,6 @@ public class AudioManager : MonoBehaviour
 		_sampleRate = AudioSettings.outputSampleRate;
 		_nextTick = startTick * _sampleRate;
 		_running = true;
-
-		OnBeat();
 	}
 
 	AudioSource GetTrack (TrackTypes type)
