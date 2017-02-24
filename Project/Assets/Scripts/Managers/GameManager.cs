@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour {
 	public FloatRange enemyVerticalRange = new FloatRange(-4f, 4f);
 
 	[SerializeField] private Player_Controller playerController;
-	[SerializeField] private TextMeshProUGUI titleText;
 	public GameObject mainMenu;
 	public Camera mainCamera;
 
