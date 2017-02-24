@@ -17,7 +17,9 @@ public class Person : MonoBehaviour {
 	private float wobbleOffset;
 	private float wobbleVal;
 	private float transferTimer = 0;
-	private float transferDur = 3f;
+	private float transferDur = 2f;
+
+	[SerializeField] private Animator animator;
 
 	private int segmentDistance;
 	private PersonMoveType moveType = PersonMoveType.Follow;
@@ -52,8 +54,10 @@ public class Person : MonoBehaviour {
 			float percent = Mathf.Clamp01(transferTimer / transferDur);
 			Vector3 lerpedPos = Vector3.Lerp(transform.position, targetPos, percent);
 			transform.position = lerpedPos;
+
 			if (percent >= 1) {
 				moveType = PersonMoveType.Follow;
+				animator.SetBool("isJumping", false);
 			}
 		}
 	}
@@ -64,6 +68,7 @@ public class Person : MonoBehaviour {
 		this.moveType = moveType;
 
 		if (moveType == PersonMoveType.Transfer) {
+			animator.SetBool("isJumping", true);
 			transferTimer = 0;
 		}
 	}
