@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+	public static AudioManager instance;
 
 	public enum TrackTypes
 	{
@@ -17,68 +18,84 @@ public class AudioManager : MonoBehaviour
 	[SerializeField]
 	private AudioSource _bassTrack, _clavTrack, _keyTrack, _pizzTrack, _drumTrack;
 
-	public double bpm = 160.0F;
-	public float gain = 0.5F;
-	public int signatureHi = 4;
-	public int signatureLo = 4;
-	private double nextTick = 0.0F;
-	private float amp = 0.0F;
-	private float phase = 0.0F;
-	private double sampleRate = 0.0F;
-	private int accent;
-	private bool running = false;
+	[SerializeField]
+	private double _bpm = 160.0F;
+	public double bpm {
+		get { return _bpm; }
+	}
+
+	[SerializeField]
+	private float _gain = 0.5F;
+	[SerializeField]
+	private int _signatureHi = 4;
+	[SerializeField]
+	private int _signatureLo = 4;
+	private double _nextTick = 0.0F;
+	private float _amp = 0.0F;
+	private float _phase = 0.0F;
+	private double _sampleRate = 0.0F;
+	private int _accent;
+	private bool _running = false;
+
+	public delegate void BeatHandler ();
+	public BeatHandler Beat;
+
+	void Awake() {
+		if(!instance)
+			instance = this;
+	}
+
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.Space) && !_bassTrack.isPlaying)
+			PlayTracks();
+	}
 
 	void OnAudioFilterRead (float[] data, int channels)
 	{
-		if (!running)
+		if (!_running)
 			return;
 
-		double samplesPerTick = sampleRate * 60.0F / bpm * 4.0F / signatureLo;
-		double sample = AudioSettings.dspTime * sampleRate;
+		double samplesPerTick = _sampleRate * 60.0F / _bpm * 4.0F / _signatureLo;
+		double sample = AudioSettings.dspTime * _sampleRate;
 		int dataLen = data.Length / channels;
 		int n = 0;
 		while (n < dataLen) {
-			float x = gain * amp * Mathf.Sin (phase);
+			float x = _gain * _amp * Mathf.Sin (_phase);
 			int i = 0;
 			while (i < channels) {
 				data [n * channels + i] += x;
 				i++;
 			}
-			while (sample + n >= nextTick) {
-				nextTick += samplesPerTick;
-				amp = 1.0F;
-				if (++accent > signatureHi) {
-					accent = 1;
-					amp *= 2.0F;
+			while (sample + n >= _nextTick) {
+				_nextTick += samplesPerTick;
+				_amp = 1.0F;
+				if (++_accent > _signatureHi) {
+					_accent = 1;
+					_amp *= 2.0F;
 				}
-				Debug.Log ("Tick: " + accent + "/" + signatureHi);
+				Debug.Log ("Tick: " + _accent + "/" + _signatureHi);
+				Beat();
 			}
-			phase += amp * 0.3F;
-			amp *= 0.993F;
+			_phase += _amp * 0.3F;
+			_amp *= 0.993F;
 			n++;
-		}
-	}
-
-	void Update() {
-		if(Input.GetKeyDown(KeyCode.Space) && !_bassTrack.isPlaying)
-		{
-			PlayTracks();
 		}
 	}
 
 	void PlayTracks ()
 	{
-		_bassTrack.Play();
-		_clavTrack.Play();
-		_keyTrack.Play();
-		_pizzTrack.Play();
-		_drumTrack.Play();
+		_bassTrack.Play ();
+		_clavTrack.Play ();
+		_keyTrack.Play ();
+		_pizzTrack.Play ();
+		_drumTrack.Play ();
 
-		accent = signatureHi;
+		_accent = _signatureHi;
 		double startTick = AudioSettings.dspTime;
-		sampleRate = AudioSettings.outputSampleRate;
-		nextTick = startTick * sampleRate;
-		running = true;
+		_sampleRate = AudioSettings.outputSampleRate;
+		_nextTick = startTick * _sampleRate;
+		_running = true;
 	}
 
 	AudioSource GetTrack (TrackTypes type)
