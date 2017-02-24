@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Trail : MonoBehaviour {
+	private List<Person> people;
+
+	private void Awake() {
+		people = new List<Person>();
+	}
 
 	[SerializeField]
 	private AudioManager.TrackTypes _trackType;
@@ -43,5 +48,12 @@ public class Player_Trail : MonoBehaviour {
 	{
 		_active = false;
 		_splineTrailRenderer.emit = false;
+	}
+
+	public void AddPerson(Person person) 
+	{
+		people.Add(person);
+		person.transform.SetParent(transform);
+		person.SetTrail(this);
 	}
 }

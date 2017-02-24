@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WhitDataTypes;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -26,7 +27,36 @@ public class Player_Controller : MonoBehaviour
 	[SerializeField]
 	private Player_Trail _bassTrailRenderer;
 
+	public IntRange segmentDistanceRange = new IntRange(5, 40);
+	[Range(0.5f, 2)] public float wobbleSpeed = 1;
+	[Range(0.1f, 10)] public float wobbleIntensity = 1;
+
 	private float _yPos = 0, _lastYPos;
+
+	public Player_Trail GetDrumTrail() 
+	{
+		return _drumTrailRenderer;
+	}
+
+	public Player_Trail GetPizzTrail() 
+	{
+		return _pizzTrailRenderer;
+	}
+
+	public Player_Trail GetKeysTrail() 
+	{
+		return _keysTrailRenderer;
+	}
+
+	public Player_Trail GetClavTrail() 
+	{
+		return _clavTrailRenderer;
+	}
+
+	public Player_Trail GetBassTrail() 
+	{
+		return _bassTrailRenderer;
+	}
 
 	void Awake() {
 		if(!instance)
