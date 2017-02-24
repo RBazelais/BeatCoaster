@@ -38,11 +38,21 @@ public class Player_Controller : MonoBehaviour
 	[SerializeField]
 	private Player_Trail _bassTrailRenderer;
 
+	[SerializeField]
+	private Player_Collider _col;
+
 	public IntRange segmentDistanceRange = new IntRange(5, 40);
 	[Range(0.5f, 2)] public float wobbleSpeed = 1;
 	[Range(0.1f, 10)] public float wobbleIntensity = 1;
 
-	private float _yPos = 0, _lastYPos;
+	private float _yPos = 0, _lastYPos, _yCenter;
+	public float yCenter
+	{
+		get
+		{
+			return _yCenter;
+		}
+	}
 
 	public Player_Trail GetDrumTrail() 
 	{
@@ -78,18 +88,41 @@ public class Player_Controller : MonoBehaviour
 		_bassTrailRenderer.ActivateTrail();
 	}
 
+	void SetState(PlayerState state) {
+		switch(state) {
+		case PlayerState.Active:
+			_yCenter = transform.position.y;
+			break;
+		case PlayerState.Drop:
+			break;
+		case PlayerState.Idle:
+			break;
+
+		}
+		_playerState = state;
+	}
+
 	void Update ()
 	{
+		if(Input.GetKeyDown(KeyCode.Q))
+		{
+			SetState(PlayerState.Drop);
+		}
+		if(Input.GetKeyDown(KeyCode.E))
+		{
+			SetState(PlayerState.Active);
+		}
+
 		if(_playerState == PlayerState.Active) {
 			bool input = false;
-			if (transform.position.y > -4) {
+			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S)) {
 					input = true;
 					_yPos -= .05f;
 				}
 			}
 
-			if (transform.position.y < 11.5f - (1 * ActiveTrails ())) {
+			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
 				if (Input.GetKey (KeyCode.W)) {
 					input = true;
 					_yPos += .05f;
@@ -107,13 +140,19 @@ public class Player_Controller : MonoBehaviour
 
 			_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
 
-			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, -7.5f, 12.5f - (1 * ActiveTrails ())), 0);
+			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter -7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
 		}
 		else if (_playerState == PlayerState.Drop) {
-			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
-			_yPos -= .5f;
+			Mathf.Clamp(_yPos -= .075f, -2, 2);
+
+			transform.position = new Vector3(_pointPos, transform.position.y + _yPos, 0);
 		}
-			
+
+		int segment = Mathf.Max(_bassTrailRenderer.splineTrailRenderer.spline.NbSegments - 15, 0);
+		float colPos = _bassTrailRenderer.splineTrailRenderer.spline.GetSegmentDistanceFromStart(segment);
+		Vector3 pos = _bassTrailRenderer.splineTrailRenderer.spline.FindPositionFromDistance(colPos);
+		_col.transform.position = pos;
+		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 		_pointPos += 1f;
 	}
 

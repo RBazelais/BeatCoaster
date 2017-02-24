@@ -16,6 +16,7 @@ public class Person : MonoBehaviour {
 
 	private void Awake() {
 		segmentDistance = Player_Controller.instance.segmentDistanceRange.GetRandom();
+		Debug.Log(segmentDistance);
 		wobbleOffset = UnityEngine.Random.Range(0, 360);
 		sprite = GetComponentInChildren<SpriteRenderer>();
 	}
