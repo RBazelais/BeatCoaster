@@ -8,7 +8,7 @@ public class PersonManager : MonoBehaviour {
 	public static PersonManager instance {
 		get {
 			if (_instance == null) {
-				GameObject.FindObjectOfType<PersonManager>();
+				_instance = GameObject.FindObjectOfType<PersonManager>();
 			}
 			return _instance;
 		}
