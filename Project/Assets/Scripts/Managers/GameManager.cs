@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	[SerializeField] private Player_Controller playerController;
 	public GameObject mainMenu;
+	public GameObject inGameData;
 	public Camera mainCamera;
 
 	private StateMachine stateMachine;
@@ -61,12 +62,14 @@ public class GameManager : MonoBehaviour {
 
 	private void Title_EnterState() {
 		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", false);
 		playerController.OnTitleEnterState();
 		mainCamera.DOOrthoSize(2f, 1f);
 	}
 
 	private void Title_ExitState() {
 		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		mainCamera.DOOrthoSize(10f, 1f);
 	}
 
