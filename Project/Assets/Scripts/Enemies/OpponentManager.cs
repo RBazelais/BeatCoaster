@@ -42,7 +42,8 @@ public class OpponentManager : MonoBehaviour {
 	private void SpawnOpponent() {
 		Trail_Opponent opponent = opponentPrefab.Spawn();
 		opponent.transform.position = new Vector3(spawnPoint.position.x, GameManager.instance.enemyVerticalRange.GetRandom(), 0);
-//		opponent.transform.SetParent(spawnPoint);
+		AudioManager.TrackTypes trackType = (AudioManager.TrackTypes)Random.Range(0, 5);
+		opponent.SetTrackType(trackType);
 		opponent.Activate();
 	}
 }

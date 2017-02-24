@@ -8,11 +8,11 @@ public class AudioManager : MonoBehaviour
 
 	public enum TrackTypes
 	{
-		Bass,
-		Clav,
-		Keys,
-		Pizz,
-		Drums
+		Bass = 0,
+		Clav = 1,
+		Keys = 2,
+		Pizz = 3,
+		Drums = 4
 	}
 
 	[SerializeField]

@@ -136,4 +136,9 @@ public class Trail_Opponent : MonoBehaviour {
 	private float GetExitPercent() {
 		return Mathf.Clamp01(exitTimer / exitDur);
 	}
+
+	public void SetTrackType(AudioManager.TrackTypes trackType) {
+		_splineTrailRenderer.vertexColor = GameManager.GetColorForTrackType(trackType);
+		_bgSplineTrailRenderer.vertexColor = GameManager.GetShadowColorForTrackType(trackType);
+	}
 }
