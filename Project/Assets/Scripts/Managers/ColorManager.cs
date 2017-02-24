@@ -1,16 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using WhitDataTypes;
 
-public class GameManager : MonoBehaviour {
-	public enum GameState {
-		Title,
-		Playing,
-		GameOver
-	}
-
+public class ColorManager : MonoBehaviour {
 	public static Color DrumColor = new Color(1, 0, 0);
 	public static Color PizzColor = new Color(254f/255f, 118f/255f, 15f/255f);
 	public static Color KeysColor = new Color(247f/255f, 205f/255f, 0f/255f);
@@ -64,31 +56,5 @@ public class GameManager : MonoBehaviour {
 		hsvColor.v -= 0.26f;
 		Color c = WadeUtils.HSVToRGB(hsvColor);
 		return c;
-	}
-
-	private static GameManager _instance;
-	public static GameManager instance {
-		get {
-			if (_instance == null) {
-				_instance = GameObject.FindObjectOfType<GameManager>();
-			}
-			return _instance;
-		}
-	}
-
-	public FloatRange enemyVerticalRange = new FloatRange(-4f, 4f);
-
-	public GameState state {get; private set;}
-
-	public void SetState(GameState state) {
-		this.state = state;
-	}
-
-	void Start() {
-
-	}
-
-	void Update() {
-
 	}
 }

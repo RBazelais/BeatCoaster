@@ -77,8 +77,8 @@ public class TrackTrail : MonoBehaviour {
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {
 		_trackType = trackType;
-		_splineTrailRenderer.vertexColor = GameManager.GetColorForTrackType(trackType);
-		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.vertexColor = GameManager.GetShadowColorForTrackType(trackType);
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType(trackType);
+		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType(trackType);
 	}
 
 	private void OnBeat() {

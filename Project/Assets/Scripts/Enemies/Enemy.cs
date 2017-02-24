@@ -112,6 +112,7 @@ public class Enemy : MonoBehaviour {
 
 	private Vector3 GetPlayerPos() {
 		Vector3 v = Player_Controller.instance.transform.position;
+		v.x = v.x + 10;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
@@ -151,8 +152,9 @@ public class Enemy : MonoBehaviour {
 		}
 		else if (state == EnemyState.Collected) {
 			if(GetCollectedPercent() >= 1) {
-				state = EnemyState.Exiting;
 				Player_Controller.instance.ActivateTrack(_trackType);
+				state = EnemyState.Exited;
+				OnExited();
 			}
 		}
 	}

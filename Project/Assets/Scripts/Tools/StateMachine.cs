@@ -47,7 +47,7 @@ public class StateMachine {
 		this.preUpdateStateDelegate = preUpdateStateDelegate;
 		this.postUpdateStateDelegate = postUpdateStateDelegate;
 
-		EnableInput();
+		if (InputManager.instance) EnableInput();
 	}
 
 	public void Update() {
