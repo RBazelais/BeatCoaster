@@ -89,6 +89,22 @@ public class TrackTrail : MonoBehaviour
 
 	public void DeactivateTrail ()
 	{
+		Sequence peopleKillSequence = DOTween.Sequence();
+		for(int i = 0; i < people.Count; i++) {
+			people[i].Reset();
+			people[i].SetTrail(null, Person.PersonMoveType.Follow);
+			people[i].transform.parent = null;
+			peopleKillSequence.Insert(0, people[i].transform.DOMove(new Vector3(Random.Range(-50,50), 10, 0), .33f).SetRelative(true));
+		}
+
+		peopleKillSequence.Play().OnComplete(() =>
+			{
+				for(int i = 0; i < people.Count; i++) {
+					people[i].Recycle();
+				}
+				people.Clear();
+			});
+
 		_capSprite.enabled = false;
 		_active = false;
 		_splineTrailRenderer.emit = false;

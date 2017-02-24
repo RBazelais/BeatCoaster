@@ -132,10 +132,10 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if (Input.GetKeyDown (KeyCode.Q)) {
+		if (Input.GetKeyDown (KeyCode.Q) || Input.GetKeyDown(KeyCode.DownArrow)) {
 			SetState (PlayerState.Drop);
 		}
-		if (Input.GetKeyDown (KeyCode.E)) {
+		if (Input.GetKeyDown (KeyCode.E) || Input.GetKeyDown(KeyCode.UpArrow)) {
 			SetState (PlayerState.Active);
 		}
 

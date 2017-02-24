@@ -33,6 +33,11 @@ public class Person : MonoBehaviour {
 		sprite = GetComponentInChildren<SpriteRenderer>();
 	}
 
+	public void Reset() {
+		transferTimer = 0;
+		moveType = PersonMoveType.Follow;
+	}
+
 	void LateUpdate () 
 	{
 		if (trail) 

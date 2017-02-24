@@ -30,7 +30,7 @@ public class EnemyManager : MonoBehaviour {
 		get {return _enemies;}
 	}
 
-	private int _maxEnemies = 1;
+	private int _maxEnemies = 2;
 
 	private void Start() {
 		enemyPrefab.CreatePool(10);
