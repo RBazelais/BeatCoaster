@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9d907ccba31af411a879e22b84673a75
-timeCreated: 1487913577
+timeCreated: 1487914803
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -93,10 +93,10 @@ TextureImporter:
       name: person-happy_0
       rect:
         serializedVersion: 2
-        x: 12
-        y: 8
+        x: 6
+        y: 5
         width: 69
-        height: 112
+        height: 115
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -106,10 +106,10 @@ TextureImporter:
       name: person-happy_1
       rect:
         serializedVersion: 2
-        x: 102
-        y: 8
-        width: 69
-        height: 109
+        x: 123
+        y: 5
+        width: 75
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,10 +119,10 @@ TextureImporter:
       name: person-happy_2
       rect:
         serializedVersion: 2
-        x: 183
-        y: 8
-        width: 69
-        height: 106
+        x: 234
+        y: 5
+        width: 75
+        height: 109
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,10 +132,10 @@ TextureImporter:
       name: person-happy_3
       rect:
         serializedVersion: 2
-        x: 262
-        y: 8
-        width: 74
-        height: 103
+        x: 343
+        y: 5
+        width: 80
+        height: 106
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
