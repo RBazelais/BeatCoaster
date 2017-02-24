@@ -53,8 +53,14 @@ public class Person : MonoBehaviour {
 		float dur = 60.0f / (float)AudioManager.instance.bpm;
 		float buffer = dur * 0.1f;
 		dur -= buffer;
-		sprite.transform
+
+		Sequence s = DOTween.Sequence();
+		s.AppendInterval(buffer);
+		s.Append(sprite.transform
 			.DOLocalJump(Vector3.zero, jumpAmt, 1, dur)
-			.SetDelay(buffer);
+			.SetDelay(buffer));
+		s.Join(sprite.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0.2f), dur));
+
+		
 	}
 }
