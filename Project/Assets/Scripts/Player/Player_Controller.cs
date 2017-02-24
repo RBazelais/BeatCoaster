@@ -123,6 +123,8 @@ public class Player_Controller : MonoBehaviour
 			SetState(PlayerState.Active);
 		}
 
+		Debug.Log(_playerState);
+
 		if(_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
@@ -154,7 +156,7 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-	void SetState(PlayerState state) {
+	public void SetState(PlayerState state) {
 		switch(state) {
 		case PlayerState.Active:
 			_yCenter = transform.position.y;
@@ -187,9 +189,14 @@ public class Player_Controller : MonoBehaviour
 			_yPos += .025f;
 		}
 
-		_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
-
-		transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter -7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
+		if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
+			_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
+			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter -7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
+		}
+		else if (_playerState == PlayerState.Drop){
+			_yPos = Mathf.Clamp(_yPos, -2f, 2f);
+			transform.position = new Vector3(_pointPos, transform.position.y + _yPos, 0);
+		}
 
 		_pointPos += 1f;
 

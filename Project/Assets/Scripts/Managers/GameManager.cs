@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour {
 		stateMachine = new StateMachine();
 		stateMachine.Initialize(this, PreUpdateState, PostUpdateState);
 		SetState(GameState.Title);
+		//playerController.SetState(Player_Controller.PlayerState.Idle);
 	}
 
 	void Update() {
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour {
 		playerController.OnTitleUpdateState();
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			SetState(GameState.Playing);
+			playerController.SetState(Player_Controller.PlayerState.Active);
 		}
 	}
 
