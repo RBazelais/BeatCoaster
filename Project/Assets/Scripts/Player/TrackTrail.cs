@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class TrackTrail : MonoBehaviour {
 	private List<Person> people;
 
 	private void Awake() {
 		people = new List<Person>();
+	}
+
+	private void Start() {
+		AudioManager.instance.BeatOnUpdate += OnBeat;
 	}
 
 	[SerializeField]
@@ -73,5 +78,16 @@ public class TrackTrail : MonoBehaviour {
 		_trackType = trackType;
 		_splineTrailRenderer.vertexColor = GameManager.GetColorForTrackType(trackType);
 		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.vertexColor = GameManager.GetShadowColorForTrackType(trackType);
+	}
+
+	private void OnBeat() {
+//		float initialHeight = splineTrailRenderer.height;
+//		float targetHeight = initialHeight * 0.5f;
+//
+//		float beatDuration = 60f / (float)AudioManager.instance.bpm;
+//
+//		Sequence s = DOTween.Sequence();
+//		s.Append(DOTween.To(()=>{return splineTrailRenderer.height;}, (x)=>{splineTrailRenderer.height = x;}, targetHeight, beatDuration / 2f));
+//		s.Append(DOTween.To(()=>{return splineTrailRenderer.height;}, (x)=>{splineTrailRenderer.height = x;}, initialHeight, beatDuration / 2f - 0.1f));
 	}
 }
