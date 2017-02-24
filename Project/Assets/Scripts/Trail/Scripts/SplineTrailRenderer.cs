@@ -35,7 +35,6 @@ public class SplineTrailRenderer : MonoBehaviour
 	//public float fadeSpeed = 0f; 
 	public float maxLength = 50f;
 	public bool debugDrawSpline = false;
-	public bool debuggg = false;
 
 	private AdvancedParameters advancedParameters = new AdvancedParameters(); 
 

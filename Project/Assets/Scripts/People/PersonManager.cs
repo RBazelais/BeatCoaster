@@ -50,7 +50,7 @@ public class PersonManager : MonoBehaviour {
 		AddPersonToTrail(Player_Controller.instance.GetBassTrail());
 	}
 
-	private void AddPersonToTrail(Player_Trail trail) {
+	private void AddPersonToTrail(TrackTrail trail) {
 		Person person = CreatePerson();
 		trail.AddPerson(person);
 	}

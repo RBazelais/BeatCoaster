@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Trail : MonoBehaviour {
+public class TrackTrail : MonoBehaviour {
 	private List<Person> people;
 
 	private void Awake() {
@@ -29,6 +29,16 @@ public class Player_Trail : MonoBehaviour {
 		}
 	}
 
+	[SerializeField]
+	private SplineTrailRenderer _shadowSplineTrailRenderer;
+	public SplineTrailRenderer shadowSplineTrailRenderer
+	{
+		get
+		{
+			return _shadowSplineTrailRenderer;
+		}
+	}
+
 	private bool _active;
 	public bool active
 	{
@@ -42,12 +52,14 @@ public class Player_Trail : MonoBehaviour {
 	{
 		_active = true;
 		_splineTrailRenderer.emit = true;
+		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = true;
 	}
 
 	public void DeactivateTrail()
 	{
 		_active = false;
 		_splineTrailRenderer.emit = false;
+		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = false;
 	}
 
 	public void AddPerson(Person person) 
@@ -55,5 +67,11 @@ public class Player_Trail : MonoBehaviour {
 		people.Add(person);
 		person.transform.SetParent(transform);
 		person.SetTrail(this);
+	}
+
+	public void SetTrackType(AudioManager.TrackTypes trackType) {
+		_trackType = trackType;
+		_splineTrailRenderer.vertexColor = GameManager.GetColorForTrackType(trackType);
+		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.vertexColor = GameManager.GetShadowColorForTrackType(trackType);
 	}
 }

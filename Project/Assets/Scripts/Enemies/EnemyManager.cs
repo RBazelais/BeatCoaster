@@ -4,12 +4,12 @@ using UnityEngine;
 using DG.Tweening;
 using WhitDataTypes;
 
-public class OpponentManager : MonoBehaviour {
-	private static OpponentManager _instance;
-	public static OpponentManager instance {
+public class EnemyManager : MonoBehaviour {
+	private static EnemyManager _instance;
+	public static EnemyManager instance {
 		get {
 			if (_instance == null) {
-				_instance = GameObject.FindObjectOfType<OpponentManager>();
+				_instance = GameObject.FindObjectOfType<EnemyManager>();
 			}
 			return _instance;
 		}
@@ -20,12 +20,12 @@ public class OpponentManager : MonoBehaviour {
 	public Transform spawnPoint;
 	public Transform endPoint;
 
-	[SerializeField] private Trail_Opponent opponentPrefab;
+	[SerializeField] private Enemy enemyPrefab;
 
 	private bool songPlaying = true;
 
 	private void Start() {
-		opponentPrefab.CreatePool(10);
+		enemyPrefab.CreatePool(10);
 		AudioManager.instance.BeatExact += OnBeat;
 	}
 
@@ -35,15 +35,15 @@ public class OpponentManager : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.O)) {
-			SpawnOpponent();
+			SpawnEnemy();
 		}
 	}
 
-	private void SpawnOpponent() {
-		Trail_Opponent opponent = opponentPrefab.Spawn();
-		opponent.transform.position = new Vector3(spawnPoint.position.x, GameManager.instance.enemyVerticalRange.GetRandom(), 0);
+	private void SpawnEnemy() {
+		Enemy enemy = enemyPrefab.Spawn();
+		enemy.transform.position = new Vector3(spawnPoint.position.x, GameManager.instance.enemyVerticalRange.GetRandom(), 0);
 		AudioManager.TrackTypes trackType = (AudioManager.TrackTypes)Random.Range(0, 5);
-		opponent.SetTrackType(trackType);
-		opponent.Activate();
+		enemy.SetTrackType(trackType);
+		enemy.Activate();
 	}
 }

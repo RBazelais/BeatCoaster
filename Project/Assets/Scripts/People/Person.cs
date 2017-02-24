@@ -5,7 +5,7 @@ using WhitDataTypes;
 using DG.Tweening;
 
 public class Person : MonoBehaviour {
-	public Player_Trail trail {get; private set;}
+	public TrackTrail trail {get; private set;}
 
 	private SpriteRenderer sprite;
 
@@ -38,7 +38,7 @@ public class Person : MonoBehaviour {
 		transform.position = endPosition;
 	}
 
-	public void SetTrail(Player_Trail trail)
+	public void SetTrail(TrackTrail trail)
 	{
 		this.trail = trail;
 	}

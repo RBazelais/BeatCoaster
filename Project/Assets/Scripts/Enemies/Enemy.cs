@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum OpponentState {
+public enum EnemyState {
 	Paused,
 	Entering,
 	Exiting,
 	Exited
 }
 
-public class Trail_Opponent : MonoBehaviour {
+public class Enemy : MonoBehaviour {
 	private float enterTimer = 0;
 	private float exitTimer = 0;
-	private OpponentState state = OpponentState.Paused;
+	private EnemyState state = EnemyState.Paused;
 	private float enterDur;
 	private float exitDur;
 	private float endVerticalPos;
@@ -21,37 +21,32 @@ public class Trail_Opponent : MonoBehaviour {
 	private float sineAmplitude;
 	private float sineFrequency;
 
-	[SerializeField]
-	private SplineTrailRenderer _splineTrailRenderer, _bgSplineTrailRenderer;
+	[SerializeField] private TrackTrail trail;
 
 	public void Activate() {
 		sineAmplitude = Random.Range(1f, 3f);
 		sineFrequency = Random.Range(3f, 10f);
 
-		_splineTrailRenderer.gameObject.SetActive(true);
-		_bgSplineTrailRenderer.gameObject.SetActive(true);
-
-		_splineTrailRenderer.emit = true;
-		_bgSplineTrailRenderer.emit = true;
+		trail.ActivateTrail();
 
 		spawnVerticalPos = transform.position.y;
 		endVerticalPos = GameManager.instance.enemyVerticalRange.GetRandom();
 
-		enterDur = OpponentManager.instance.enemyEnterDurationRange.GetRandom();
-		exitDur = OpponentManager.instance.enemyExitDurationRange.GetRandom();
+		enterDur = EnemyManager.instance.enemyEnterDurationRange.GetRandom();
+		exitDur = EnemyManager.instance.enemyExitDurationRange.GetRandom();
 
-		state = OpponentState.Entering;
+		state = EnemyState.Entering;
 	}
 
 	private void Update() {
-		if (state == OpponentState.Paused) return;
+		if (state == EnemyState.Paused) return;
 		UpdateTimers();
 		UpdateState();
 		UpdatePosition();
 	}
 
 	private void UpdatePosition() {
-		if (state == OpponentState.Entering) {// || state == OpponentState.Exiting) {
+		if (state == EnemyState.Entering) {// || state == OpponentState.Exiting) {
 			transform.position = GetPosition();
 		}
 	}
@@ -67,45 +62,45 @@ public class Trail_Opponent : MonoBehaviour {
 	}
 
 	private Vector3 GetSpawnPos() {
-		Vector3 v = OpponentManager.instance.spawnPoint.position;
+		Vector3 v = EnemyManager.instance.spawnPoint.position;
 		v.y = spawnVerticalPos;
 		v.z = 0;
 		return v;
 	}
 
 	private Vector3 GetEndPos() {
-		Vector3 v = OpponentManager.instance.endPoint.position;
+		Vector3 v = EnemyManager.instance.endPoint.position;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
 	}
 
 	private float GetCurrentTimerPercent() {
-		if (state == OpponentState.Entering) return GetEnterPercent();
-		else if (state == OpponentState.Exiting) return GetExitPercent();
+		if (state == EnemyState.Entering) return GetEnterPercent();
+		else if (state == EnemyState.Exiting) return GetExitPercent();
 		else return 0;
 	}
 
 	private void UpdateTimers() {
 		sineTimer += Time.deltaTime * sineFrequency;
-		if (state == OpponentState.Entering) {
+		if (state == EnemyState.Entering) {
 			enterTimer += Time.deltaTime;
 		}
-		else if (state == OpponentState.Exiting) {
+		else if (state == EnemyState.Exiting) {
 			exitTimer += Time.deltaTime;
 		}
 	}
 
 	private void UpdateState() {
-		if (state == OpponentState.Entering) {
+		if (state == EnemyState.Entering) {
 			if (GetEnterPercent() >= 1) {
-				state = OpponentState.Exiting;
+				state = EnemyState.Exiting;
 				OnReachedIntersectionPoint();
 			}
 		}
-		else if (state == OpponentState.Exiting) {
+		else if (state == EnemyState.Exiting) {
 			if (GetExitPercent() >= 1) {
-				state = OpponentState.Exited;
+				state = EnemyState.Exited;
 				OnExited();
 			}
 		}
@@ -116,9 +111,8 @@ public class Trail_Opponent : MonoBehaviour {
 	}
 
 	private void ResetAndRecycle() {
-		_bgSplineTrailRenderer.emit = false;
-		_splineTrailRenderer.emit = false;
-		state = OpponentState.Paused;
+		trail.DeactivateTrail();
+		state = EnemyState.Paused;
 		enterTimer = 0;
 		exitTimer = 0;
 		sineTimer = 0;
@@ -138,7 +132,6 @@ public class Trail_Opponent : MonoBehaviour {
 	}
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {
-		_splineTrailRenderer.vertexColor = GameManager.GetColorForTrackType(trackType);
-		_bgSplineTrailRenderer.vertexColor = GameManager.GetShadowColorForTrackType(trackType);
+		trail.SetTrackType(trackType);
 	}
 }

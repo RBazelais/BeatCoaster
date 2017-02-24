@@ -24,19 +24,19 @@ public class Player_Controller : MonoBehaviour
 	private float _pointPos = 0;
 
 	[SerializeField]
-	private Player_Trail _drumTrailRenderer;
+	private TrackTrail _drumTrailRenderer;
 
 	[SerializeField]
-	private Player_Trail _pizzTrailRenderer;
+	private TrackTrail _pizzTrailRenderer;
 
 	[SerializeField]
-	private Player_Trail _keysTrailRenderer;
+	private TrackTrail _keysTrailRenderer;
 
 	[SerializeField]
-	private Player_Trail _clavTrailRenderer;
+	private TrackTrail _clavTrailRenderer;
 
 	[SerializeField]
-	private Player_Trail _bassTrailRenderer;
+	private TrackTrail _bassTrailRenderer;
 
 	[SerializeField]
 	private Player_Collider _col;
@@ -50,27 +50,27 @@ public class Player_Controller : MonoBehaviour
 		}
 	}
 
-	public Player_Trail GetDrumTrail() 
+	public TrackTrail GetDrumTrail() 
 	{
 		return _drumTrailRenderer;
 	}
 
-	public Player_Trail GetPizzTrail() 
+	public TrackTrail GetPizzTrail() 
 	{
 		return _pizzTrailRenderer;
 	}
 
-	public Player_Trail GetKeysTrail() 
+	public TrackTrail GetKeysTrail() 
 	{
 		return _keysTrailRenderer;
 	}
 
-	public Player_Trail GetClavTrail() 
+	public TrackTrail GetClavTrail() 
 	{
 		return _clavTrailRenderer;
 	}
 
-	public Player_Trail GetBassTrail() 
+	public TrackTrail GetBassTrail() 
 	{
 		return _bassTrailRenderer;
 	}
