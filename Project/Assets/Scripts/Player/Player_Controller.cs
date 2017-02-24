@@ -153,9 +153,15 @@ public class Player_Controller : MonoBehaviour
 	}
 
 	private void LateUpdate() {
-		int segment = Mathf.Max(_bassTrailRenderer.splineTrailRenderer.spline.NbSegments - 15, 0);
-		float colPos = _bassTrailRenderer.splineTrailRenderer.spline.GetSegmentDistanceFromStart(segment);
-		Vector3 pos = _bassTrailRenderer.splineTrailRenderer.spline.FindPositionFromDistance(colPos);
+		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
+
+		int segment = Mathf.Max(spline.NbSegments - 15, 0);
+		float distFromStart = spline.GetSegmentDistanceFromStart(segment);
+
+		Vector3 pos = spline.FindPositionFromDistance(distFromStart);
+
+		Vector3 endPos = spline.FindPositionFromDistance(spline.GetSegmentDistanceFromStart(spline.NbSegments - 1));
+		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
 //		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
