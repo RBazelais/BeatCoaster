@@ -133,24 +133,24 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if (Input.GetKeyDown (KeyCode.Q) || Input.GetKeyDown (KeyCode.DownArrow)) {
+		if (Input.GetKeyDown (KeyCode.Q)) {
 			SetState (PlayerState.Drop);
 		}
-		if (Input.GetKeyDown (KeyCode.E) || Input.GetKeyDown (KeyCode.UpArrow)) {
+		if (Input.GetKeyDown (KeyCode.E)) {
 			SetState (PlayerState.Active);
 		}
 
 		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
-				if (Input.GetKey (KeyCode.S)) {
+				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
 					input = true;
 					_yPos -= .065f;
 				}
 			}
 
 			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
-				if (Input.GetKey (KeyCode.W)) {
+				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
 					input = true;
 					_yPos += .065f;
 				}
@@ -237,14 +237,17 @@ public class Player_Controller : MonoBehaviour
 
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
-		TrackTrail trail = GetTrack (type);
+		TrackTrail track = GetTrack (type);
+		if(!track.active) {
+			track.SetActive ();
 		SetTrackOrder ();
-		trail.ActivateTrail ();
+		track.ActivateTrail ();
 
 		if (type != AudioManager.TrackTypes.Bass)
-			trail.decaySequence.Play ();
+			track.decaySequence.Play ();
 		
-		PersonManager.instance.TransferPeople (fromTrail, trail);
+		PersonManager.instance.TransferPeople (fromTrail, track);
+		}
 	}
 
 	public void SetTrackOrder ()

@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour {
 	private void Title_UpdateState() {
 		playerController.OnTitleUpdateState();
 		if (Input.GetKeyDown(KeyCode.Space)) {
+			AudioManager.instance.PlayTracks();
 			SetState(GameState.Playing);
 			playerController.SetState(Player_Controller.PlayerState.Active);
 			playerController.StartPlaying();

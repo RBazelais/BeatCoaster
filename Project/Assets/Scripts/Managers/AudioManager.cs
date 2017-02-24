@@ -50,9 +50,6 @@ public class AudioManager : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.Space) && !_bassTrack.isPlaying)
-			PlayTracks();
-
 		if (sendBeatSignal) {
 			BeatOnUpdate();
 			sendBeatSignal = false;
@@ -96,7 +93,7 @@ public class AudioManager : MonoBehaviour
 		sendBeatSignal = true;
 	}
 
-	void PlayTracks ()
+	public void PlayTracks ()
 	{
 		_bassTrack.Play ();
 		_clavTrack.Play ();

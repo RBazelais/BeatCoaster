@@ -73,6 +73,7 @@ public class Enemy : MonoBehaviour
 	public void Collect ()
 	{
 		_collected = true;
+		_trail.capSprite.transform.DOPunchScale (new Vector3 (4f, 4f, 0), .33f, 1, 2);
 	}
 
 	private void Update ()
@@ -143,7 +144,7 @@ public class Enemy : MonoBehaviour
 	private Vector3 GetPlayerPos ()
 	{
 		Vector3 v = Player_Controller.instance.transform.position;
-		v.x = v.x + 10;
+		v.x = v.x + 50;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
@@ -186,7 +187,7 @@ public class Enemy : MonoBehaviour
 			}
 		} else if (state == EnemyState.Collected) {
 			if (GetCollectedPercent () >= 1) {
-				Player_Controller.instance.ActivateTrack (_trackType, _trail);
+					Player_Controller.instance.ActivateTrack (_trackType, _trail);
 				state = EnemyState.Exited;
 				OnExited ();
 			}
@@ -220,17 +221,12 @@ public class Enemy : MonoBehaviour
 			state = EnemyState.Collected;
 
 			var track = Player_Controller.instance.GetTrack (_trackType);
-
-			if (!Player_Controller.instance.GetTrack (_trackType).active)
-				Player_Controller.instance.GetTrack (_trackType).SetActive ();
-			else {
-				PersonManager.instance.TransferPeople (_trail, track);
-				if (_trackType != AudioManager.TrackTypes.Bass)
-					track.ResetDecay ();
+			if(track.active){
+			PersonManager.instance.TransferPeople (_trail, track);
+			if (_trackType != AudioManager.TrackTypes.Bass)
+				track.ResetDecay ();
 			}
 		}
-
-
 	}
 
 	private float GetEnterPercent ()
