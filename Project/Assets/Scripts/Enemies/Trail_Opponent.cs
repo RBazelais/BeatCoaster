@@ -44,6 +44,7 @@ public class Trail_Opponent : MonoBehaviour {
 	}
 
 	private void Update() {
+		if (state == OpponentState.Paused) return;
 		UpdateTimers();
 		UpdateState();
 		UpdatePosition();
@@ -111,9 +112,16 @@ public class Trail_Opponent : MonoBehaviour {
 	}
 
 	private void OnExited() {
+		ResetAndRecycle();
+	}
+
+	private void ResetAndRecycle() {
 		_bgSplineTrailRenderer.emit = false;
 		_splineTrailRenderer.emit = false;
-
+		state = OpponentState.Paused;
+		enterTimer = 0;
+		exitTimer = 0;
+		sineTimer = 0;
 		transform.Recycle();
 	}
 
