@@ -17,7 +17,7 @@ public class Person : MonoBehaviour {
 	private float wobbleOffset;
 	private float wobbleVal;
 	private float transferTimer = 0;
-	private float transferDur = 0.5f;
+	private float transferDur = 3f;
 
 	private int segmentDistance;
 	private PersonMoveType moveType = PersonMoveType.Follow;
@@ -43,6 +43,7 @@ public class Person : MonoBehaviour {
 		float distFromStart = trail.splineTrailRenderer.spline.GetSegmentDistanceFromStart(segment);
 		distFromStart += wobbleVal;
 		Vector3 targetPos = trail.splineTrailRenderer.spline.FindPositionFromDistance(distFromStart);
+
 		if (moveType == PersonMoveType.Follow) {
 			transform.position = targetPos;
 		}
@@ -50,6 +51,7 @@ public class Person : MonoBehaviour {
 			transferTimer += Time.deltaTime;
 			float percent = Mathf.Clamp01(transferTimer / transferDur);
 			Vector3 lerpedPos = Vector3.Lerp(transform.position, targetPos, percent);
+			transform.position = lerpedPos;
 			if (percent >= 1) {
 				moveType = PersonMoveType.Follow;
 			}

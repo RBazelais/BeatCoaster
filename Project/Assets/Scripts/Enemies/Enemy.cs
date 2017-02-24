@@ -55,10 +55,9 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void Collect(TrackTrail collectedByTrack)
+	public void Collect()
 	{
 		_collected = true;
-		PersonManager.instance.TransferPeople(trail, collectedByTrack);
 	}
 
 	private void Update() {
@@ -159,7 +158,7 @@ public class Enemy : MonoBehaviour {
 		}
 		else if (state == EnemyState.Collected) {
 			if(GetCollectedPercent() >= 1) {
-				Player_Controller.instance.ActivateTrack(_trackType);
+				Player_Controller.instance.ActivateTrack(_trackType, trail);
 				state = EnemyState.Exited;
 				OnExited();
 			}

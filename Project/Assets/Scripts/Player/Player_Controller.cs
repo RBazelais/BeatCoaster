@@ -225,11 +225,12 @@ public class Player_Controller : MonoBehaviour
 //		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
 
-	public void ActivateTrack (AudioManager.TrackTypes type)
+	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
 		TrackTrail trail = GetTrack(type);
 		SetTrackOrder(trail);
 		trail.ActivateTrail ();
+		PersonManager.instance.TransferPeople(fromTrail, trail);
 	}
 
 	void SetTrackOrder(TrackTrail trail) {

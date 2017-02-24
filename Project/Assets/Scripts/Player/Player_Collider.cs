@@ -12,7 +12,7 @@ public class Player_Collider : MonoBehaviour {
 		var enemy = col.GetComponent<Enemy>();
 		TrackTrail track = Player_Controller.instance.GetTrack(enemy.trackType);
 		if(!track.active){
-			enemy.Collect(track);
+			enemy.Collect();
 		}
 	}
 }
