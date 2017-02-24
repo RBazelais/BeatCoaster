@@ -5,12 +5,23 @@ using WhitDataTypes;
 
 public class Player_Controller : MonoBehaviour
 {
+	public enum PlayerState
+	{
+		Idle,
+		Active,
+		Drop
+	}
+
 	public static Player_Controller instance;
 
-	private float _pointPos = 0;
-
 	[SerializeField]
-	private Camera _camera;
+	private PlayerState _playerState;
+	public PlayerState playerState
+	{
+		get { return _playerState; }
+	}
+
+	private float _pointPos = 0;
 
 	[SerializeField]
 	private Player_Trail _drumTrailRenderer;
@@ -69,32 +80,40 @@ public class Player_Controller : MonoBehaviour
 
 	void Update ()
 	{
-		bool input = false;
-		if (transform.position.y > -4) {
-			if (Input.GetKey (KeyCode.S)) {
-				input = true;
-				_yPos -= .05f;
+		if(_playerState == PlayerState.Active) {
+			bool input = false;
+			if (transform.position.y > -4) {
+				if (Input.GetKey (KeyCode.S)) {
+					input = true;
+					_yPos -= .05f;
+				}
 			}
-		}
 
-		if (transform.position.y < 11.5f - (1 * ActiveTrails ())) {
-			if (Input.GetKey (KeyCode.W)) {
-				input = true;
-				_yPos += .05f;
+			if (transform.position.y < 11.5f - (1 * ActiveTrails ())) {
+				if (Input.GetKey (KeyCode.W)) {
+					input = true;
+					_yPos += .05f;
+				}
 			}
-		}
 
-		if (_yPos <= .025f && _yPos >= -.025f) {
-			_yPos = 0;
-		}
-		else if (_yPos > 0) {
-			_yPos -= .025f;
-		} else if (_yPos < 0) {
-			_yPos += .025f;
-		}
+			if (_yPos <= .025f && _yPos >= -.025f) {
+				_yPos = 0;
+			}
+			else if (_yPos > 0) {
+				_yPos -= .025f;
+			} else if (_yPos < 0) {
+				_yPos += .025f;
+			}
 
-		_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
-		transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, -7.5f, 12.5f - (1 * ActiveTrails ())), 0);
+			_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
+
+			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, -7.5f, 12.5f - (1 * ActiveTrails ())), 0);
+		}
+		else if (_playerState == PlayerState.Drop) {
+			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
+			_yPos -= .5f;
+		}
+			
 		_pointPos += 1f;
 	}
 
@@ -113,10 +132,5 @@ public class Player_Controller : MonoBehaviour
 			active++;
 
 		return active;
-	}
-
-	void LateUpdate ()
-	{
-		_camera.transform.position = new Vector3 (transform.position.x - 20, 0, -10);
 	}
 }
