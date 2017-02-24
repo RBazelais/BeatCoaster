@@ -49,9 +49,16 @@ public class Enemy : MonoBehaviour {
 		state = EnemyState.Entering;
 	}
 
-	public void Collect()
+	public void AddPeople(int numPeople) {
+		for (int i = 0; i < numPeople; i++) {
+			PersonManager.instance.AddPersonToTrail(trail);
+		}
+	}
+
+	public void Collect(TrackTrail collectedByTrack)
 	{
 		_collected = true;
+		PersonManager.instance.TransferPeople(trail, collectedByTrack);
 	}
 
 	private void Update() {

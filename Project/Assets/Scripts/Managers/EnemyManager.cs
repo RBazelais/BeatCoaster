@@ -44,6 +44,7 @@ public class EnemyManager : MonoBehaviour {
 		enemy.transform.position = new Vector3(spawnPoint.position.x,Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom(), 0);
 		AudioManager.TrackTypes trackType = (AudioManager.TrackTypes)Random.Range(0, 5);
 		enemy.SetTrackType(trackType);
+		enemy.AddPeople(Random.Range(5, 20));
 		enemy.Activate();
 	}
 }

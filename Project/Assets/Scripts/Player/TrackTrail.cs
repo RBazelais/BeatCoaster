@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 public class TrackTrail : MonoBehaviour {
-	private List<Person> people;
+	public List<Person> people {get; private set;}
 
 	private void Awake() {
 		people = new List<Person>();
@@ -72,11 +72,17 @@ public class TrackTrail : MonoBehaviour {
 		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = false;
 	}
 
-	public void AddPerson(Person person) 
+	public void AddPerson(Person person, Person.PersonMoveType moveType) 
 	{
 		people.Add(person);
-		person.transform.SetParent(transform);
-		person.SetTrail(this);
+		person.transform.SetParent(transform, true);
+		person.SetTrail(this, moveType);
+	}
+
+	public void RemovePerson(Person person) {
+		if (!people.Contains(person)) Debug.LogError("can't remove person who's not on track");
+
+		people.Remove(person);
 	}
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {

@@ -50,9 +50,22 @@ public class PersonManager : MonoBehaviour {
 		AddPersonToTrail(Player_Controller.instance.GetBassTrail());
 	}
 
-	private void AddPersonToTrail(TrackTrail trail) {
+	public void AddPersonToTrail(TrackTrail trail) {
 		Person person = CreatePerson();
-		trail.AddPerson(person);
+		trail.AddPerson(person, Person.PersonMoveType.Follow);
+	}
+
+	public void TransferPeople(TrackTrail fromTrail, TrackTrail toTrail) {
+		for (int i = 0; i < fromTrail.people.Count; i++) {
+			Person person = fromTrail.people[i];
+			TransferPerson(person, fromTrail, toTrail);
+		}
+	}
+
+	private void TransferPerson(Person person, TrackTrail fromTrail, TrackTrail toTrail) {
+		if (person.trail != fromTrail) Debug.LogError("can't transfer person from a trail they're not on!");
+		fromTrail.RemovePerson(person);
+		toTrail.AddPerson(person, Person.PersonMoveType.Transfer);
 	}
 
 	private Person CreatePerson() {

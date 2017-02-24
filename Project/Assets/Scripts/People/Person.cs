@@ -5,14 +5,22 @@ using WhitDataTypes;
 using DG.Tweening;
 
 public class Person : MonoBehaviour {
+	public enum PersonMoveType {
+		Follow,
+		Transfer
+	}
+
 	public TrackTrail trail {get; private set;}
 
 	private SpriteRenderer sprite;
 
 	private float wobbleOffset;
 	private float wobbleVal;
+	private float transferTimer = 0;
+	private float transferDur = 0.5f;
 
 	private int segmentDistance;
+	private PersonMoveType moveType = PersonMoveType.Follow;
 
 	private void Awake() {
 		segmentDistance = PersonManager.instance.segmentDistanceRange.GetRandom();
@@ -34,13 +42,28 @@ public class Person : MonoBehaviour {
 		int segment = Mathf.Max(trail.splineTrailRenderer.spline.NbSegments - segmentDistance, 0);
 		float distFromStart = trail.splineTrailRenderer.spline.GetSegmentDistanceFromStart(segment);
 		distFromStart += wobbleVal;
-		Vector3 endPosition = trail.splineTrailRenderer.spline.FindPositionFromDistance(distFromStart);
-		transform.position = endPosition;
+		Vector3 targetPos = trail.splineTrailRenderer.spline.FindPositionFromDistance(distFromStart);
+		if (moveType == PersonMoveType.Follow) {
+			transform.position = targetPos;
+		}
+		else if (moveType == PersonMoveType.Transfer) {
+			transferTimer += Time.deltaTime;
+			float percent = Mathf.Clamp01(transferTimer / transferDur);
+			Vector3 lerpedPos = Vector3.Lerp(transform.position, targetPos, percent);
+			if (percent >= 1) {
+				moveType = PersonMoveType.Follow;
+			}
+		}
 	}
 
-	public void SetTrail(TrackTrail trail)
+	public void SetTrail(TrackTrail trail, PersonMoveType moveType)
 	{
 		this.trail = trail;
+		this.moveType = moveType;
+
+		if (moveType == PersonMoveType.Transfer) {
+			transferTimer = 0;
+		}
 	}
 
 	private void UpdateWobble() {
