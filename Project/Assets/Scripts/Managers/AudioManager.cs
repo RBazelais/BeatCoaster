@@ -111,7 +111,7 @@ public class AudioManager : MonoBehaviour
 		_running = true;
 	}
 
-	AudioSource GetTrack (TrackTypes type)
+	public AudioSource GetTrack (TrackTypes type)
 	{
 		AudioSource track = null;
 		switch (type) { 

@@ -6,8 +6,8 @@ public class ColorManager : MonoBehaviour {
 	public static Color DrumColor = new Color(1, 0, 0);
 	public static Color PizzColor = new Color(254f/255f, 118f/255f, 15f/255f);
 	public static Color KeysColor = new Color(247f/255f, 205f/255f, 0f/255f);
-	public static Color ClavColor = new Color(0f/255f, 137f/255f, 209f/255f);
-	public static Color BassColor = new Color(0f/255f, 196f/255f, 71f/255f);
+	public static Color ClavColor = new Color(0f/255f, 196f/255f, 71f/255f);
+	public static Color BassColor = new Color(0f/255f, 137f/255f, 209f/255f); 
 
 	public static Color DrumShadowColor {get {return GetShadowColorFromColor(DrumColor);}}
 	public static Color PizzShadowColor {get {return GetShadowColorFromColor(PizzColor);}}

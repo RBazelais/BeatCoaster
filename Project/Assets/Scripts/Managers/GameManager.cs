@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour {
 	void Start() {
 		stateMachine = new StateMachine();
 		stateMachine.Initialize(this, PreUpdateState, PostUpdateState);
+		playerController.SetTrails();
 		SetState(GameState.Title);
-		//playerController.SetState(Player_Controller.PlayerState.Idle);
 	}
 
 	void Update() {

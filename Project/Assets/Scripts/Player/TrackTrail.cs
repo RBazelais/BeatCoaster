@@ -3,95 +3,130 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class TrackTrail : MonoBehaviour {
-	public List<Person> people {get; private set;}
+public class TrackTrail : MonoBehaviour
+{
+	private List<Person> people;
 
-	private void Awake() {
-		people = new List<Person>();
+	private void Awake ()
+	{
+		people = new List<Person> ();
 	}
 
-	private void Start() {
+	private void Start ()
+	{
 		AudioManager.instance.BeatOnUpdate += OnBeat;
 	}
 
 	[SerializeField]
 	private AudioManager.TrackTypes _trackType;
-	public AudioManager.TrackTypes trackType
-	{
-		get
-		{
+
+	public AudioManager.TrackTypes trackType {
+		get {
 			return _trackType;
 		}
 	}
 
 	[SerializeField]
 	private SplineTrailRenderer _splineTrailRenderer;
-	public SplineTrailRenderer splineTrailRenderer
-	{
-		get
-		{
+
+	public SplineTrailRenderer splineTrailRenderer {
+		get {
 			return _splineTrailRenderer;
 		}
 	}
 
 	[SerializeField]
 	private SplineTrailRenderer _shadowSplineTrailRenderer;
-	public SplineTrailRenderer shadowSplineTrailRenderer
-	{
-		get
-		{
+
+	public SplineTrailRenderer shadowSplineTrailRenderer {
+		get {
 			return _shadowSplineTrailRenderer;
 		}
 	}
 
+	[SerializeField]
+	private SpriteRenderer _capSprite;
+
+	public SpriteRenderer capSprite {
+		get{ return _capSprite; }
+	}
+
 	private bool _active;
-	public bool active
-	{
-		get
-		{
+
+	public bool active {
+		get {
 			return _active;
 		}
 	}
 
-	public void SetActive()
+	private Sequence _decaySequence;
+	public Sequence decaySequence
+	{
+		get{return _decaySequence;
+		}
+	}
+
+	public void SetActive ()
 	{
 		_active = true;
 	}
 
-	public void ActivateTrail()
+	public void ActivateTrail ()
 	{
-		_splineTrailRenderer.Clear();
+		_capSprite.enabled = true;
+		 
+		_splineTrailRenderer.Clear ();
+		if (_shadowSplineTrailRenderer != null)
+			_shadowSplineTrailRenderer.Clear ();
+		
 		_splineTrailRenderer.emit = true;
-		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = true;
+		if (_shadowSplineTrailRenderer != null)
+			_shadowSplineTrailRenderer.emit = true;
 	}
 
-	public void DeactivateTrail()
+	public void DeactivateTrail ()
 	{
+		_capSprite.enabled = false;
 		_active = false;
 		_splineTrailRenderer.emit = false;
-		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = false;
+		if (_shadowSplineTrailRenderer != null)
+			_shadowSplineTrailRenderer.emit = false;
 	}
 
-	public void AddPerson(Person person, Person.PersonMoveType moveType) 
+	public void ResetDecay() {
+		_decaySequence.Kill();
+		SetTrackType(_trackType);
+		_decaySequence.Play();
+	}
+
+	public void AddPerson (Person person)
 	{
-		people.Add(person);
-		person.transform.SetParent(transform, true);
-		person.SetTrail(this, moveType);
+		people.Add (person);
+		person.transform.SetParent (transform);
+		person.SetTrail (this);
 	}
 
-	public void RemovePerson(Person person) {
-		if (!people.Contains(person)) Debug.LogError("can't remove person who's not on track");
-
-		people.Remove(person);
-	}
-
-	public void SetTrackType(AudioManager.TrackTypes trackType) {
+	public void SetTrackType (AudioManager.TrackTypes trackType)
+	{
 		_trackType = trackType;
-		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType(trackType);
-		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType(trackType);
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		if (_shadowSplineTrailRenderer != null)
+			_shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType (trackType);
+
+		_decaySequence = DOTween.Sequence ();
+		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f));
+		_decaySequence.SetDelay (5f).OnComplete(() => {
+			DeactivateTrail();
+			Player_Controller.instance.SetTrackOrder();
+		});
 	}
 
-	private void OnBeat() {
+
+
+	private void OnBeat ()
+	{
 //		float initialHeight = splineTrailRenderer.height;
 //		float targetHeight = initialHeight * 0.5f;
 //

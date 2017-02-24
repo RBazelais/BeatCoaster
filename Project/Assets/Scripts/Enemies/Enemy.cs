@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public enum EnemyState {
 	Paused,
@@ -58,6 +59,7 @@ public class Enemy : MonoBehaviour {
 	public void Collect()
 	{
 		_collected = true;
+		trail.capSprite.transform.DOPunchScale(new Vector3(4f,4f,0), .33f, 1, 2);
 	}
 
 	private void Update() {
@@ -111,6 +113,7 @@ public class Enemy : MonoBehaviour {
 
 	private Vector3 GetEndPos() {
 		Vector3 v = EnemyManager.instance.endPoint.position;
+		v.x = v.x + 3;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
@@ -171,10 +174,13 @@ public class Enemy : MonoBehaviour {
 
 	private void ResetAndRecycle() {
 		trail.DeactivateTrail();
+		_collected = false;
 		state = EnemyState.Paused;
 		enterTimer = 0;
 		exitTimer = 0;
+		collectedTimer = 0;
 		sineTimer = 0;
+		EnemyManager.instance.enemies.Remove(this);
 		transform.Recycle();
 	}
 
