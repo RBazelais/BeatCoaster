@@ -18,6 +18,8 @@ public class Person : MonoBehaviour {
 	private float wobbleVal;
 	private float transferTimer = 0;
 	private float transferDur = 2f;
+	private int rotateDirSign = 1;
+	private bool readyForNewBeat = true;
 
 	[SerializeField] private Animator animator;
 
@@ -25,6 +27,7 @@ public class Person : MonoBehaviour {
 	private PersonMoveType moveType = PersonMoveType.Follow;
 
 	private void Awake() {
+		rotateDirSign = WhitTools.GetRandomSign();
 		segmentDistance = PersonManager.instance.segmentDistanceRange.GetRandom();
 		wobbleOffset = UnityEngine.Random.Range(0, 360);
 		sprite = GetComponentInChildren<SpriteRenderer>();
@@ -78,10 +81,17 @@ public class Person : MonoBehaviour {
 	}
 		
 	public void OnBeat() {
-		float jumpAmt = UnityEngine.Random.Range(0.4f, 0.6f);
-		float dur = 60.0f / (float)AudioManager.instance.bpm;
+		if (!readyForNewBeat) return;
+
+		readyForNewBeat = false;
+		float jumpAmt = UnityEngine.Random.Range(0.5f, 0.7f);
+
+		float dur = 60.0f / (float)AudioManager.instance.bpm - 0.01f;
 		float buffer = dur * 0.1f;
 		dur -= buffer;
+		if (Random.value < 0.5f) dur *= 2;
+
+		Vector3 punchRotation = new Vector3(0, 0, Random.Range(10, 40) * rotateDirSign);
 
 		Sequence s = DOTween.Sequence();
 		s.AppendInterval(buffer);
@@ -89,7 +99,11 @@ public class Person : MonoBehaviour {
 			.DOLocalJump(Vector3.zero, jumpAmt, 1, dur)
 			.SetDelay(buffer));
 		s.Join(sprite.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0.2f), dur));
-
-		
+		s.Join(sprite.transform.DOPunchRotation(punchRotation, dur, 5, 0.5f));
+		s.OnComplete(()=>{
+			rotateDirSign *= -1;
+			readyForNewBeat = true;
+		});
+		s.Play();
 	}
 }
