@@ -108,7 +108,7 @@ public class SplineTrailRenderer : MonoBehaviour
 
 		RenderMesh();
 	}
-	
+
 	private void RenderMesh() 
 	{
 		if(advancedParameters.nbSegmentToParametrize == 0)
@@ -119,7 +119,7 @@ public class SplineTrailRenderer : MonoBehaviour
 		float length = Mathf.Max(spline.Length() - 0.1f, 0);
 		
 		int nbQuad = ((int)(1f/width * length)) + 1 - quadOffset;
-		
+
 		if(allocatedNbQuad < nbQuad) //allocate more memory for the mesh
 		{
 			Reallocate(nbQuad);
@@ -130,7 +130,7 @@ public class SplineTrailRenderer : MonoBehaviour
 		int startingQuad = lastStartingQuad;
 		float lastDistance = startingQuad * width + quadOffset * width;
 		maxInstanciedTriCount = System.Math.Max(maxInstanciedTriCount, (nbQuad-1) * NbTriIndexPerQuad);
-		
+
 		Vector3 n = normal;
 		if(dynamicNormalUpdate)
 		{
