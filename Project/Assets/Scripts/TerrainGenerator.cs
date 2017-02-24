@@ -47,7 +47,6 @@ public class TerrainGenerator : MonoBehaviour
 
 	void LateUpdate ()
 	{
-		//GenerateCurve (_yPos);
 		_camera.transform.position = new Vector3 (transform.position.x - 20, 0, -10);
 	}
 }
