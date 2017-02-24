@@ -4,6 +4,19 @@ using UnityEngine;
 using WhitDataTypes;
 
 public class PersonManager : MonoBehaviour {
+	private static PersonManager _instance;
+	public static PersonManager instance {
+		get {
+			if (_instance == null) {
+				GameObject.FindObjectOfType<PersonManager>();
+			}
+			return _instance;
+		}
+	}
+
+	public IntRange segmentDistanceRange = new IntRange(5, 40);
+	[Range(0.5f, 2)] public float wobbleSpeed = 1;
+	[Range(0.1f, 10)] public float wobbleIntensity = 1;
 	[SerializeField] private Person personPrefab;
 
 	private List<Person> people;

@@ -41,10 +41,6 @@ public class Player_Controller : MonoBehaviour
 	[SerializeField]
 	private Player_Collider _col;
 
-	public IntRange segmentDistanceRange = new IntRange(5, 40);
-	[Range(0.5f, 2)] public float wobbleSpeed = 1;
-	[Range(0.1f, 10)] public float wobbleIntensity = 1;
-
 	private float _yPos = 0, _lastYPos, _yCenter;
 	public float yCenter
 	{

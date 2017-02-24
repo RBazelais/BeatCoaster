@@ -15,7 +15,7 @@ public class Person : MonoBehaviour {
 	private int segmentDistance;
 
 	private void Awake() {
-		segmentDistance = Player_Controller.instance.segmentDistanceRange.GetRandom();
+		segmentDistance = PersonManager.instance.segmentDistanceRange.GetRandom();
 		wobbleOffset = UnityEngine.Random.Range(0, 360);
 		sprite = GetComponentInChildren<SpriteRenderer>();
 	}
@@ -44,7 +44,7 @@ public class Person : MonoBehaviour {
 	}
 
 	private void UpdateWobble() {
-		wobbleVal = Player_Controller.instance.wobbleIntensity * Mathf.Sin(Time.time * Player_Controller.instance.wobbleSpeed + wobbleOffset);
+		wobbleVal = PersonManager.instance.wobbleIntensity * Mathf.Sin(Time.time * PersonManager.instance.wobbleSpeed + wobbleOffset);
 	}
 		
 	public void OnBeat() {
