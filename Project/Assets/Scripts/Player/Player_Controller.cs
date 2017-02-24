@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainGenerator : MonoBehaviour
+public class Player_Controller : MonoBehaviour
 {
 	private float _pointPos = 0;
 
@@ -10,19 +10,19 @@ public class TerrainGenerator : MonoBehaviour
 	private Camera _camera;
 
 	[SerializeField]
-	private SplineTrailRenderer _drumTrailRenderer;
+	private Player_Trail _drumTrailRenderer;
 
 	[SerializeField]
-	private SplineTrailRenderer _pizzTrailRenderer;
+	private Player_Trail _pizzTrailRenderer;
 
 	[SerializeField]
-	private SplineTrailRenderer _keysTrailRenderer;
+	private Player_Trail _keysTrailRenderer;
 
 	[SerializeField]
-	private SplineTrailRenderer _clavTrailRenderer;
+	private Player_Trail _clavTrailRenderer;
 
 	[SerializeField]
-	private SplineTrailRenderer _bassTrailRenderer;
+	private Player_Trail _bassTrailRenderer;
 
 	private float _yPos = 0, _lastYPos;
 
