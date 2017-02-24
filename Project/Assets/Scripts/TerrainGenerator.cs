@@ -12,7 +12,21 @@ public class TerrainGenerator : MonoBehaviour
 	[SerializeField]
 	private SplineTrailRenderer _drumTrailRenderer;
 
+	[SerializeField]
+	private SplineTrailRenderer _pizzTrailRenderer;
+
+	[SerializeField]
+	private SplineTrailRenderer _keysTrailRenderer;
+
+	[SerializeField]
+	private SplineTrailRenderer _clavTrailRenderer;
+
+	[SerializeField]
+	private SplineTrailRenderer _bassTrailRenderer;
+
 	private float _yPos = 0, _lastYPos;
+
+
 
 	void Update ()
 	{
