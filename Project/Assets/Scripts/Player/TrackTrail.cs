@@ -6,7 +6,8 @@ using DG.Tweening;
 public class TrackTrail : MonoBehaviour {
 	public List<Person> people {get; private set;}
 
-	private void Awake() {
+	private void Awake() 
+	{
 		people = new List<Person>();
 	}
 
