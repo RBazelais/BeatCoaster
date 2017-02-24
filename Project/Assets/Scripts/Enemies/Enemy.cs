@@ -6,12 +6,14 @@ public enum EnemyState {
 	Paused,
 	Entering,
 	Exiting,
-	Exited
+	Exited,
+	Collected
 }
 
 public class Enemy : MonoBehaviour {
 	private float enterTimer = 0;
 	private float exitTimer = 0;
+	private float collectedTimer = 0;
 	private EnemyState state = EnemyState.Paused;
 	private float enterDur;
 	private float exitDur;
@@ -20,6 +22,9 @@ public class Enemy : MonoBehaviour {
 	private float sineTimer = 0;
 	private float sineAmplitude;
 	private float sineFrequency;
+
+	private Vector3 _collectedPos; 
+	private bool _collected = false;
 
 	private AudioManager.TrackTypes _trackType;
 	public AudioManager.TrackTypes trackType
@@ -44,6 +49,11 @@ public class Enemy : MonoBehaviour {
 		state = EnemyState.Entering;
 	}
 
+	public void Collect()
+	{
+		_collected = true;
+	}
+
 	private void Update() {
 		if (state == EnemyState.Paused) return;
 		UpdateTimers();
@@ -55,12 +65,24 @@ public class Enemy : MonoBehaviour {
 		if (state == EnemyState.Entering) {// || state == OpponentState.Exiting) {
 			transform.position = GetPosition();
 		}
+		if(state == EnemyState.Collected)
+			transform.position = GetPlayerPosition();
 	}
 
 	private Vector3 GetPosition() {
 		float percent = GetCurrentTimerPercent();
 		Vector3 pos = Vector3.Lerp(GetSpawnPos(), GetEndPos(), percent);
 		Vector3 diff = GetEndPos() - GetSpawnPos();
+		Vector3 dir = diff.normalized;
+		Vector3 perpDir = new Vector3(dir.y, -dir.x, dir.z);
+		pos += perpDir * Mathf.Sin(sineTimer) * sineAmplitude;
+		return pos;
+	}
+
+	private Vector3 GetPlayerPosition() {
+		float percent = GetCurrentTimerPercent();
+		Vector3 pos = Vector3.Lerp(GetCollectedPos(), GetPlayerPos(), percent);
+		Vector3 diff = GetPlayerPos() - GetCollectedPos();
 		Vector3 dir = diff.normalized;
 		Vector3 perpDir = new Vector3(dir.y, -dir.x, dir.z);
 		pos += perpDir * Mathf.Sin(sineTimer) * sineAmplitude;
@@ -74,8 +96,22 @@ public class Enemy : MonoBehaviour {
 		return v;
 	}
 
+	private Vector3 GetCollectedPos() {
+		Vector3 v = _collectedPos;
+		v.y = endVerticalPos;
+		v.z = 0;
+		return v;
+	}
+
 	private Vector3 GetEndPos() {
 		Vector3 v = EnemyManager.instance.endPoint.position;
+		v.y = endVerticalPos;
+		v.z = 0;
+		return v;
+	}
+
+	private Vector3 GetPlayerPos() {
+		Vector3 v = Player_Controller.instance.transform.position;
 		v.y = endVerticalPos;
 		v.z = 0;
 		return v;
@@ -84,6 +120,7 @@ public class Enemy : MonoBehaviour {
 	private float GetCurrentTimerPercent() {
 		if (state == EnemyState.Entering) return GetEnterPercent();
 		else if (state == EnemyState.Exiting) return GetExitPercent();
+		else if (state == EnemyState.Collected) return GetCollectedPercent();
 		else return 0;
 	}
 
@@ -95,12 +132,14 @@ public class Enemy : MonoBehaviour {
 		else if (state == EnemyState.Exiting) {
 			exitTimer += Time.deltaTime;
 		}
+		else if (state == EnemyState.Collected) {
+			collectedTimer += Time.deltaTime;
+		}
 	}
 
 	private void UpdateState() {
 		if (state == EnemyState.Entering) {
 			if (GetEnterPercent() >= 1) {
-				state = EnemyState.Exiting;
 				OnReachedIntersectionPoint();
 			}
 		}
@@ -108,6 +147,12 @@ public class Enemy : MonoBehaviour {
 			if (GetExitPercent() >= 1) {
 				state = EnemyState.Exited;
 				OnExited();
+			}
+		}
+		else if (state == EnemyState.Collected) {
+			if(GetCollectedPercent() >= 1) {
+				state = EnemyState.Exiting;
+				Player_Controller.instance.ActivateTrack(_trackType);
 			}
 		}
 	}
@@ -126,7 +171,15 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void OnReachedIntersectionPoint() {
-		
+		if(!_collected)
+			state = EnemyState.Exiting;
+		else
+		{
+			_collectedPos = transform.position;
+			state = EnemyState.Collected;
+		}
+
+
 	}
 
 	private float GetEnterPercent() {
@@ -135,6 +188,10 @@ public class Enemy : MonoBehaviour {
 
 	private float GetExitPercent() {
 		return Mathf.Clamp01(exitTimer / exitDur);
+	}
+
+	private float GetCollectedPercent() {
+		return Mathf.Clamp01(collectedTimer/ 1);
 	}
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {

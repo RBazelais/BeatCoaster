@@ -10,6 +10,8 @@ public class Player_Collider : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		var enemy = col.GetComponent<Enemy>();
-
+		if(!Player_Controller.instance.GetTrack(enemy.trackType).active){
+		enemy.Collect();
+		}
 	}
 }

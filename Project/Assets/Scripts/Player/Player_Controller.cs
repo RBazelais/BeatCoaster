@@ -162,6 +162,55 @@ public class Player_Controller : MonoBehaviour
 //		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
 
+	public void ActivateTrack(AudioManager.TrackTypes type)
+	{
+		switch(type) {
+		case AudioManager.TrackTypes.Bass:
+			if(!_bassTrailRenderer.active)
+				_bassTrailRenderer.ActivateTrail();
+			break;
+		case AudioManager.TrackTypes.Clav:
+			if(!_clavTrailRenderer.active)
+				_clavTrailRenderer.ActivateTrail();
+			break;
+		case AudioManager.TrackTypes.Drums:
+			if(!_drumTrailRenderer.active)
+				_drumTrailRenderer.ActivateTrail();
+			break;
+		case AudioManager.TrackTypes.Keys:
+			if(!_keysTrailRenderer.active)
+				_keysTrailRenderer.ActivateTrail();
+			break;
+		case AudioManager.TrackTypes.Pizz:
+			if(!_pizzTrailRenderer.active)
+				_pizzTrailRenderer.ActivateTrail();
+			break;
+		}
+	}
+
+	public TrackTrail GetTrack(AudioManager.TrackTypes type)
+	{
+		TrackTrail track = null;
+		switch(type) {
+		case AudioManager.TrackTypes.Bass:
+			track = _bassTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Clav:
+			track = _clavTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Drums:
+			track = _drumTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Keys:
+			track = _keysTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Pizz:
+			track = _pizzTrailRenderer;
+			break;
+		}
+		return track;
+	}
+
 	int ActiveTrails ()
 	{
 		int active = 0;
