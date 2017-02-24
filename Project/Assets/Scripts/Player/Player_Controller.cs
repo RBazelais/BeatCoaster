@@ -148,12 +148,16 @@ public class Player_Controller : MonoBehaviour
 			transform.position = new Vector3(_pointPos, transform.position.y + _yPos, 0);
 		}
 
+
+		_pointPos += 1f;
+	}
+
+	private void LateUpdate() {
 		int segment = Mathf.Max(_bassTrailRenderer.splineTrailRenderer.spline.NbSegments - 15, 0);
 		float colPos = _bassTrailRenderer.splineTrailRenderer.spline.GetSegmentDistanceFromStart(segment);
 		Vector3 pos = _bassTrailRenderer.splineTrailRenderer.spline.FindPositionFromDistance(colPos);
 		_col.transform.position = pos;
-		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
-		_pointPos += 1f;
+//		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
 
 	int ActiveTrails ()
