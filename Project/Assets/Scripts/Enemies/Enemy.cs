@@ -33,13 +33,17 @@ public class Enemy : MonoBehaviour {
 		get{return _trackType;}
 	}
 
-	[SerializeField] private TrackTrail trail;
+	[SerializeField] private TrackTrail _trail;
+	public TrackTrail trail
+	{
+		get{return _trail;}
+	}
 
 	public void Activate() {
 		sineAmplitude = Random.Range(1f, 3f);
 		sineFrequency = Random.Range(3f, 10f);
 
-		trail.ActivateTrail();
+		_trail.ActivateTrail();
 
 		spawnVerticalPos = transform.position.y;
 		endVerticalPos = Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom();
@@ -52,14 +56,14 @@ public class Enemy : MonoBehaviour {
 
 	public void AddPeople(int numPeople) {
 		for (int i = 0; i < numPeople; i++) {
-			PersonManager.instance.AddPersonToTrail(trail);
+			PersonManager.instance.AddPersonToTrail(_trail);
 		}
 	}
 
 	public void Collect()
 	{
 		_collected = true;
-		trail.capSprite.transform.DOPunchScale(new Vector3(4f,4f,0), .33f, 1, 2);
+		_trail.capSprite.transform.DOPunchScale(new Vector3(4f,4f,0), .33f, 1, 2);
 	}
 
 	private void Update() {
@@ -161,7 +165,7 @@ public class Enemy : MonoBehaviour {
 		}
 		else if (state == EnemyState.Collected) {
 			if(GetCollectedPercent() >= 1) {
-				Player_Controller.instance.ActivateTrack(_trackType, trail);
+				Player_Controller.instance.ActivateTrack(_trackType, _trail);
 				state = EnemyState.Exited;
 				OnExited();
 			}
@@ -173,7 +177,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void ResetAndRecycle() {
-		trail.DeactivateTrail();
+		_trail.DeactivateTrail();
 		_collected = false;
 		state = EnemyState.Paused;
 		enterTimer = 0;
@@ -210,7 +214,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {
-		trail.SetTrackType(trackType);
+		_trail.SetTrackType(trackType);
 		_trackType = trackType;
 	}
 }

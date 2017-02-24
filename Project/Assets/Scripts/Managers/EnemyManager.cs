@@ -22,7 +22,15 @@ public class EnemyManager : MonoBehaviour {
 
 	[SerializeField] private Enemy enemyPrefab;
 
-	private bool songPlaying = true;
+	private bool songPlaying = true, _readytoSpawn = false;
+
+	private List<Enemy> _enemies = new List<Enemy>();
+	public List<Enemy> enemies
+	{
+		get {return _enemies;}
+	}
+
+	private int _maxEnemies = 1;
 
 	private void Start() {
 		enemyPrefab.CreatePool(10);
@@ -31,20 +39,25 @@ public class EnemyManager : MonoBehaviour {
 
 	private void OnBeat() {
 		if (!songPlaying) songPlaying = true;
+		_readytoSpawn = true;
 	}
 
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.O)) {
+		if (_readytoSpawn) {
+			_readytoSpawn = false;
 			SpawnEnemy();
 		}
 	}
 
 	private void SpawnEnemy() {
+		if(_enemies.Count < _maxEnemies){
 		Enemy enemy = enemyPrefab.Spawn();
+			_enemies.Add(enemy);
 		enemy.transform.position = new Vector3(spawnPoint.position.x,Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom(), 0);
 		AudioManager.TrackTypes trackType = (AudioManager.TrackTypes)Random.Range(0, 5);
 		enemy.SetTrackType(trackType);
-		enemy.AddPeople(Random.Range(5, 20));
+		enemy.AddPeople(Random.Range(3, 10));
 		enemy.Activate();
+	}
 	}
 }

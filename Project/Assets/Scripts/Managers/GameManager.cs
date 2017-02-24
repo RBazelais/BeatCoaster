@@ -31,7 +31,8 @@ public class GameManager : MonoBehaviour {
 	public FloatRange enemyVerticalRange = new FloatRange(-4f, 4f);
 
 	[SerializeField] private Player_Controller playerController;
-	[SerializeField] private TextMeshProUGUI titleText;
+	public GameObject mainMenu;
+	public Camera mainCamera;
 
 	private StateMachine stateMachine;
 
@@ -59,12 +60,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Title_EnterState() {
-		titleText.gameObject.SetActive(true);
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		playerController.OnTitleEnterState();
+		mainCamera.DOOrthoSize(2f, 1f);
 	}
 
 	private void Title_ExitState() {
-		titleText.gameObject.SetActive(false);
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		mainCamera.DOOrthoSize(10f, 1f);
 	}
 
 	private void Title_UpdateState() {

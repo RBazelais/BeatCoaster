@@ -5,11 +5,10 @@ using DG.Tweening;
 
 public class TrackTrail : MonoBehaviour
 {
-	private List<Person> people;
+	public List<Person> people {get; private set;}
 
-	private void Awake ()
-	{
-		people = new List<Person> ();
+	private void Awake() {
+		people = new List<Person>();
 	}
 
 	private void Start ()
@@ -74,7 +73,11 @@ public class TrackTrail : MonoBehaviour
 	public void ActivateTrail ()
 	{
 		_capSprite.enabled = true;
-		 
+
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		AudioManager.instance.GetTrack(_trackType).volume = .65f;
+
 		_splineTrailRenderer.Clear ();
 		if (_shadowSplineTrailRenderer != null)
 			_shadowSplineTrailRenderer.Clear ();
@@ -95,15 +98,31 @@ public class TrackTrail : MonoBehaviour
 
 	public void ResetDecay() {
 		_decaySequence.Kill();
-		SetTrackType(_trackType);
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		AudioManager.instance.GetTrack(_trackType).volume = .65f;
+
+		_decaySequence = DOTween.Sequence ();
+		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f));
+		_decaySequence.SetDelay (5f).OnComplete(() => {
+			DeactivateTrail();
+			Player_Controller.instance.SetTrackOrder();
+		});
 		_decaySequence.Play();
 	}
 
-	public void AddPerson (Person person)
+	public void AddPerson(Person person, Person.PersonMoveType moveType) 
 	{
-		people.Add (person);
-		person.transform.SetParent (transform);
-		person.SetTrail (this);
+		people.Add(person);
+		person.transform.SetParent(transform, true);
+		person.SetTrail(this, moveType);
+	}
+
+	public void RemovePerson(Person person) {
+		if (!people.Contains(person)) Debug.LogError("can't remove person who's not on track");
+
+		people.Remove(person);
 	}
 
 	public void SetTrackType (AudioManager.TrackTypes trackType)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using WhitDataTypes;
+using DG.Tweening;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -85,6 +86,14 @@ public class Player_Controller : MonoBehaviour
 	{
 		_bassTrailRenderer.SetActive();
 		_bassTrailRenderer.ActivateTrail ();
+	}
+
+	public void SetTrails() {
+		_bassTrailRenderer.SetTrackType(AudioManager.TrackTypes.Bass);
+		_clavTrailRenderer.SetTrackType(AudioManager.TrackTypes.Clav);
+		_drumTrailRenderer.SetTrackType(AudioManager.TrackTypes.Drums);
+		_keysTrailRenderer.SetTrackType(AudioManager.TrackTypes.Keys);
+		_pizzTrailRenderer.SetTrackType(AudioManager.TrackTypes.Pizz);
 	}
 
 	private void ActivateAllTrails ()
@@ -228,15 +237,19 @@ public class Player_Controller : MonoBehaviour
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
 		TrackTrail trail = GetTrack(type);
-		SetTrackOrder(trail);
+		SetTrackOrder();
 		trail.ActivateTrail ();
+
+		if(type != AudioManager.TrackTypes.Bass)
+			trail.decaySequence.Play();
+		
 		PersonManager.instance.TransferPeople(fromTrail, trail);
 	}
 
-	void SetTrackOrder(TrackTrail trail) {
+	public void SetTrackOrder() {
 
 		int val = 0;
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 5; i++) {
 			AudioManager.TrackTypes type = (AudioManager.TrackTypes)i;
 			TrackTrail track = GetTrack(type);
 			if(track.active){

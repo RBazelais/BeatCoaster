@@ -75,14 +75,6 @@ public class PersonManager : MonoBehaviour {
 		return person;
 	}
 
-	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Alpha1)) AddPersonToDrumTrail();
-		else if (Input.GetKeyDown(KeyCode.Alpha2)) AddPersonToPizzTrail();
-		else if (Input.GetKeyDown(KeyCode.Alpha3)) AddPersonToKeysTrail();
-		else if (Input.GetKeyDown(KeyCode.Alpha4)) AddPersonToClavTrail();
-		else if (Input.GetKeyDown(KeyCode.Alpha5)) AddPersonToBassTrail();
-	}
-
 	private void OnBeat() {
 		for (int i = 0; i < people.Count; i++) {
 			people[i].OnBeat();

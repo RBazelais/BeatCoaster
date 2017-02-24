@@ -14,5 +14,10 @@ public class Player_Collider : MonoBehaviour {
 		if(!track.active){
 			enemy.Collect();
 		}
+		else {
+			PersonManager.instance.TransferPeople(enemy.trail, track);
+			if(enemy.trackType != AudioManager.TrackTypes.Bass)
+			track.ResetDecay();
+		}
 	}
 }
