@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Player_Collider : MonoBehaviour {
 
@@ -10,14 +11,8 @@ public class Player_Collider : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		var enemy = col.GetComponent<Enemy>();
-		TrackTrail track = Player_Controller.instance.GetTrack(enemy.trackType);
-		if(!track.active){
+		if(!enemy.collected){
 			enemy.Collect();
-		}
-		else {
-			PersonManager.instance.TransferPeople(enemy.trail, track);
-			if(enemy.trackType != AudioManager.TrackTypes.Bass)
-			track.ResetDecay();
 		}
 	}
 }

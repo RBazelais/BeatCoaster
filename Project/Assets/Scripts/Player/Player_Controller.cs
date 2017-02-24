@@ -145,14 +145,14 @@ public class Player_Controller : MonoBehaviour
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S)) {
 					input = true;
-					_yPos -= .05f;
+					_yPos -= .065f;
 				}
 			}
 
 			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
 				if (Input.GetKey (KeyCode.W)) {
 					input = true;
-					_yPos += .05f;
+					_yPos += .065f;
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
@@ -208,7 +208,7 @@ public class Player_Controller : MonoBehaviour
 		}
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
-			_yPos = Mathf.Clamp (_yPos, -.4f, .4f);
+			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
 			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter - 7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
 		} else if (_playerState == PlayerState.Drop) {
 			_yPos = Mathf.Clamp (_yPos, -2f, 2f);
