@@ -179,6 +179,7 @@ public class Enemy : MonoBehaviour {
 		{
 			_collectedPos = transform.position;
 			state = EnemyState.Collected;
+			Player_Controller.instance.GetTrack(_trackType).SetActive();
 		}
 
 

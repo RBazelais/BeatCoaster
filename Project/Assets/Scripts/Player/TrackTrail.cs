@@ -53,9 +53,13 @@ public class TrackTrail : MonoBehaviour {
 		}
 	}
 
-	public void ActivateTrail()
+	public void SetActive()
 	{
 		_active = true;
+	}
+
+	public void ActivateTrail()
+	{
 		_splineTrailRenderer.Clear();
 		_splineTrailRenderer.emit = true;
 		if (_shadowSplineTrailRenderer != null) _shadowSplineTrailRenderer.emit = true;

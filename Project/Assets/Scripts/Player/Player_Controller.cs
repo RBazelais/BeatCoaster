@@ -7,6 +7,7 @@ public class Player_Controller : MonoBehaviour
 {
 	public enum PlayerState
 	{
+		None,
 		Idle,
 		Active,
 		Drop
@@ -16,8 +17,8 @@ public class Player_Controller : MonoBehaviour
 
 	[SerializeField]
 	private PlayerState _playerState;
-	public PlayerState playerState
-	{
+
+	public PlayerState playerState {
 		get { return _playerState; }
 	}
 
@@ -42,90 +43,94 @@ public class Player_Controller : MonoBehaviour
 	private Player_Collider _col;
 
 	private float _yPos = 0, _lastYPos, _yCenter;
-	public float yCenter
-	{
-		get
-		{
+
+	public float yCenter {
+		get {
 			return _yCenter;
 		}
 	}
 
-	public TrackTrail GetDrumTrail() 
+	public TrackTrail GetDrumTrail ()
 	{
 		return _drumTrailRenderer;
 	}
 
-	public TrackTrail GetPizzTrail() 
+	public TrackTrail GetPizzTrail ()
 	{
 		return _pizzTrailRenderer;
 	}
 
-	public TrackTrail GetKeysTrail() 
+	public TrackTrail GetKeysTrail ()
 	{
 		return _keysTrailRenderer;
 	}
 
-	public TrackTrail GetClavTrail() 
+	public TrackTrail GetClavTrail ()
 	{
 		return _clavTrailRenderer;
 	}
 
-	public TrackTrail GetBassTrail() 
+	public TrackTrail GetBassTrail ()
 	{
 		return _bassTrailRenderer;
 	}
 
-	void Awake() {
-		if(!instance)
+	void Awake ()
+	{
+		if (!instance)
 			instance = this;
 	}
 
-	public void StartPlaying() {
-		_bassTrailRenderer.ActivateTrail();
+	public void StartPlaying ()
+	{
+		_bassTrailRenderer.SetActive();
+		_bassTrailRenderer.ActivateTrail ();
 	}
 
-	private void ActivateAllTrails() {
-		_bassTrailRenderer.ActivateTrail();
-		_clavTrailRenderer.ActivateTrail();
-		_drumTrailRenderer.ActivateTrail();
-		_keysTrailRenderer.ActivateTrail();
-		_pizzTrailRenderer.ActivateTrail();
+	private void ActivateAllTrails ()
+	{
+		_bassTrailRenderer.ActivateTrail ();
+		_clavTrailRenderer.ActivateTrail ();
+		_drumTrailRenderer.ActivateTrail ();
+		_keysTrailRenderer.ActivateTrail ();
+		_pizzTrailRenderer.ActivateTrail ();
 	}
 
-	private void DeactivateAllTrails() {
-		_bassTrailRenderer.DeactivateTrail();
-		_clavTrailRenderer.DeactivateTrail();
-		_drumTrailRenderer.DeactivateTrail();
-		_keysTrailRenderer.DeactivateTrail();
-		_pizzTrailRenderer.DeactivateTrail();
+	private void DeactivateAllTrails ()
+	{
+		_bassTrailRenderer.DeactivateTrail ();
+		_clavTrailRenderer.DeactivateTrail ();
+		_drumTrailRenderer.DeactivateTrail ();
+		_keysTrailRenderer.DeactivateTrail ();
+		_pizzTrailRenderer.DeactivateTrail ();
 	}
 
-	public void OnTitleEnterState() {
-		ActivateAllTrails();
+	public void OnTitleEnterState ()
+	{
+		ActivateAllTrails ();
 	}
 
-	public void OnTitleUpdateState() {
+	public void OnTitleUpdateState ()
+	{
 
 	}
 
-	public void OnPlayingEnterState() {
-		DeactivateAllTrails();
-		_bassTrailRenderer.ActivateTrail();
+	public void OnPlayingEnterState ()
+	{
+		DeactivateAllTrails ();
+		_bassTrailRenderer.ActivateTrail ();
 	}
 
-	public void OnPlayingUpdateState() {
-		if(Input.GetKeyDown(KeyCode.Q))
-		{
-			SetState(PlayerState.Drop);
+	public void OnPlayingUpdateState ()
+	{
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			SetState (PlayerState.Drop);
 		}
-		if(Input.GetKeyDown(KeyCode.E))
-		{
-			SetState(PlayerState.Active);
+		if (Input.GetKeyDown (KeyCode.E)) {
+			SetState (PlayerState.Active);
 		}
 
-		Debug.Log(_playerState);
-
-		if(_playerState == PlayerState.Active) {
+		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S)) {
@@ -140,24 +145,26 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .05f;
 				}
 			}
+		} else if (_playerState == PlayerState.Drop) {
+			Mathf.Clamp (_yPos -= .075f, -2, 2);
+
+			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
-		else if (_playerState == PlayerState.Drop) {
-			Mathf.Clamp(_yPos -= .075f, -2, 2);
-
-			transform.position = new Vector3(_pointPos, transform.position.y + _yPos, 0);
-		}
 	}
 
-	public void OnGameOverEnterState() {
+	public void OnGameOverEnterState ()
+	{
 
 	}
 
-	public void OnGameOverUpdateState() {
+	public void OnGameOverUpdateState ()
+	{
 
 	}
 
-	public void SetState(PlayerState state) {
-		switch(state) {
+	public void SetState (PlayerState state)
+	{
+		switch (state) {
 		case PlayerState.Active:
 			_yCenter = transform.position.y;
 			break;
@@ -175,93 +182,88 @@ public class Player_Controller : MonoBehaviour
 
 	}
 
-	public void OnPreUpdateState() {
+	public void OnPreUpdateState ()
+	{
 		
 	}
 
-	public void OnPostUpdateState() {
+	public void OnPostUpdateState ()
+	{
 		if (_yPos <= .025f && _yPos >= -.025f) {
 			_yPos = 0;
-		}
-		else if (_yPos > 0) {
+		} else if (_yPos > 0) {
 			_yPos -= .025f;
 		} else if (_yPos < 0) {
 			_yPos += .025f;
 		}
 
-		if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
-			_yPos = Mathf.Clamp(_yPos, -.4f, .4f);
-			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter -7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
-		}
-		else if (_playerState == PlayerState.Drop){
-			_yPos = Mathf.Clamp(_yPos, -2f, 2f);
-			transform.position = new Vector3(_pointPos, transform.position.y + _yPos, 0);
+		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
+			_yPos = Mathf.Clamp (_yPos, -.4f, .4f);
+			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter - 7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
+		} else if (_playerState == PlayerState.Drop) {
+			_yPos = Mathf.Clamp (_yPos, -2f, 2f);
+			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
 
 		_pointPos += 1f;
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
 
-		int segment = Mathf.Max(spline.NbSegments - 15, 0);
-		float distFromStart = spline.GetSegmentDistanceFromStart(segment);
+		int segment = Mathf.Max (spline.NbSegments - 15, 0);
+		float distFromStart = spline.GetSegmentDistanceFromStart (segment);
 
-		Vector3 pos = spline.FindPositionFromDistance(distFromStart);
+		Vector3 pos = spline.FindPositionFromDistance (distFromStart);
 
-		Vector3 endPos = spline.FindPositionFromDistance(spline.GetSegmentDistanceFromStart(spline.NbSegments - 1));
+		Vector3 endPos = spline.FindPositionFromDistance (spline.GetSegmentDistanceFromStart (spline.NbSegments - 1));
 		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
 	}
 
-	private void LateUpdate() {
+	private void LateUpdate ()
+	{
 		
 //		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
 
-	public void ActivateTrack(AudioManager.TrackTypes type)
+	public void ActivateTrack (AudioManager.TrackTypes type)
 	{
-		switch(type) {
-			case AudioManager.TrackTypes.Bass:
-				if(!_bassTrailRenderer.active)
-					_bassTrailRenderer.ActivateTrail();
-				break;
-			case AudioManager.TrackTypes.Clav:
-				if(!_clavTrailRenderer.active)
-					_clavTrailRenderer.ActivateTrail();
-				break;
-			case AudioManager.TrackTypes.Drums:
-				if(!_drumTrailRenderer.active)
-					_drumTrailRenderer.ActivateTrail();
-				break;
-			case AudioManager.TrackTypes.Keys:
-				if(!_keysTrailRenderer.active)
-					_keysTrailRenderer.ActivateTrail();
-				break;
-			case AudioManager.TrackTypes.Pizz:
-				if(!_pizzTrailRenderer.active)
-					_pizzTrailRenderer.ActivateTrail();
-				break;
+		TrackTrail trail = GetTrack(type);
+		SetTrackOrder(trail);
+		trail.ActivateTrail ();
+	}
+
+	void SetTrackOrder(TrackTrail trail) {
+
+		int val = 0;
+		for(int i = 0; i < 4; i++) {
+			AudioManager.TrackTypes type = (AudioManager.TrackTypes)i;
+			TrackTrail track = GetTrack(type);
+			if(track.active){
+				track.transform.localPosition = new Vector3(0, -2 + val, 0);
+				val++;
+			}
 		}
 	}
 
-	public TrackTrail GetTrack(AudioManager.TrackTypes type)
+	public TrackTrail GetTrack (AudioManager.TrackTypes type)
 	{
 		TrackTrail track = null;
-		switch(type) {
-			case AudioManager.TrackTypes.Bass:
-				track = _bassTrailRenderer;
-				break;
-			case AudioManager.TrackTypes.Clav:
-				track = _clavTrailRenderer;
-				break;
-			case AudioManager.TrackTypes.Drums:
-				track = _drumTrailRenderer;
-				break;
-			case AudioManager.TrackTypes.Keys:
-				track = _keysTrailRenderer;
-				break;
-			case AudioManager.TrackTypes.Pizz:
-				track = _pizzTrailRenderer;
-				break;
+		switch (type) {
+		case AudioManager.TrackTypes.Bass:
+			track = _bassTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Clav:
+			track = _clavTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Drums:
+			track = _drumTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Keys:
+			track = _keysTrailRenderer;
+			break;
+		case AudioManager.TrackTypes.Pizz:
+			track = _pizzTrailRenderer;
+			break;
 		}
 		return track;
 	}

@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			SetState(GameState.Playing);
 			playerController.SetState(Player_Controller.PlayerState.Active);
+			playerController.StartPlaying();
 		}
 	}
 
