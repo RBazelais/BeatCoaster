@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8ba3884e4bd9d4877ac1f844c44fcfe9
-timeCreated: 1487963632
+timeCreated: 1487971382
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -19,6 +19,10 @@ TextureImporter:
     21300024: person-sprites_12
     21300026: person-sprites_13
     21300028: person-sprites_14
+    21300030: person-sprites_15
+    21300032: person-sprites_16
+    21300034: person-sprites_17
+    21300036: person-sprites_18
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -104,12 +108,12 @@ TextureImporter:
       name: person-sprites_0
       rect:
         serializedVersion: 2
-        x: 21
-        y: 494
-        width: 69
+        x: 28
+        y: 665
+        width: 72
         height: 115
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -117,12 +121,12 @@ TextureImporter:
       name: person-sprites_1
       rect:
         serializedVersion: 2
-        x: 132
-        y: 494
+        x: 141
+        y: 664
         width: 76
-        height: 112
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -130,12 +134,12 @@ TextureImporter:
       name: person-sprites_2
       rect:
         serializedVersion: 2
-        x: 246
-        y: 494
+        x: 255
+        y: 664
         width: 76
-        height: 109
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -143,12 +147,12 @@ TextureImporter:
       name: person-sprites_3
       rect:
         serializedVersion: 2
-        x: 358
-        y: 494
+        x: 367
+        y: 664
         width: 80
-        height: 106
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -156,12 +160,12 @@ TextureImporter:
       name: person-sprites_4
       rect:
         serializedVersion: 2
-        x: 27
-        y: 335
+        x: 36
+        y: 506
         width: 70
         height: 115
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -169,12 +173,12 @@ TextureImporter:
       name: person-sprites_5
       rect:
         serializedVersion: 2
-        x: 136
-        y: 335
+        x: 145
+        y: 504
         width: 76
-        height: 113
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -182,12 +186,12 @@ TextureImporter:
       name: person-sprites_6
       rect:
         serializedVersion: 2
-        x: 249
-        y: 335
+        x: 258
+        y: 504
         width: 75
-        height: 109
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -195,12 +199,12 @@ TextureImporter:
       name: person-sprites_7
       rect:
         serializedVersion: 2
-        x: 27
-        y: 176
+        x: 36
+        y: 347
         width: 70
         height: 116
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -208,12 +212,12 @@ TextureImporter:
       name: person-sprites_8
       rect:
         serializedVersion: 2
-        x: 27
-        y: 17
+        x: 36
+        y: 188
         width: 70
         height: 116
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -221,12 +225,12 @@ TextureImporter:
       name: person-sprites_9
       rect:
         serializedVersion: 2
-        x: 130
-        y: 17
+        x: 139
+        y: 188
         width: 75
         height: 113
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -234,12 +238,12 @@ TextureImporter:
       name: person-sprites_10
       rect:
         serializedVersion: 2
-        x: 236
-        y: 17
+        x: 245
+        y: 188
         width: 75
         height: 110
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -247,12 +251,12 @@ TextureImporter:
       name: person-sprites_11
       rect:
         serializedVersion: 2
-        x: 338
-        y: 17
+        x: 347
+        y: 188
         width: 81
         height: 107
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -260,12 +264,12 @@ TextureImporter:
       name: person-sprites_12
       rect:
         serializedVersion: 2
-        x: 449
-        y: 17
+        x: 458
+        y: 188
         width: 70
         height: 121
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -273,12 +277,77 @@ TextureImporter:
       name: person-sprites_13
       rect:
         serializedVersion: 2
-        x: 555
-        y: 17
+        x: 564
+        y: 188
         width: 70
         height: 124
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: person-sprites_14
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 79
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: person-sprites_15
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 33
+        width: 104
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: person-sprites_16
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 36
+        width: 117
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: person-sprites_17
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 37
+        width: 117
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: person-sprites_18
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 37
+        width: 121
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
