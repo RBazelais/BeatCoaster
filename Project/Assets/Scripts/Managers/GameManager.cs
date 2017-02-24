@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	[SerializeField] private Player_Controller playerController;
 	[SerializeField] private TextMeshProUGUI titleText;
+	public Camera mainCamera;
 
 	private StateMachine stateMachine;
 
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour {
 	private void Title_EnterState() {
 		titleText.gameObject.SetActive(true);
 		playerController.OnTitleEnterState();
+		mainCamera.DOOrthoSize(2f, 1f);
 	}
 
 	private void Title_ExitState() {
