@@ -13,7 +13,8 @@ public class PersonManager : MonoBehaviour {
 	}
 
 	private void Start() {
-		AudioManager.instance.Beat += OnBeat;
+		ObjectPool.CreatePool(personPrefab, 50);
+		AudioManager.instance.BeatOnUpdate += OnBeat;
 	}
 
 	public void AddPersonToDrumTrail() {
@@ -42,7 +43,7 @@ public class PersonManager : MonoBehaviour {
 	}
 
 	private Person CreatePerson() {
-		Person person = Instantiate(personPrefab);
+		Person person = personPrefab.Spawn();
 		person.transform.SetParent(transform);
 		people.Add(person);
 		return person;
@@ -57,7 +58,6 @@ public class PersonManager : MonoBehaviour {
 	}
 
 	private void OnBeat() {
-		Debug.Log("beat");
 		for (int i = 0; i < people.Count; i++) {
 			people[i].OnBeat();
 		}

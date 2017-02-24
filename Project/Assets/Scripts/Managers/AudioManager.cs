@@ -38,7 +38,10 @@ public class AudioManager : MonoBehaviour
 	private bool _running = false;
 
 	public delegate void BeatHandler ();
-	public BeatHandler Beat;
+	public BeatHandler BeatExact;
+	public BeatHandler BeatOnUpdate;
+
+	private bool sendBeatSignal = false;
 
 	void Awake() {
 		if(!instance)
@@ -49,6 +52,11 @@ public class AudioManager : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Space) && !_bassTrack.isPlaying)
 			PlayTracks();
+
+		if (sendBeatSignal) {
+			BeatOnUpdate();
+			sendBeatSignal = false;
+		}
 	}
 
 	void OnAudioFilterRead (float[] data, int channels)
@@ -75,12 +83,17 @@ public class AudioManager : MonoBehaviour
 					_amp *= 2.0F;
 				}
 				Debug.Log ("Tick: " + _accent + "/" + _signatureHi);
-				Beat();
+				OnBeat();
 			}
 			_phase += _amp * 0.3F;
 			_amp *= 0.993F;
 			n++;
 		}
+	}
+
+	private void OnBeat() {
+		BeatExact();
+		sendBeatSignal = true;
 	}
 
 	void PlayTracks ()
@@ -96,6 +109,8 @@ public class AudioManager : MonoBehaviour
 		_sampleRate = AudioSettings.outputSampleRate;
 		_nextTick = startTick * _sampleRate;
 		_running = true;
+
+		OnBeat();
 	}
 
 	AudioSource GetTrack (TrackTypes type)

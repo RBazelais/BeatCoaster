@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	void Awake() {
 		_opponentPrefab.CreatePool(100);
-		AudioManager.instance.Beat += SpawnOpponent;
+		AudioManager.instance.BeatExact += SpawnOpponent;
 	}
 
 	void Update() {

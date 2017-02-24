@@ -46,8 +46,14 @@ public class Person : MonoBehaviour {
 	private void UpdateWobble() {
 		wobbleVal = Player_Controller.instance.wobbleIntensity * Mathf.Sin(Time.time * Player_Controller.instance.wobbleSpeed + wobbleOffset);
 	}
-
+		
 	public void OnBeat() {
-		sprite.transform.DOLocalJump(Vector3.zero, 5, 1, 0.15f);
+		float jumpAmt = UnityEngine.Random.Range(0.4f, 0.6f);
+		float dur = 60.0f / (float)AudioManager.instance.bpm;
+		float buffer = dur * 0.1f;
+		dur -= buffer;
+		sprite.transform
+			.DOLocalJump(Vector3.zero, jumpAmt, 1, dur)
+			.SetDelay(buffer);
 	}
 }
