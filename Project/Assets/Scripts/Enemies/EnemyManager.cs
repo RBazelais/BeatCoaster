@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour {
 
 	private void SpawnEnemy() {
 		Enemy enemy = enemyPrefab.Spawn();
-		enemy.transform.position = new Vector3(spawnPoint.position.x, GameManager.instance.enemyVerticalRange.GetRandom(), 0);
+		enemy.transform.position = new Vector3(spawnPoint.position.x,Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom(), 0);
 		AudioManager.TrackTypes trackType = (AudioManager.TrackTypes)Random.Range(0, 5);
 		enemy.SetTrackType(trackType);
 		enemy.Activate();

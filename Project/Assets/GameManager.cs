@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public FloatRange enemyVerticalRange = new FloatRange(-12.5f, 12.5f);
+	public FloatRange enemyVerticalRange = new FloatRange(-4f, 4f);
 
 	public GameState state {get; private set;}
 

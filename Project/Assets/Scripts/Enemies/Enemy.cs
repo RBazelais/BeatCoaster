@@ -21,6 +21,12 @@ public class Enemy : MonoBehaviour {
 	private float sineAmplitude;
 	private float sineFrequency;
 
+	private AudioManager.TrackTypes _trackType;
+	public AudioManager.TrackTypes trackType
+	{
+		get{return _trackType;}
+	}
+
 	[SerializeField] private TrackTrail trail;
 
 	public void Activate() {
@@ -30,7 +36,7 @@ public class Enemy : MonoBehaviour {
 		trail.ActivateTrail();
 
 		spawnVerticalPos = transform.position.y;
-		endVerticalPos = GameManager.instance.enemyVerticalRange.GetRandom();
+		endVerticalPos = Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom();
 
 		enterDur = EnemyManager.instance.enemyEnterDurationRange.GetRandom();
 		exitDur = EnemyManager.instance.enemyExitDurationRange.GetRandom();
@@ -133,5 +139,6 @@ public class Enemy : MonoBehaviour {
 
 	public void SetTrackType(AudioManager.TrackTypes trackType) {
 		trail.SetTrackType(trackType);
+		_trackType = trackType;
 	}
 }

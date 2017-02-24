@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour {
 	}
 
 	private void UpdateActivePosition() {
-		Vector3 targetPos = new Vector3(Player_Controller.instance.transform.position.x - 18, Player_Controller.instance.yCenter, -10);
+		Vector3 targetPos = new Vector3(Player_Controller.instance.transform.position.x - 19, Player_Controller.instance.yCenter, -10);
 		_mainCamera.transform.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
 	}
 
