@@ -142,11 +142,11 @@ public class TrackTrail : MonoBehaviour
 		Debug.Log(trackType.ToString() + " reset track sequence");
 
 		_decaySequence = DOTween.Sequence ();
-		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
-		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
-		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
-		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
-		_decaySequence.SetDelay (5f).OnComplete(() => {
+		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, GameManager.instance.fadeDuration));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, GameManager.instance.fadeDuration).SetEase(Ease.Linear));
+		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, GameManager.instance.fadeDuration).SetEase(Ease.Linear));
+		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, GameManager.instance.fadeDuration));
+		_decaySequence.SetDelay (GameManager.instance.fadeDelay).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
 			AudioManager.instance.RestartBeats();
@@ -168,11 +168,11 @@ public class TrackTrail : MonoBehaviour
 			_shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType (trackType);
 
 		_decaySequence = DOTween.Sequence ();
-		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
-		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
-		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
-		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
-		_decaySequence.SetDelay (5f).OnComplete(() => {
+		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, GameManager.instance.fadeDuration));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, GameManager.instance.fadeDuration).SetEase(Ease.Linear));
+		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, GameManager.instance.fadeDuration).SetEase(Ease.Linear));
+		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, GameManager.instance.fadeDuration));
+		_decaySequence.SetDelay (GameManager.instance.fadeDelay).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
 			AudioManager.instance.RestartBeats();

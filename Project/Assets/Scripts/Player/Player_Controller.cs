@@ -237,6 +237,7 @@ public class Player_Controller : MonoBehaviour
 		DisableDropNotification();
 
 		PersonManager.instance.DropPeople();
+		GameManager.instance.SpeedFadeTimes();
 
 		yield return new WaitForSeconds(7.5f);
 

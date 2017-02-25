@@ -49,6 +49,16 @@ public class GameManager : MonoBehaviour {
 
 	private StateMachine stateMachine;
 
+	private float _fadeDelay = 5, _fadeDuration = 10;
+	public float fadeDelay
+	{
+		get { return _fadeDelay;}
+	}
+	public float fadeDuration
+	{
+		get{return _fadeDuration;}
+	}
+
 	public void SetState(GameState state) {
 		stateMachine.SetState(state);
 	}
@@ -66,6 +76,11 @@ public class GameManager : MonoBehaviour {
 
 	public void AddDroppedListeners(int amt) {
 		_droppedListeners += amt;
+	}
+
+	public void SpeedFadeTimes() {
+		_fadeDelay = Mathf.Clamp(_fadeDelay -= .25f, 2.5f, 5f);
+		_fadeDuration = Mathf.Clamp(_fadeDuration -= .25f, 6.5f, 10f);
 	}
 
 	protected void PreUpdateState() {
