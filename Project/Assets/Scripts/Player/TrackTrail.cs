@@ -16,10 +16,8 @@ public class TrackTrail : MonoBehaviour
 	{
 		AudioManager.instance.BeatOnUpdate += OnBeat;
 	}
-
-	[SerializeField]
+		
 	private AudioManager.TrackTypes _trackType;
-
 	public AudioManager.TrackTypes trackType {
 		get {
 			return _trackType;
@@ -88,21 +86,25 @@ public class TrackTrail : MonoBehaviour
 		_active = true;
 	}
 
-	public void ActivateTrail ()
-	{
+	public void InitTrail() {
 		_capSprite.enabled = true;
 
 		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
 		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
-		AudioManager.instance.GetTrack(_trackType).volume = .65f;
 
 		_splineTrailRenderer.Clear ();
 		if (_shadowSplineTrailRenderer != null)
 			_shadowSplineTrailRenderer.Clear ();
-		
+
 		_splineTrailRenderer.emit = true;
 		if (_shadowSplineTrailRenderer != null)
 			_shadowSplineTrailRenderer.emit = true;
+	}
+
+	public void ActivateTrail ()
+	{
+		AudioManager.instance.GetTrack(_trackType).volume = 1f;
+		InitTrail();
 	}
 
 	public void DeactivateTrail ()
@@ -133,7 +135,7 @@ public class TrackTrail : MonoBehaviour
 
 	public void ResetDecay(bool playAgain = true) {
 		_decaySequence.Kill();
-		AudioManager.instance.GetTrack(_trackType).volume = .65f;
+		AudioManager.instance.GetTrack(_trackType).volume = 1f;
 
 		decayVal = 1;
 		ResetTrailAppearance();
@@ -159,6 +161,8 @@ public class TrackTrail : MonoBehaviour
 	public void SetTrackType (AudioManager.TrackTypes trackType)
 	{
 		_trackType = trackType;
+
+		Debug.Log(_trackType);
 		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
 		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
 		if (_shadowSplineTrailRenderer != null)

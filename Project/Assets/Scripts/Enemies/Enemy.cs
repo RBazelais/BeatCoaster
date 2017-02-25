@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
 		sineAmplitude = Random.Range (1f, 3f);
 		sineFrequency = Random.Range (5f, 15f);
 
-		_trail.ActivateTrail ();
+		_trail.InitTrail ();
 
 		spawnVerticalPos = transform.position.y;
 		endVerticalPos = Player_Controller.instance.yCenter + GameManager.instance.enemyVerticalRange.GetRandom ();

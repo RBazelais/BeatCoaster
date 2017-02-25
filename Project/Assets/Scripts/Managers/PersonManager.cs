@@ -104,7 +104,7 @@ public class PersonManager : MonoBehaviour {
 		Person[] toDrop = collectedPeople.ToArray();
 		for(int i = 0; i < toDrop.Length; i++) {
 			var person = toDrop[i];
-			peopleKillSequence.Insert(i * 12/collectedPeople.Count, person.transform.DOMove(new Vector3(20, UnityEngine.Random.Range(-10,10), 0), .33f).SetRelative(true).OnStart(() => {
+			peopleKillSequence.Insert(i * 6/collectedPeople.Count, person.transform.DOMove(new Vector3(20, UnityEngine.Random.Range(-10,10), 0), .33f).SetRelative(true).OnStart(() => {
 				person.Reset();
 				person.SetTrail(null, Person.PersonMoveType.Follow);
 				person.transform.parent = null;

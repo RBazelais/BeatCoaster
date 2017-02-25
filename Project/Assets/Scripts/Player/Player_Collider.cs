@@ -43,20 +43,21 @@ public class Player_Collider : MonoBehaviour
 
 	void Update ()
 	{
-		RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
+		RaycastHit2D[] hits = Physics2D.CircleCastAll (transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
 		if (hits.Length > 0) {
-			_sprite.color = new Color(1,1,1,.85f);
+			_sprite.color = new Color (1, 1, 1, .85f);
 			if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
-				for(int i = 0; i < hits.Length; i++) {
-					var enemy = hits[i].transform.GetComponent<Enemy>();
-					if (!enemy.collected) {
-						enemy.AttemptCollect ();
+				for (int i = 0; i < hits.Length; i++) {
+					var enemy = hits [i].transform.GetComponent<Enemy> ();
+					if (enemy != null) {
+						if (!enemy.collected) {
+							enemy.AttemptCollect ();
+						}
 					}
 				}
 			}
-		}
-		else {
-			_sprite.color = new Color(1,1,1,.5f);
+		} else {
+			_sprite.color = new Color (1, 1, 1, .5f);
 		}
 	}
 }

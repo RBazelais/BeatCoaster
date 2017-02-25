@@ -50,6 +50,12 @@ public class Player_Controller : MonoBehaviour
 
 	private float _yPos = 0, _lastYPos, _yCenter;
 
+	private bool _hitSpaceForDrop, _dropHit;
+	public bool dropHit
+	{
+		get{ return _dropHit; }
+	}
+
 	public float yCenter {
 		get {
 			return _yCenter;
@@ -151,19 +157,16 @@ public class Player_Controller : MonoBehaviour
 	public void OnPlayingUpdateState ()
 	{
 		if (ActiveTrails () == 5 && _playerState == PlayerState.Active && PersonManager.instance.GetListenerCount() > 0) {
-			if (!_dropReminder.gameObject.activeSelf)
-				EnableDrop ();
-
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				_playerState = PlayerState.Idle;
-				AudioManager.instance.PlaySound(AudioManager.instance.whiteNoiseClip, 1);
-				TriggerDrop ();
-			}
+				TriggerBuildUp ();
 		}
-		else
+
+		if(_playerState == PlayerState.Idle)
 		{
-			if(_dropReminder.gameObject.activeSelf)
-				DisableDrop();
+			if(_hitSpaceForDrop)
+			{
+				if(Input.GetKeyDown(KeyCode.Space))
+					_dropHit = true;
+			}
 		}
 
 		bool input = false;
@@ -194,8 +197,10 @@ public class Player_Controller : MonoBehaviour
 		}
 	}
 
-	void TriggerDrop ()
+	void TriggerBuildUp ()
 	{
+		_playerState = PlayerState.Idle;
+		AudioManager.instance.PlaySound(AudioManager.instance.whiteNoiseClip, 1);
 		AudioManager.instance.TriggerDrop ();
 
 		_bassTrailRenderer.decaySequence.Kill ();
@@ -216,37 +221,46 @@ public class Player_Controller : MonoBehaviour
 		EnemyManager.instance.enemies.Clear ();
 	}
 
-	void EnableDrop ()
+	void EnableDropNotification ()
 	{
 		_dropReminder.gameObject.SetActive (true);
-		AudioManager.instance.sfxWhiteNoise.Play ();
+		//AudioManager.instance.sfxWhiteNoise.Play ();
 	}
 
-	void DisableDrop() {
+	void DisableDropNotification() {
 		_dropReminder.gameObject.SetActive(false);
-		AudioManager.instance.sfxWhiteNoise.Stop();
+		//AudioManager.instance.sfxWhiteNoise.Stop();
+	}
+
+	public IEnumerator YieldToDropEnable() {
+		yield return new WaitForSeconds(11f);
+		_hitSpaceForDrop = true;
+		EnableDropNotification();
 	}
 
 	public IEnumerator PlayDrop() {
 		SetState (PlayerState.Drop);
+		DisableDropNotification();
 
 		PersonManager.instance.DropPeople();
 
-		yield return new WaitForSeconds(12f);
+		yield return new WaitForSeconds(6f);
+
+		ResetToBass();
+	}
+
+	public void ResetToBass() {
+		DisableDropNotification();
+
+		_clavTrailRenderer.DeactivateTrail();
+		_drumTrailRenderer.DeactivateTrail();
+		_keysTrailRenderer.DeactivateTrail();
+		_pizzTrailRenderer.DeactivateTrail();
+
+		SetTrackOrder();
 
 		SetState(PlayerState.Active);
-
-		_pizzTrailRenderer.ResetDecay();
-
-		yield return new WaitForSeconds(1f);
-
-		_clavTrailRenderer.ResetDecay();
-
-		yield return new WaitForSeconds(1f);
-
-		_drumTrailRenderer.ResetDecay();
-		_keysTrailRenderer.ResetDecay();
-
+		AudioManager.instance.RestartBeats();
 	}
 
 	public void OnGameOverEnterState ()

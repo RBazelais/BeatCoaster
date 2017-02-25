@@ -72,6 +72,8 @@ public class AudioManager : MonoBehaviour
 
 	private bool sendBeatSignal = false, _triggerDrop = false, _initPlay = false, _waitForBuild = false;
 
+	private double _dropTime;
+
 	void Awake ()
 	{
 		if (!instance)
@@ -95,7 +97,9 @@ public class AudioManager : MonoBehaviour
 				_triggerDrop = false;
 				_waitForBuild = true;
 				_buildTrack.PlayScheduled (nextEventTime);
-				_dropTrack.PlayScheduled (nextEventTime + ((60.0F / bpm * numBeatsPerSegment) * 2f));
+				_dropTime = nextEventTime + ((60.0F / bpm * numBeatsPerSegment) * 2f);
+				_dropTrack.PlayScheduled (_dropTime);
+				StartCoroutine(Player_Controller.instance.YieldToDropEnable());
 				Debug.Log ("Scheduled source to start at time " + nextEventTime);
 			}
 			if (_initPlay) {
@@ -107,9 +111,15 @@ public class AudioManager : MonoBehaviour
 		}
 
 		if (_waitForBuild) {
-			if (_buildTrack.isPlaying) {
+			if (AudioSettings.dspTime >= _dropTime) {
 				_waitForBuild = false;
-				StartCoroutine (PlayDrop ());
+
+				if(Player_Controller.instance.dropHit)
+				PlayDrop();
+				else{
+					_dropTrack.volume = 0;
+					Player_Controller.instance.ResetToBass();
+				}
 			}
 		}
 	}
@@ -125,7 +135,7 @@ public class AudioManager : MonoBehaviour
 		_pizzTrack.PlayScheduled (eventTime);
 		_drumTrack.PlayScheduled (eventTime);
 
-		_bassTrack.volume = .65f;
+		_bassTrack.volume = 1f;
 		_clavTrack.volume = 0;
 		_keyTrack.volume = 0;
 		_pizzTrack.volume = 0;
@@ -138,9 +148,9 @@ public class AudioManager : MonoBehaviour
 	}
 
 
-	IEnumerator PlayDrop ()
+	void PlayDrop ()
 	{
-		yield return new WaitForSeconds (1f);
+		_dropTrack.volume = 1;
 		_bassTrack.volume = 0;
 		_clavTrack.volume = 0;
 		_keyTrack.volume = 0;
@@ -211,15 +221,15 @@ public class AudioManager : MonoBehaviour
 	void VolumeUpAllTracks ()
 	{
 		if (Player_Controller.instance.GetBassTrail ().active && _bassTrack.volume == 0)
-			_bassTrack.volume = .65f;
-		if (Player_Controller.instance.GetClavTrail ().active && _bassTrack.volume == 0)
-			_clavTrack.volume = .65f;
-		if (Player_Controller.instance.GetKeysTrail ().active && _bassTrack.volume == 0)
-					_keyTrack.volume = .65f;
-		if (Player_Controller.instance.GetPizzTrail ().active && _bassTrack.volume == 0)
-					_pizzTrack.volume = .65f;
-		if (Player_Controller.instance.GetDrumTrail ().active && _bassTrack.volume == 0)
-					_drumTrack.volume = .65f;
+			_bassTrack.volume = 1f;
+		if (Player_Controller.instance.GetClavTrail ().active && _clavTrack.volume == 0)
+			_clavTrack.volume = 1f;
+		if (Player_Controller.instance.GetKeysTrail ().active && _keyTrack.volume == 0)
+					_keyTrack.volume = 1f;
+		if (Player_Controller.instance.GetPizzTrail ().active && _pizzTrack.volume == 0)
+					_pizzTrack.volume = 1f;
+		if (Player_Controller.instance.GetDrumTrail ().active && _drumTrack.volume == 0)
+					_drumTrack.volume = 1f;
 	}
 
 	public AudioSource GetTrack (TrackTypes type)
@@ -242,6 +252,7 @@ public class AudioManager : MonoBehaviour
 			track = _drumTrack;
 			break;
 		}
+		Debug.Log(track);
 		return track;
 	}
 }
