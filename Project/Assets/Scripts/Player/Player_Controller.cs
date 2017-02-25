@@ -143,14 +143,6 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if (Input.GetKeyDown (KeyCode.Q)) {
-			_playerState = PlayerState.Idle;
-			TriggerDrop();
-		}
-		if (Input.GetKeyDown (KeyCode.E)) {
-			SetState (PlayerState.Active);
-		}
-
 		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
 			_playerState = PlayerState.Idle;
 			TriggerDrop();
@@ -161,9 +153,9 @@ public class Player_Controller : MonoBehaviour
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
 		}
-
-		if (_playerState == PlayerState.Active) {
+			
 			bool input = false;
+		if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
 					input = true;
@@ -177,12 +169,17 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
-		} else if (_playerState == PlayerState.Drop) {
-			_yPos -= .045f;
-			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
-
-			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
-			_pointPos += 1;
+		}
+		else if (_playerState == PlayerState.Drop) {
+				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+					input = true;
+					_yPos -= .065f;
+				}
+				
+				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+					input = true;
+					_yPos += .065f;
+				}
 		}
 	}
 
@@ -265,7 +262,7 @@ public class Player_Controller : MonoBehaviour
 			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
 			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter - 7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
 		} else if (_playerState == PlayerState.Drop) {
-			_yPos = Mathf.Clamp (_yPos, -2f, 2f);
+			_yPos = Mathf.Clamp (_yPos, -2f, -.75f);
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
 
@@ -288,12 +285,6 @@ public class Player_Controller : MonoBehaviour
 		_col.transform.position = pos;
 	}
 
-	private void LateUpdate ()
-	{
-
-		//		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
-	}
-
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
 		TrackTrail track = GetTrack (type);
@@ -308,8 +299,6 @@ public class Player_Controller : MonoBehaviour
 			PersonManager.instance.TransferPeople (fromTrail, track);
 		}
 	}
-
-
 
 	public void SetTrackOrder ()
 	{

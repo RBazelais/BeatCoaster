@@ -111,6 +111,12 @@ public class AudioManager : MonoBehaviour
 		_keyTrack.PlayScheduled (eventTime);
 		_pizzTrack.PlayScheduled (eventTime);
 		_drumTrack.PlayScheduled (eventTime);
+
+		_bassTrack.volume = 1;
+		_clavTrack.volume = 0;
+		_keyTrack.volume = 0;
+		_pizzTrack.volume = 0;
+		_drumTrack.volume = 0;
 	}
 
 	public void TriggerDrop ()

@@ -8,6 +8,9 @@ public class CameraManager : MonoBehaviour {
 	[SerializeField]
 	private Camera _mainCamera;
 
+	[SerializeField]
+	private Transform _cameraParent;
+
 	void Start() {
 		AudioManager.instance.BeatOnUpdate += ShakeCamera;
 	}
@@ -23,17 +26,17 @@ public class CameraManager : MonoBehaviour {
 
 	private void UpdateActivePosition() {
 		Vector3 targetPos = new Vector3(Player_Controller.instance.transform.position.x - 19, Player_Controller.instance.yCenter, -10);
-		_mainCamera.transform.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
+		_cameraParent.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
 	}
 
 	private void UpdateDropPosition() {
 		Vector3 targetPos = new Vector3 (Player_Controller.instance.transform.position.x - 20, Player_Controller.instance.transform.position.y + 17, -10);
-		_mainCamera.transform.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
+		_cameraParent.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
 	}
 
 	void ShakeCamera() {
 		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop){
-			_mainCamera.DOShakePosition(.1f);
+			_mainCamera.DOShakePosition(.15f, 1f, 50);
 		}
 	}
 }
