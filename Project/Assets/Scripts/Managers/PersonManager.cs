@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WhitDataTypes;
 using System;
+using DG.Tweening;
 
 public class PersonManager : MonoBehaviour {
 	public Action SignalPersonAddedToCollection;
@@ -90,6 +91,42 @@ public class PersonManager : MonoBehaviour {
 		if (person.trail != fromTrail) Debug.LogError("can't transfer person from a trail they're not on!");
 		fromTrail.RemovePerson(person);
 		toTrail.AddPerson(person, Person.PersonMoveType.Transfer);
+	}
+
+	public void DropPeople() {
+		var bassTrail = Player_Controller.instance.GetBassTrail();
+		var clavTrail = Player_Controller.instance.GetClavTrail();
+		var keyTrail = Player_Controller.instance.GetKeysTrail();
+		var drumTrail = Player_Controller.instance.GetDrumTrail();
+		var pizzTrail = Player_Controller.instance.GetPizzTrail();
+
+		Sequence peopleKillSequence = DOTween.Sequence(); 
+		Person[] toDrop = collectedPeople.ToArray();
+		for(int i = 0; i < toDrop.Length; i++) {
+			var person = toDrop[i];
+			peopleKillSequence.Insert(i * 12/collectedPeople.Count, person.transform.DOMove(new Vector3(20, UnityEngine.Random.Range(-10,10), 0), .33f).SetRelative(true).OnStart(() => {
+				person.Reset();
+				person.SetTrail(null, Person.PersonMoveType.Follow);
+				person.transform.parent = null;
+
+				GameManager.instance.AddDroppedListeners(listenersPerPersonUnit);
+				OnPersonLeftCollectedPeople(person);
+			}));
+		}
+
+		peopleKillSequence.Play().OnComplete(() =>
+			{	
+				bassTrail.people.Clear();
+				clavTrail.people.Clear();
+				keyTrail.people.Clear();
+				drumTrail.people.Clear();
+				pizzTrail.people.Clear();
+
+				for(int i = 0; i < collectedPeople.Count; i++) {
+					collectedPeople[i].Recycle();
+				}
+				collectedPeople.Clear();
+			});
 	}
 
 	private Person CreatePerson() {

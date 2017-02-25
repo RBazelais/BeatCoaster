@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	private int _droppedListeners;
+	public int droppedListeners
+	{
+		get { return _droppedListeners; }
+	}
+
 	public FloatRange enemyVerticalRange = new FloatRange(-4f, 4f);
 
 	[SerializeField] private Player_Controller playerController;
@@ -54,6 +60,10 @@ public class GameManager : MonoBehaviour {
 
 	void Update() {
 		stateMachine.Update();
+	}
+
+	public void AddDroppedListeners(int amt) {
+		_droppedListeners += amt;
 	}
 
 	protected void PreUpdateState() {

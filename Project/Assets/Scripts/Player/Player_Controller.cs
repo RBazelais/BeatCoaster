@@ -235,6 +235,8 @@ public class Player_Controller : MonoBehaviour
 	public IEnumerator PlayDrop() {
 		SetState (PlayerState.Drop);
 
+		PersonManager.instance.DropPeople();
+
 		yield return new WaitForSeconds(12f);
 
 		SetState(PlayerState.Active);
@@ -296,7 +298,7 @@ public class Player_Controller : MonoBehaviour
 			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
 			transform.position = new Vector3 (_pointPos, Mathf.Clamp (transform.position.y + _yPos, _yCenter - 7.5f, _yCenter + 12.5f - (1 * ActiveTrails ())), 0);
 		} else if (_playerState == PlayerState.Drop) {
-			_yPos = Mathf.Clamp (_yPos, -2f, -.75f);
+			_yPos = Mathf.Clamp (_yPos, -1.5f, -.75f);
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
 

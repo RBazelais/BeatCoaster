@@ -40,6 +40,6 @@ public class ListenersText : MonoBehaviour {
 	}
 
 	private string GetString() {
-		return PersonManager.instance.GetListenerCount().ToString("N0") + " listeners";
+		return GameManager.instance.droppedListeners.ToString("N0") + " listeners";
 	}
 }
