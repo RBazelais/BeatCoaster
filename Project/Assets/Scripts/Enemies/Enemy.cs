@@ -194,8 +194,29 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	private Sequence _decaySequence;
+	public Sequence decaySequence
+	{
+		get{return _decaySequence;
+		}
+	}
+
+	public void decayTrail() {
+		// Fade lines when they decay
+		_decaySequence.Kill();
+		_trail.splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_trail.shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType (trackType);
+		_trail.capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		_decaySequence = DOTween.Sequence ();
+		_decaySequence.Insert (0, DOTween.To (() => _trail.capSprite.color, x => _trail.capSprite.color = x, Color.clear, 1f));
+		_decaySequence.Insert (0, DOTween.To (() => _trail.splineTrailRenderer.vertexColor, x => _trail.splineTrailRenderer.vertexColor = x, Color.clear, 1f));
+		_decaySequence.Insert (0, DOTween.To (() => _trail.shadowSplineTrailRenderer.vertexColor, x => _trail.shadowSplineTrailRenderer.vertexColor = x, Color.clear, 1f));
+		_decaySequence.Play();
+	}
+
 	private void OnExited ()
 	{
+		
 		ResetAndRecycle ();
 	}
 
@@ -214,9 +235,10 @@ public class Enemy : MonoBehaviour
 
 	private void OnReachedIntersectionPoint ()
 	{
-		if (!_collected)
+		if (!_collected) {
 			state = EnemyState.Exiting;
-		else {
+			decayTrail ();
+		} else {
 			_collectedPos = transform.position;
 			state = EnemyState.Collected;
 
