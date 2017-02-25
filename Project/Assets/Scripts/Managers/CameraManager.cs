@@ -38,8 +38,8 @@ public class CameraManager : MonoBehaviour {
 
 	void ShakeCamera() {
 		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Idle){
-			_mainCamera.DOShakePosition(.15f, _shakeIntensity, 10);
-			_shakeIntensity += .75f;
+			_mainCamera.DOShakePosition(.15f, Mathf.Clamp(_shakeIntensity, 1, 2f), 10);
+			_shakeIntensity += .05f;
 		}
 		else if (Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop) {
 			_shakeIntensity = 1f;

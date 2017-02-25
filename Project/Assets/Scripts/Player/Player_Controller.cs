@@ -227,7 +227,7 @@ public class Player_Controller : MonoBehaviour
 	}
 
 	public IEnumerator YieldToDropEnable() {
-		yield return new WaitForSeconds(11f);
+		yield return new WaitForSeconds(11.5f);
 		_hitSpaceForDrop = true;
 		EnableDropNotification();
 	}
