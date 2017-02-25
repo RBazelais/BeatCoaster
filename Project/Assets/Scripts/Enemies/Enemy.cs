@@ -70,10 +70,28 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+
+	private Sequence _highlightSequence;
+	public Sequence highlightSequence
+	{
+		get{return _highlightSequence;
+		}
+	}
+
+	public void highlightCap() {
+		// Highlight cap when line is collected
+		_highlightSequence.Kill();
+		_trail.capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		_highlightSequence = DOTween.Sequence ();
+		_highlightSequence.Insert (0, DOTween.To (() => _trail.capSprite.color, x => _trail.capSprite.color = x, Color.white, .5f));
+		_highlightSequence.Play();
+	}
+
 	public void Collect ()
 	{
 		_collected = true;
 		_trail.capSprite.transform.DOPunchScale (new Vector3 (4f, 4f, 0), .33f, 1, 2);
+		highlightCap ();
 	}
 
 	private void Update ()
@@ -194,6 +212,26 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	private void OnExited ()
+	{
+		
+		ResetAndRecycle ();
+	}
+
+	private void ResetAndRecycle ()
+	{
+		_trail.DeactivateTrail ();
+		_collected = false;
+		state = EnemyState.Paused;
+		enterTimer = 0;
+		exitTimer = 0;
+		collectedTimer = 0;
+		sineTimer = 0;
+		EnemyManager.instance.enemies.Remove (this);
+		transform.Recycle ();
+	}
+
+
 	private Sequence _decaySequence;
 	public Sequence decaySequence
 	{
@@ -212,25 +250,6 @@ public class Enemy : MonoBehaviour
 		_decaySequence.Insert (0, DOTween.To (() => _trail.splineTrailRenderer.vertexColor, x => _trail.splineTrailRenderer.vertexColor = x, Color.clear, 1f));
 		_decaySequence.Insert (0, DOTween.To (() => _trail.shadowSplineTrailRenderer.vertexColor, x => _trail.shadowSplineTrailRenderer.vertexColor = x, Color.clear, 1f));
 		_decaySequence.Play();
-	}
-
-	private void OnExited ()
-	{
-		
-		ResetAndRecycle ();
-	}
-
-	private void ResetAndRecycle ()
-	{
-		_trail.DeactivateTrail ();
-		_collected = false;
-		state = EnemyState.Paused;
-		enterTimer = 0;
-		exitTimer = 0;
-		collectedTimer = 0;
-		sineTimer = 0;
-		EnemyManager.instance.enemies.Remove (this);
-		transform.Recycle ();
 	}
 
 	private void OnReachedIntersectionPoint ()
