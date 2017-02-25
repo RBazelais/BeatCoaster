@@ -42,12 +42,6 @@ public class AudioManager : MonoBehaviour
 	private double nextEventTime;
 	private int flip = 0;
 
-	[SerializeField]
-	private AudioSource[] audioSources = new AudioSource[2];
-
-	[SerializeField]
-	public AudioClip[] clips = new AudioClip[2];
-
 	public delegate void BeatHandler ();
 
 	public BeatHandler BeatExact;
