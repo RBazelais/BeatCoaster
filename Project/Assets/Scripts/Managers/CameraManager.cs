@@ -39,7 +39,7 @@ public class CameraManager : MonoBehaviour {
 	void ShakeCamera() {
 		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Idle){
 			_mainCamera.DOShakePosition(.15f, _shakeIntensity, 10);
-			_shakeIntensity += .2f;
+			_shakeIntensity += .75f;
 		}
 		else if (Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop) {
 			_shakeIntensity = 1f;

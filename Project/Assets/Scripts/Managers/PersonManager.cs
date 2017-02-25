@@ -127,6 +127,8 @@ public class PersonManager : MonoBehaviour {
 				}
 				collectedPeople.Clear();
 			});
+
+		listenersPerPersonUnit += 5;
 	}
 
 	private Person CreatePerson() {
