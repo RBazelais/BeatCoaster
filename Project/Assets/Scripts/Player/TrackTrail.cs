@@ -114,18 +114,23 @@ public class TrackTrail : MonoBehaviour
 
 	public void ResetDecay() {
 		_decaySequence.Kill();
-		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
-		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
 		AudioManager.instance.GetTrack(_trackType).volume = .65f;
+
+		ResetTrailAppearance();
 
 		_decaySequence = DOTween.Sequence ();
 		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
-		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
 		});
 		_decaySequence.Play();
+	}
+
+	public void ResetTrailAppearance() {
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
 	}
 
 	public void AddPerson(Person person, Person.PersonMoveType moveType) 
@@ -151,13 +156,12 @@ public class TrackTrail : MonoBehaviour
 
 		_decaySequence = DOTween.Sequence ();
 		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
-		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
 		});
 	}
-
 
 
 	private void OnBeat ()

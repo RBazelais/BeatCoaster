@@ -134,10 +134,16 @@ public class Player_Controller : MonoBehaviour
 	public void OnPlayingUpdateState ()
 	{
 		if (Input.GetKeyDown (KeyCode.Q)) {
-			SetState (PlayerState.Drop);
+			_playerState = PlayerState.Idle;
+			TriggerDrop();
 		}
 		if (Input.GetKeyDown (KeyCode.E)) {
 			SetState (PlayerState.Active);
+		}
+
+		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
+			_playerState = PlayerState.Idle;
+			TriggerDrop();
 		}
 
 		if (_playerState == PlayerState.Active) {
@@ -160,6 +166,29 @@ public class Player_Controller : MonoBehaviour
 
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
+	}
+
+	void TriggerDrop() {
+		AudioManager.instance.TriggerDrop();
+
+		_bassTrailRenderer.decaySequence.Kill();
+		_clavTrailRenderer.decaySequence.Kill();
+		_drumTrailRenderer.decaySequence.Kill();
+		_keysTrailRenderer.decaySequence.Kill();
+		_pizzTrailRenderer.decaySequence.Kill();
+
+		_bassTrailRenderer.ResetTrailAppearance();
+		_clavTrailRenderer.ResetTrailAppearance();
+		_drumTrailRenderer.ResetTrailAppearance();
+		_keysTrailRenderer.ResetTrailAppearance();
+		_pizzTrailRenderer.ResetTrailAppearance();
+
+		for(int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
+			EnemyManager.instance.enemies[i].Recycle();
+		}
+		EnemyManager.instance.enemies.Clear();
+
+		_playerState = PlayerState.Drop;
 	}
 
 	public void OnGameOverEnterState ()
@@ -205,6 +234,11 @@ public class Player_Controller : MonoBehaviour
 			_yPos -= .025f;
 		} else if (_yPos < 0) {
 			_yPos += .025f;
+		}
+
+		if(_playerState == PlayerState.Idle)
+		{
+			_yPos = 0;
 		}
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {

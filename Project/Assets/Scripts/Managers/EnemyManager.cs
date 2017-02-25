@@ -51,7 +51,7 @@ public class EnemyManager : MonoBehaviour
 
 	private void Update ()
 	{
-		if (_readytoSpawn) {
+		if (_readytoSpawn && Player_Controller.instance.playerState == Player_Controller.PlayerState.Active) {
 			_readytoSpawn = false;
 			StartSpawnEnemyCoroutine ();
 		}

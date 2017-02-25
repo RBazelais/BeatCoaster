@@ -16,10 +16,11 @@ public class AudioManager : MonoBehaviour
 	}
 
 	[SerializeField]
-	private AudioSource _bassTrack, _clavTrack, _keyTrack, _pizzTrack, _drumTrack;
+	private AudioSource _bassTrack, _clavTrack, _keyTrack, _pizzTrack, _drumTrack, _buildTrack, _dropTrack;
 
 	[SerializeField]
 	private double _bpm = 160.0F;
+
 	public double bpm {
 		get { return _bpm; }
 	}
@@ -37,23 +38,77 @@ public class AudioManager : MonoBehaviour
 	private int _accent;
 	private bool _running = false;
 
+	public int numBeatsPerSegment = 16;
+	private double nextEventTime;
+	private int flip = 0;
+
+	[SerializeField]
+	private AudioSource[] audioSources = new AudioSource[2];
+
+	[SerializeField]
+	public AudioClip[] clips = new AudioClip[2];
+
 	public delegate void BeatHandler ();
+
 	public BeatHandler BeatExact;
 	public BeatHandler BeatOnUpdate;
 
-	private bool sendBeatSignal = false;
+	private bool sendBeatSignal = false, _triggerDrop = false, _initPlay = false;
 
-	void Awake() {
-		if(!instance)
+	void Awake ()
+	{
+		if (!instance)
 			instance = this;
 	}
 
-	void Update()
+	void Update ()
 	{
 		if (sendBeatSignal) {
-			BeatOnUpdate();
+			BeatOnUpdate ();
 			sendBeatSignal = false;
 		}
+
+		if(!_running)
+			return;
+
+		double time = AudioSettings.dspTime;
+		if (time + 1.0F > nextEventTime) {
+			if (_triggerDrop) {
+				_triggerDrop = false;
+				_buildTrack.PlayScheduled (nextEventTime);
+				_dropTrack.PlayScheduled (nextEventTime + ((60.0F / bpm * numBeatsPerSegment)*2f));
+			}
+			if(_initPlay) {
+				_initPlay = false;
+				PlayBeats(nextEventTime);
+			}
+
+			Debug.Log ("Scheduled source to start at time " + nextEventTime);
+			nextEventTime += 60.0F / bpm * numBeatsPerSegment;
+		}
+	}
+
+				void PlayBeats(double eventTime) {
+					_bassTrack.PlayScheduled (eventTime);
+					_clavTrack.PlayScheduled (eventTime);
+					_keyTrack.PlayScheduled (eventTime);
+					_pizzTrack.PlayScheduled (eventTime);
+					_drumTrack.PlayScheduled (eventTime);
+				}
+
+	public void TriggerDrop ()
+	{
+		_triggerDrop = true;
+	}
+
+
+	void PlayDrop ()
+	{
+		_bassTrack.volume = 0;
+		_clavTrack.volume = 0;
+		_keyTrack.volume = 0;
+		_pizzTrack.volume = 0;
+		_drumTrack.volume = 0;
 	}
 
 	void OnAudioFilterRead (float[] data, int channels)
@@ -80,7 +135,7 @@ public class AudioManager : MonoBehaviour
 					_amp *= 2.0F;
 				}
 //				Debug.Log ("Tick: " + _accent + "/" + _signatureHi);
-				OnBeat();
+				OnBeat ();
 			}
 			_phase += _amp * 0.3F;
 			_amp *= 0.993F;
@@ -88,24 +143,22 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	private void OnBeat() {
-		if (BeatExact != null) BeatExact();
+	private void OnBeat ()
+	{
+		if (BeatExact != null)
+			BeatExact ();
 		sendBeatSignal = true;
 	}
 
 	public void PlayTracks ()
 	{
-		_bassTrack.Play ();
-		_clavTrack.Play ();
-		_keyTrack.Play ();
-		_pizzTrack.Play ();
-		_drumTrack.Play ();
-
 		_accent = _signatureHi;
 		double startTick = AudioSettings.dspTime;
 		_sampleRate = AudioSettings.outputSampleRate;
 		_nextTick = startTick * _sampleRate;
+		nextEventTime = AudioSettings.dspTime + 2.0F;
 		_running = true;
+		_initPlay = true;
 	}
 
 	public AudioSource GetTrack (TrackTypes type)

@@ -9,7 +9,7 @@ public class CameraManager : MonoBehaviour {
 
 	void LateUpdate ()
 	{
-		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Active)
+		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Active || Player_Controller.instance.playerState == Player_Controller.PlayerState.Idle)
 			UpdateActivePosition();
 		else if (Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop) {
 			UpdateDropPosition();
