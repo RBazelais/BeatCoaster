@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WhitDataTypes;
@@ -88,6 +88,12 @@ public class Player_Controller : MonoBehaviour
 		_bassTrailRenderer.ActivateTrail ();
 	}
 
+	public void StopPlaying ()
+	{
+		DeactivateAllTrails ();
+		Debug.Log ("All Trails Deactivated");
+	}
+
 	public void SetTrails ()
 	{
 		_bassTrailRenderer.SetTrackType (AudioManager.TrackTypes.Bass);
@@ -146,7 +152,13 @@ public class Player_Controller : MonoBehaviour
 			TriggerDrop();
 		}
 
-		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
+		if(Input.GetKeyDown(KeyCode.Z)){
+			SetState (PlayerState.GameOver);
+			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
+
+		}
+
+		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
@@ -193,7 +205,8 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnGameOverEnterState ()
 	{
-
+		DeactivateAllTrails ();
+		SetState(Player_Controller.PlayerState.GameOver);
 	}
 
 	public void OnGameOverUpdateState ()
@@ -424,6 +437,11 @@ public class Player_Controller : MonoBehaviour
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
 
+		/*
+			if (_playerState == PlayerState.GameOver) {
+				
+			}
+		*/
 		_pointPos += 1f;
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
@@ -458,6 +476,8 @@ public class Player_Controller : MonoBehaviour
 		PersonManager.instance.TransferPeople (fromTrail, track);
 		}
 	}
+
+
 
 	public void SetTrackOrder ()
 	{
