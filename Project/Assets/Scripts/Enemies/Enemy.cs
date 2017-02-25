@@ -22,12 +22,13 @@ public class Enemy : MonoBehaviour
 	private float exitDur;
 	private float endVerticalPos;
 	private float spawnVerticalPos;
-	private float sineTimer = 0;
+	private float timer = 0;
 	private float sineAmplitude;
 	private float sineFrequency;
 
 	private Vector3 _collectedPos;
 	private bool _collected = false;
+	private bool decayingTrail = false;
 
 	public bool collected {
 		get {
@@ -50,7 +51,7 @@ public class Enemy : MonoBehaviour
 	public void Activate ()
 	{
 		sineAmplitude = Random.Range (1f, 3f);
-		sineFrequency = Random.Range (3f, 10f);
+		sineFrequency = Random.Range (5f, 15f);
 
 		_trail.ActivateTrail ();
 
@@ -87,8 +88,12 @@ public class Enemy : MonoBehaviour
 		_highlightSequence.Play();
 	}
 
-	public void Collect ()
+	public void AttemptCollect ()
 	{
+		if (decayingTrail) return;
+
+		Player_Controller.instance.OnEnemyCollected(this);
+
 		_collected = true;
 		_trail.capSprite.transform.DOPunchScale (new Vector3 (4f, 4f, 0), .33f, 1, 2);
 		highlightCap ();
@@ -119,7 +124,7 @@ public class Enemy : MonoBehaviour
 		Vector3 diff = GetEndPos () - GetSpawnPos ();
 		Vector3 dir = diff.normalized;
 		Vector3 perpDir = new Vector3 (dir.y, -dir.x, dir.z);
-		pos += perpDir * Mathf.Sin (sineTimer) * sineAmplitude;
+		pos += perpDir * Mathf.Sin (timer) * sineAmplitude;
 		return pos;
 	}
 
@@ -130,7 +135,7 @@ public class Enemy : MonoBehaviour
 		Vector3 diff = GetPlayerPos () - GetCollectedPos ();
 		Vector3 dir = diff.normalized;
 		Vector3 perpDir = new Vector3 (dir.y, -dir.x, dir.z);
-		pos += perpDir * Mathf.Sin (sineTimer) * sineAmplitude;
+		pos += perpDir * Mathf.Sin (timer) * sineAmplitude;
 		return pos;
 	}
 
@@ -182,7 +187,7 @@ public class Enemy : MonoBehaviour
 
 	private void UpdateTimers ()
 	{
-		sineTimer += Time.deltaTime * sineFrequency;
+		timer += Time.deltaTime * sineFrequency;
 		if (state == EnemyState.Entering) {
 			enterTimer += Time.deltaTime;
 		} else if (state == EnemyState.Exiting) {
@@ -220,13 +225,14 @@ public class Enemy : MonoBehaviour
 
 	private void ResetAndRecycle ()
 	{
+		decayingTrail = false;
 		_trail.DeactivateTrail ();
 		_collected = false;
 		state = EnemyState.Paused;
 		enterTimer = 0;
 		exitTimer = 0;
 		collectedTimer = 0;
-		sineTimer = 0;
+		timer = 0;
 		EnemyManager.instance.enemies.Remove (this);
 		transform.Recycle ();
 	}
@@ -240,6 +246,7 @@ public class Enemy : MonoBehaviour
 	}
 
 	public void decayTrail() {
+		decayingTrail = true;
 		// Fade lines when they decay
 		_decaySequence.Kill();
 		_trail.splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
@@ -262,10 +269,10 @@ public class Enemy : MonoBehaviour
 			state = EnemyState.Collected;
 
 			var track = Player_Controller.instance.GetTrack (_trackType);
-			if(track.active){
-			PersonManager.instance.TransferPeople (_trail, track);
-			if (_trackType != AudioManager.TrackTypes.Bass)
-				track.ResetDecay ();
+			if(track.active) {
+				PersonManager.instance.TransferPeople (_trail, track);
+				if (_trackType != AudioManager.TrackTypes.Bass)
+					track.ResetDecay ();
 			}
 		}
 	}

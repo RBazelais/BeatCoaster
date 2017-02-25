@@ -10,7 +10,16 @@ public enum SwipeDirection {
 }
 
 public class InputManager : MonoBehaviour {
-	public static InputManager instance {get; private set;}
+	private static InputManager _instance;
+	public static InputManager instance {
+		get {
+			if (_instance == null) {
+				_instance = GameObject.FindObjectOfType<InputManager>();
+				_instance.Initialize();
+			}
+			return _instance;
+		}
+	}
 
 	public bool inputEnabled {get; private set;}
 
@@ -42,13 +51,6 @@ public class InputManager : MonoBehaviour {
 	private bool touchInSession = false;
 	private bool sentInputSignalThisFrame = false;
 	private SwipeDirection lastSwipeDirection = SwipeDirection.Up;
-
-	public static void Create() {
-		if (instance != null) Debug.LogError("already created!");
-
-		InputManager.instance = WhitTools.CreateGameObjectWithComponent<InputManager>("Input Manager");
-		InputManager.instance.Initialize();
-	}
 
 	public void CancelInput() {
 		EndTouchSession();
