@@ -46,6 +46,9 @@ public class GameOverInfoText : MonoBehaviour {
 
 		if (GameManager.instance.droppedListeners == 0) {
 			infoString = "That's not enough to fill anything. Yikes.\n\nPress spacebar to continue";
+		} else if (GameManager.instance.droppedListeners <= 300) {
+			venueName = "the historic, now-closed CBGB";
+			venueLocation = "New York, New York";
 		} else if (GameManager.instance.droppedListeners <= 600) {
 			venueName = "the Music Hall of Williamsburg";
 			venueLocation = "New York, New York";
