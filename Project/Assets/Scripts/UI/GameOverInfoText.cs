@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ListenersText : MonoBehaviour {
+public class GameOverListenersText : MonoBehaviour {
 	[SerializeField] private TextMeshProUGUI text;
 
 	private void OnEnable() {
@@ -40,6 +40,6 @@ public class ListenersText : MonoBehaviour {
 	}
 
 	private string GetString() {
-		return GameManager.instance.droppedListeners.ToString("N0") + " checked-in listeners";
+		return GameManager.instance.droppedListeners.ToString("N0") + " listeners";
 	}
 }

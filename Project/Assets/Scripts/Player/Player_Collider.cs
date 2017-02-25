@@ -14,6 +14,7 @@ public class Player_Collider : MonoBehaviour
 	[SerializeField] private AudioClip[] hits;
 
 	[SerializeField] private SpriteRenderer _sprite;
+	[SerializeField] private AudioClip noCollectSound;
 
 	private float beatPunchIntensity = 0.5f;
 
@@ -43,21 +44,26 @@ public class Player_Collider : MonoBehaviour
 
 	void Update ()
 	{
-		RaycastHit2D[] hits = Physics2D.CircleCastAll (transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
+		RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
 		if (hits.Length > 0) {
-			_sprite.color = new Color (1, 1, 1, .85f);
+			_sprite.color = new Color(1,1,1,.85f);
 			if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
-				for (int i = 0; i < hits.Length; i++) {
-					var enemy = hits [i].transform.GetComponent<Enemy> ();
-					if (enemy != null) {
-						if (!enemy.collected) {
-							enemy.AttemptCollect ();
-						}
+				bool collected = false;
+				for(int i = 0; i < hits.Length; i++) {
+					var enemy = hits[i].transform.GetComponent<Enemy>();
+					if (!enemy) continue;
+					if (!enemy.collected) {
+						enemy.Collect ();
+						collected = true;
 					}
 				}
+				if (!collected) {
+					AudioManager.instance.PlaySound(noCollectSound);
+				}
 			}
-		} else {
-			_sprite.color = new Color (1, 1, 1, .5f);
+		}
+		else {
+			_sprite.color = new Color(1,1,1,.5f);
 		}
 	}
 }
