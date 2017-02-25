@@ -97,14 +97,6 @@ public class Player_Controller : MonoBehaviour
 		_bassTrailRenderer.ActivateTrail ();
 	}
 
-	/*
-		public void StopPlaying ()
-		{
-			DeactivateAllTrails ();
-			Debug.Log ("All Trails Deactivated");
-		}
-	*/
-
 	public void SetTrails ()
 	{
 		_bassTrailRenderer.SetTrackType (AudioManager.TrackTypes.Bass);
@@ -251,8 +243,7 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnGameOverEnterState ()
 	{
-		// Stop playing music 
-		// Pause the game
+
 	}
 
 	public void OnGameOverUpdateState ()
