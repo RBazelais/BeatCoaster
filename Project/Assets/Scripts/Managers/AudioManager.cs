@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
 	public BeatHandler BeatExact;
 	public BeatHandler BeatOnUpdate;
 
-	private bool sendBeatSignal = false, _triggerDrop = false, _initPlay = false, _waitForBuild = false, _waitForDrop = false;
+	private bool sendBeatSignal = false, _triggerDrop = false, _initPlay = false, _waitForBuild = false;
 
 	void Awake ()
 	{
@@ -91,21 +91,16 @@ public class AudioManager : MonoBehaviour
 		if (_waitForBuild) {
 			if (_buildTrack.isPlaying) {
 				_waitForBuild = false;
-				_waitForDrop = true;
 				StartCoroutine (PlayDrop ());
-			}
-		}
-
-		if (_waitForDrop) {
-			if (_dropTrack.isPlaying) {
-				_waitForDrop = false;
-				Player_Controller.instance.SetState (Player_Controller.PlayerState.Active);
 			}
 		}
 	}
 
 	void PlayBeats (double eventTime)
 	{
+		_dropTrack.Stop();
+		_buildTrack.Stop();
+
 		_bassTrack.PlayScheduled (eventTime);
 		_clavTrack.PlayScheduled (eventTime);
 		_keyTrack.PlayScheduled (eventTime);
@@ -127,7 +122,8 @@ public class AudioManager : MonoBehaviour
 		_keyTrack.volume = 0;
 		_pizzTrack.volume = 0;
 		_drumTrack.volume = 0;
-		Player_Controller.instance.SetState (Player_Controller.PlayerState.Drop);
+
+		StartCoroutine(Player_Controller.instance.PlayDrop());
 	}
 
 	void OnAudioFilterRead (float[] data, int channels)
@@ -178,6 +174,27 @@ public class AudioManager : MonoBehaviour
 		nextEventTime = AudioSettings.dspTime + 2.0F;
 		_running = true;
 		_initPlay = true;
+	}
+
+	public void RestartBeats() {
+		if(_dropTrack.isPlaying){
+			_dropTrack.Stop();
+			VolumeUpAllTracks();
+		}
+	}
+
+	void VolumeUpAllTracks()
+	{
+		if(Player_Controller.instance.GetBassTrail().active && _bassTrack.volume == 0)
+		_bassTrack.volume = 1;
+		if(Player_Controller.instance.GetClavTrail().active && _bassTrack.volume == 0)
+		_clavTrack.volume = 1;
+		if(Player_Controller.instance.GetKeysTrail().active && _bassTrack.volume == 0)
+		_keyTrack.volume = 1;
+		if(Player_Controller.instance.GetPizzTrail().active && _bassTrack.volume == 0)
+		_pizzTrack.volume = 1;
+		if(Player_Controller.instance.GetDrumTrail().active && _bassTrack.volume == 0)
+		_drumTrack.volume = 1;
 	}
 
 	public AudioSource GetTrack (TrackTypes type)

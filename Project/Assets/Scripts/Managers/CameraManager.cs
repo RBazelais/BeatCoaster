@@ -22,7 +22,7 @@ public class CameraManager : MonoBehaviour {
 	}
 
 	private void UpdateDropPosition() {
-		Vector3 targetPos = new Vector3 (Player_Controller.instance.transform.position.x + 5, Player_Controller.instance.transform.position.y + 7, -10);
+		Vector3 targetPos = new Vector3 (Player_Controller.instance.transform.position.x - 20, Player_Controller.instance.transform.position.y + 17, -10);
 		_mainCamera.transform.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
 	}
 }

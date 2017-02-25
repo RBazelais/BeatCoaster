@@ -125,6 +125,7 @@ public class TrackTrail : MonoBehaviour
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
+			AudioManager.instance.RestartBeats();
 		});
 		_decaySequence.Play();
 	}
@@ -161,6 +162,7 @@ public class TrackTrail : MonoBehaviour
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
+			AudioManager.instance.RestartBeats();
 		});
 	}
 

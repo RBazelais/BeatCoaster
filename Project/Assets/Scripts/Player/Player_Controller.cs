@@ -162,8 +162,8 @@ public class Player_Controller : MonoBehaviour
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
-			_yPos -= .075f;
-			_yPos = Mathf.Clamp (_yPos, -1, 1);
+			_yPos -= .045f;
+			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
 
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 			_pointPos += 1;
@@ -189,6 +189,14 @@ public class Player_Controller : MonoBehaviour
 			EnemyManager.instance.enemies[i].Recycle();
 		}
 		EnemyManager.instance.enemies.Clear();
+	}
+
+	public IEnumerator PlayDrop() {
+		SetState (PlayerState.Drop);
+
+		yield return new WaitForSeconds(12f);
+
+		SetState(PlayerState.Active);
 	}
 
 	public void OnGameOverEnterState ()
