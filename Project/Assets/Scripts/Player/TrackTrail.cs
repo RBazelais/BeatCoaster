@@ -131,27 +131,58 @@ public class TrackTrail : MonoBehaviour
 			_shadowSplineTrailRenderer.emit = false;
 	}
 
-	public void ResetDecay() {
+	public void ResetDecay(bool playAgain = true) {
 		_decaySequence.Kill();
 		AudioManager.instance.GetTrack(_trackType).volume = .65f;
 
 		decayVal = 1;
 		ResetTrailAppearance();
+		Debug.Log(trackType.ToString() + " reset track sequence");
 
 		_decaySequence = DOTween.Sequence ();
 		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
 		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
+		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
 		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
 			AudioManager.instance.RestartBeats();
+			Debug.Log(trackType.ToString() + " decay sequence finished");
+			if (trackType == AudioManager.TrackTypes.Bass) {
+				GameManager.instance.SetState(GameManager.GameState.End);
+			}
 		});
-		_decaySequence.Play();
+		if (playAgain) _decaySequence.Play();
+	}
+
+	public void SetTrackType (AudioManager.TrackTypes trackType)
+	{
+		_trackType = trackType;
+		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
+		if (_shadowSplineTrailRenderer != null)
+			_shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType (trackType);
+
+		_decaySequence = DOTween.Sequence ();
+		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
+		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
+		if (shadowSplineTrailRenderer) _decaySequence.Insert (0, DOTween.To (() => shadowSplineTrailRenderer.vertexColor, x => shadowSplineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
+		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
+		_decaySequence.SetDelay (5f).OnComplete(() => {
+			DeactivateTrail();
+			Player_Controller.instance.SetTrackOrder();
+			AudioManager.instance.RestartBeats();
+			Debug.Log(trackType.ToString() + " decay sequence finished");
+			if (trackType == AudioManager.TrackTypes.Bass) {
+				GameManager.instance.SetState(GameManager.GameState.End);
+			}
+		});
 	}
 
 	public void ResetTrailAppearance() {
 		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
+		if (_shadowSplineTrailRenderer) _shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType(trackType);
 		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
 	}
 
@@ -168,24 +199,7 @@ public class TrackTrail : MonoBehaviour
 		people.Remove(person);
 	}
 
-	public void SetTrackType (AudioManager.TrackTypes trackType)
-	{
-		_trackType = trackType;
-		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
-		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
-		if (_shadowSplineTrailRenderer != null)
-			_shadowSplineTrailRenderer.vertexColor = ColorManager.GetShadowColorForTrackType (trackType);
 
-		_decaySequence = DOTween.Sequence ();
-		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
-		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
-		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
-		_decaySequence.SetDelay (5f).OnComplete(() => {
-			DeactivateTrail();
-			Player_Controller.instance.SetTrackOrder();
-			AudioManager.instance.RestartBeats();
-		});
-	}
 
 
 	private void OnBeat ()

@@ -319,18 +319,40 @@ public class Player_Controller : MonoBehaviour
 		Vector3 endPos = spline.FindPositionFromDistance (spline.GetSegmentDistanceFromStart (spline.NbSegments - 1));
 		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
+
+		StartBassDecaySequenceIfNeeded();
+	}
+
+	private void StartBassDecaySequenceIfNeeded() {
+		if (!OnlyActiveTrackIsBass()) return;
+
+		TrackTrail bass = GetTrack(AudioManager.TrackTypes.Bass);
+		if (bass.decaySequence.IsPlaying()) return;
+
+		bass.decaySequence.Play();
+	}
+
+	private bool OnlyActiveTrackIsBass() {
+		return
+			GetTrack(AudioManager.TrackTypes.Bass).active &&
+			!GetTrack(AudioManager.TrackTypes.Clav).active &&
+			!GetTrack(AudioManager.TrackTypes.Drums).active &&
+			!GetTrack(AudioManager.TrackTypes.Keys).active &&
+			!GetTrack(AudioManager.TrackTypes.Pizz).active;
 	}
 
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
+		TrackTrail bassTrack = GetTrack(AudioManager.TrackTypes.Bass);
+		bassTrack.ResetDecay(false);
+
 		TrackTrail track = GetTrack (type);
 		if(!track.active) {
 			track.SetActive ();
 			SetTrackOrder ();
 			track.ActivateTrail ();
 
-			if (type != AudioManager.TrackTypes.Bass)
-				track.decaySequence.Play ();
+			track.ResetDecay(type != AudioManager.TrackTypes.Bass);
 
 			PersonManager.instance.TransferPeople (fromTrail, track);
 		}

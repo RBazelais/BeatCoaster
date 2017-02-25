@@ -269,7 +269,7 @@ public class Enemy : MonoBehaviour
 			state = EnemyState.Collected;
 
 			var track = Player_Controller.instance.GetTrack (_trackType);
-			if(track.active) {
+			if (track.active) {
 				PersonManager.instance.TransferPeople (_trail, track);
 				if (_trackType != AudioManager.TrackTypes.Bass)
 					track.ResetDecay ();
