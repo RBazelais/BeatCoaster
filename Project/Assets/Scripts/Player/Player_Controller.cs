@@ -45,6 +45,8 @@ public class Player_Controller : MonoBehaviour
 	[SerializeField]
 	private TrackTrail _bassTrailRenderer;
 
+	[SerializeField] private ParticleSystem dropParticles;
+
 	[SerializeField]
 	private Player_Collider _col;
 
@@ -276,6 +278,7 @@ public class Player_Controller : MonoBehaviour
 			_yCenter = transform.position.y;
 			break;
 		case PlayerState.Drop:
+				
 			break;
 		case PlayerState.Idle:
 			break;
@@ -283,6 +286,10 @@ public class Player_Controller : MonoBehaviour
 			break;
 
 		}
+
+		if (state == PlayerState.Drop) dropParticles.Play();
+		else dropParticles.Stop();
+
 		_playerState = state;
 	}
 
