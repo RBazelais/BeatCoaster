@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour {
 		playerController.OnGameOverUpdateState();
 		//AudioManager.instance.PlayTracks();
 		SetState(GameState.End);
-		playerController.SetState(Player_Controller.PlayerState.GameOver);
+//		playerController.SetState(Player_Controller.PlayerState.GameOver);
 		playerController.StopPlaying();
 		Debug.Log ("End Update State Triggered");
 

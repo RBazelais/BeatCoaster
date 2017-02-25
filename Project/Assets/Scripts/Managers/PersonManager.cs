@@ -23,6 +23,7 @@ public class PersonManager : MonoBehaviour {
 	public IntRange segmentDistanceRange = new IntRange(5, 40);
 	[Range(0.5f, 2)] public float wobbleSpeed = 1;
 	[Range(0.1f, 10)] public float wobbleIntensity = 1;
+	[SerializeField] private AudioClip personCollectClip;
 	[SerializeField] private Person personPrefab;
 
 	private List<Person> people;
@@ -75,6 +76,7 @@ public class PersonManager : MonoBehaviour {
 	}
 
 	public void OnPersonJoinedCollectedPeople(Person person) {
+		AudioManager.instance.PlaySound(personCollectClip);
 		collectedPeople.Add(person);
 		if (SignalPersonAddedToCollection != null) SignalPersonAddedToCollection();
 	}

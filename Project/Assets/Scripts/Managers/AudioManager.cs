@@ -25,6 +25,12 @@ public class AudioManager : MonoBehaviour
 	[SerializeField]
 	private double _bpm = 160.0F;
 
+	[SerializeField] private AudioSource sfxSource;
+
+	public void PlaySound(AudioClip clip, float volume = 1) {
+		sfxSource.PlayOneShot(clip, volume);
+	}
+
 	public double bpm {
 		get { return _bpm; }
 	}

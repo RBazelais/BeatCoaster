@@ -27,6 +27,7 @@ public class Person : MonoBehaviour {
 	private PersonMoveType moveType = PersonMoveType.Follow;
 
 	private void Awake() {
+		transferDur += Random.Range(-0.5f, 0.5f);
 		rotateDirSign = WhitTools.GetRandomSign();
 		segmentDistance = PersonManager.instance.segmentDistanceRange.GetRandom();
 		wobbleOffset = UnityEngine.Random.Range(0, 360);
@@ -63,7 +64,7 @@ public class Person : MonoBehaviour {
 			Vector3 lerpedPos = Vector3.Lerp(transform.position, targetPos, percent);
 			transform.position = lerpedPos;
 
-			if (percent >= 1) {
+			if (percent >= 0.3f) {
 				moveType = PersonMoveType.Follow;
 				animator.SetBool("isJumping", false);
 				OnJoinedCollectedPeople();

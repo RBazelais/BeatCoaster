@@ -82,6 +82,10 @@ public class Player_Controller : MonoBehaviour
 			instance = this;
 	}
 
+	public void OnEnemyCollected(Enemy enemy) {
+		_col.OnEnemyCollected(enemy);
+	}
+
 	public void StartPlaying ()
 	{
 		_bassTrailRenderer.SetActive ();
@@ -153,7 +157,7 @@ public class Player_Controller : MonoBehaviour
 		}
 
 		if(Input.GetKeyDown(KeyCode.Z)){
-			SetState (PlayerState.GameOver);
+//			SetState (PlayerState.GameOver);
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
 		}
@@ -214,7 +218,7 @@ public class Player_Controller : MonoBehaviour
 	public void OnGameOverEnterState ()
 	{
 		DeactivateAllTrails ();
-		SetState(Player_Controller.PlayerState.GameOver);
+//		SetState(Player_Controller.PlayerState.GameOver);
 	}
 
 	public void OnGameOverUpdateState ()
