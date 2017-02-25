@@ -241,18 +241,19 @@ public class Player_Controller : MonoBehaviour
 
 		yield return new WaitForSeconds(12f);
 
+		SetState(PlayerState.Active);
+
 		_pizzTrailRenderer.ResetDecay();
 
 		yield return new WaitForSeconds(1f);
 
 		_clavTrailRenderer.ResetDecay();
 
-		yield retrn new WaitForSeconds(1f);
+		yield return new WaitForSeconds(1f);
 
 		_drumTrailRenderer.ResetDecay();
 		_keysTrailRenderer.ResetDecay();
 
-		SetState(PlayerState.Active);
 	}
 
 	public void OnGameOverEnterState ()
