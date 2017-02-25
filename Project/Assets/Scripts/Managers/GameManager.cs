@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using WhitDataTypes;
 using TMPro;
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Title_EnterState() {
+		//Show the title
 		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", false);
 		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
@@ -82,14 +84,8 @@ public class GameManager : MonoBehaviour {
 		mainCamera.DOOrthoSize(2f, 1f);
 	}
 
-	private void Title_ExitState() {
-		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
-		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
-		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
-		mainCamera.DOOrthoSize(10f, 1f);
-	}
-
 	private void Title_UpdateState() {
+		// Wait for player to press spacebar
 		playerController.OnTitleUpdateState();
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			AudioManager.instance.PlayTracks();
@@ -99,7 +95,16 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	private void End_EnterState() {
+	private void Title_ExitState() {
+		//Hide the title, start the game
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		mainCamera.DOOrthoSize(10f, 1f);
+	}
+
+	public void End_EnterState() {
+		//Show game over menu
 		mainMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
 		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
 		GameOverMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", true);
@@ -108,20 +113,19 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void End_ExitState() {
-		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		//Hide game over menu and show the title
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
-		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
 		mainCamera.DOOrthoSize(10f, 1f);
+
 	}
 
 	private void End_UpdateState() {
 		playerController.OnGameOverUpdateState();
-		if (Input.GetKeyDown(KeyCode.Z)){
-			SetState(GameState.End);
-			playerController.SetState(Player_Controller.PlayerState.GameOver);
-			Debug.Log ("End Update State Triggered");
-		}
-
+		playerController.SetState(Player_Controller.PlayerState.GameOver);
+		SetState(GameState.End);
+		Debug.Log ("Game over menu updated");
 
 	}
 

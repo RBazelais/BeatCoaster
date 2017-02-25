@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using WhitDataTypes;
 using DG.Tweening;
 
@@ -166,8 +167,9 @@ public class Player_Controller : MonoBehaviour
 		}
 
 		if (Input.GetKeyDown (KeyCode.Z)) {
-			//			SetState (PlayerState.GameOver);
-			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
+			SetState (PlayerState.GameOver);
+			_playerState = PlayerState.GameOver;
+			GameManager.instance.End_EnterState ();
 
 		}
 
@@ -216,7 +218,7 @@ public class Player_Controller : MonoBehaviour
 		_pizzTrailRenderer.ResetTrailAppearance ();
 
 		for (int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
-			EnemyManager.instance.enemies [i].Recycle ();
+			EnemyManager.instance.enemies[i].Recycle ();
 		}
 		EnemyManager.instance.enemies.Clear ();
 	}
@@ -244,7 +246,6 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnGameOverEnterState ()
 	{
-		DeactivateAllTrails ();
 		// Stop playing music 
 		// Pause the game
 	}
@@ -252,9 +253,10 @@ public class Player_Controller : MonoBehaviour
 	public void OnGameOverUpdateState ()
 	{
 		if (_playerState == PlayerState.GameOver) {
+			DeactivateAllTrails ();
+			GameManager.instance.SetState (GameManager.GameState.End);
 			//Play Game Over Menu animation
 		}
-
 	}
 
 	public void SetState (PlayerState state)
@@ -301,12 +303,7 @@ public class Player_Controller : MonoBehaviour
 			_yPos = Mathf.Clamp (_yPos, -1.5f, -.75f);
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
-
-		/*
-			if (_playerState == PlayerState.GameOver) {
-				
-			}
-		*/
+			
 		_pointPos += 1f;
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
