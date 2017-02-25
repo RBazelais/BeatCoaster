@@ -40,6 +40,6 @@ public class GameOverListenersText : MonoBehaviour {
 	}
 
 	private string GetString() {
-		return GameManager.instance.droppedListeners.ToString("N0");
+		return GameManager.instance.droppedListeners.ToString("N0") + " listeners";
 	}
 }

@@ -45,7 +45,7 @@ public class GameOverInfoText : MonoBehaviour {
 	private string GetString() {
 
 		if (GameManager.instance.droppedListeners == 0) {
-			infoString = "That's not enough to fill anything. Yikes.";
+			infoString = "That's not enough to fill anything. Yikes.\n\nPress spacebar to continue";
 		} else if (GameManager.instance.droppedListeners <= 600) {
 			venueName = "the Music Hall of Williamsburg";
 			venueLocation = "New York, New York";
@@ -76,7 +76,7 @@ public class GameOverInfoText : MonoBehaviour {
 		}
 
 		if (GameManager.instance.droppedListeners != 0) {
-			infoString = "That's enough to fill " + venueName + " in " + venueLocation + ".";
+			infoString = "That's enough to fill " + venueName + " in " + venueLocation + ".\n\nPress spacebar to continue";
 		}
 
 		return infoString;
