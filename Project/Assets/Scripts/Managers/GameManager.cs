@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour {
 
 	private StateMachine stateMachine;
 
-	private float _fadeDelay = 5, _fadeDuration = 10;
+	private float _fadeDelay = 5, _fadeDuration = 5;
 	public float fadeDelay
 	{
 		get { return _fadeDelay;}
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour {
 
 	public void SpeedFadeTimes() {
 		_fadeDelay = Mathf.Clamp(_fadeDelay -= .25f, 2.5f, 5f);
-		_fadeDuration = Mathf.Clamp(_fadeDuration -= .25f, 6.5f, 10f);
+		_fadeDuration = Mathf.Clamp(_fadeDuration -= .25f, 3f, 5f);
 	}
 
 	protected void PreUpdateState() {
