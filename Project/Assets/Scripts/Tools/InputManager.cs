@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour {
 		get {
 			if (_instance == null) {
 				_instance = GameObject.FindObjectOfType<InputManager>();
-				_instance.Initialize();
+//				_instance.Initialize();
 			}
 			return _instance;
 		}

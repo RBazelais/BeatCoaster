@@ -82,6 +82,10 @@ public class Player_Controller : MonoBehaviour
 			instance = this;
 	}
 
+	public void OnEnemyCollected(Enemy enemy) {
+		_col.OnEnemyCollected(enemy);
+	}
+
 	public void StartPlaying ()
 	{
 		_bassTrailRenderer.SetActive ();
@@ -139,17 +143,26 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			_playerState = PlayerState.Idle;
+			TriggerDrop();
+		}
+		if (Input.GetKeyDown (KeyCode.E)) {
+			SetState (PlayerState.Active);
+		}
+
 		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
 			_playerState = PlayerState.Idle;
 			TriggerDrop();
 		}
 
 		if(Input.GetKeyDown(KeyCode.Z)){
-			//SetState (PlayerState.GameOver);
+			//			SetState (PlayerState.GameOver);
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
 		}
-			
+
+		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
@@ -164,11 +177,13 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
-		if (_playerState == PlayerState.Drop) {
-			_yPos = Mathf.Clamp (_yPos, -1.5f, -.75f);
-		}
+		} else if (_playerState == PlayerState.Drop) {
+			_yPos -= .045f;
+			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
+
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 			_pointPos += 1;
+		}
 	}
 
 	void TriggerDrop() {
@@ -203,7 +218,7 @@ public class Player_Controller : MonoBehaviour
 	public void OnGameOverEnterState ()
 	{
 		DeactivateAllTrails ();
-		//SetState(Player_Controller.PlayerState.GameOver);
+		//		SetState(Player_Controller.PlayerState.GameOver);
 	}
 
 	public void OnGameOverUpdateState ()
@@ -233,7 +248,7 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPreUpdateState ()
 	{
-		
+
 	}
 
 	public void OnPostUpdateState ()
@@ -245,186 +260,6 @@ public class Player_Controller : MonoBehaviour
 		} else if (_yPos < 0) {
 			_yPos += .025f;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
@@ -455,8 +290,8 @@ public class Player_Controller : MonoBehaviour
 
 	private void LateUpdate ()
 	{
-		
-//		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
+
+		//		_col.transform.localPosition = new Vector3(-14, _col.transform.localPosition.y, 0);
 	}
 
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
@@ -464,13 +299,13 @@ public class Player_Controller : MonoBehaviour
 		TrackTrail track = GetTrack (type);
 		if(!track.active) {
 			track.SetActive ();
-		SetTrackOrder ();
-		track.ActivateTrail ();
+			SetTrackOrder ();
+			track.ActivateTrail ();
 
-		if (type != AudioManager.TrackTypes.Bass)
-			track.decaySequence.Play ();
-		
-		PersonManager.instance.TransferPeople (fromTrail, track);
+			if (type != AudioManager.TrackTypes.Bass)
+				track.decaySequence.Play ();
+
+			PersonManager.instance.TransferPeople (fromTrail, track);
 		}
 	}
 
@@ -515,12 +350,12 @@ public class Player_Controller : MonoBehaviour
 
 	public AudioManager.TrackTypes GetLongestDuration ()
 	{
-		
+
 		AudioManager.TrackTypes type = AudioManager.TrackTypes.Clav;
 		float duration = 0;
 		if (_bassTrailRenderer.decaySequence.IsPlaying ())
 			type = AudioManager.TrackTypes.Bass;
-		
+
 		if (_clavTrailRenderer.decaySequence.IsPlaying ())
 		if (_clavTrailRenderer.decaySequence.Elapsed() > duration) {
 			type = AudioManager.TrackTypes.Clav;

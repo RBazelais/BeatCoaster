@@ -210,7 +210,7 @@ public class Enemy : MonoBehaviour
 			}
 		} else if (state == EnemyState.Collected) {
 			if (GetCollectedPercent () >= 1) {
-					Player_Controller.instance.ActivateTrack (_trackType, _trail);
+				Player_Controller.instance.ActivateTrack (_trackType, _trail);
 				state = EnemyState.Exited;
 				OnExited ();
 			}
@@ -219,7 +219,7 @@ public class Enemy : MonoBehaviour
 
 	private void OnExited ()
 	{
-		
+
 		ResetAndRecycle ();
 	}
 
