@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour {
 
 	private void Title_ExitState() {
 		//Hide the title, start the game
+		inGameData.gameObject.SetActive (true);
 		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
 		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
@@ -106,6 +107,7 @@ public class GameManager : MonoBehaviour {
 
 	public void End_EnterState() {
 		//Show game over menu
+		GameOverMenu.gameObject.SetActive (true);
 		mainMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
 		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
 		GameOverMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", true);
