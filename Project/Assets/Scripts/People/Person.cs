@@ -66,8 +66,13 @@ public class Person : MonoBehaviour {
 			if (percent >= 1) {
 				moveType = PersonMoveType.Follow;
 				animator.SetBool("isJumping", false);
+				OnJoinedCollectedPeople();
 			}
 		}
+	}
+
+	private void OnJoinedCollectedPeople() {
+		PersonManager.instance.OnPersonJoinedCollectedPeople(this);
 	}
 
 	public void SetTrail(TrackTrail trail, PersonMoveType moveType)
@@ -91,10 +96,9 @@ public class Person : MonoBehaviour {
 		readyForNewBeat = false;
 		float jumpAmt = UnityEngine.Random.Range(0.5f, 0.7f);
 
-		float dur = 60.0f / (float)AudioManager.instance.bpm - 0.01f;
+		float dur = 60.0f / (float)AudioManager.instance.bpm - 0.1f;
 		float buffer = dur * 0.1f;
 		dur -= buffer;
-		if (Random.value < 0.5f) dur *= 2;
 
 		Vector3 punchRotation = new Vector3(0, 0, Random.Range(10, 40) * rotateDirSign);
 

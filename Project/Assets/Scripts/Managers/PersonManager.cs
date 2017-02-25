@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using WhitDataTypes;
+using System;
 
 public class PersonManager : MonoBehaviour {
+	public Action SignalPersonAddedToCollection;
+	public Action SignalPersonRemovedFromCollection;
+
+	public static int listenersPerPersonUnit = 10;
+
 	private static PersonManager _instance;
 	public static PersonManager instance {
 		get {
@@ -20,9 +26,15 @@ public class PersonManager : MonoBehaviour {
 	[SerializeField] private Person personPrefab;
 
 	private List<Person> people;
+	private List<Person> collectedPeople;
+
+	public int GetListenerCount() {
+		return collectedPeople.Count * PersonManager.listenersPerPersonUnit;
+	}
 
 	private void Awake() {
 		people = new List<Person>();
+		collectedPeople = new List<Person>();
 	}
 
 	private void Start() {
@@ -60,6 +72,16 @@ public class PersonManager : MonoBehaviour {
 			Person person = fromTrail.people[i];
 			TransferPerson(person, fromTrail, toTrail);
 		}
+	}
+
+	public void OnPersonJoinedCollectedPeople(Person person) {
+		collectedPeople.Add(person);
+		if (SignalPersonAddedToCollection != null) SignalPersonAddedToCollection();
+	}
+
+	public void OnPersonLeftCollectedPeople(Person person) {
+		collectedPeople.Remove(person);
+		if (SignalPersonRemovedFromCollection != null) SignalPersonRemovedFromCollection();
 	}
 
 	private void TransferPerson(Person person, TrackTrail fromTrail, TrackTrail toTrail) {

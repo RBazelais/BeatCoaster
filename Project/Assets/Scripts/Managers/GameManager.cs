@@ -4,8 +4,11 @@ using UnityEngine;
 using DG.Tweening;
 using WhitDataTypes;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour {
+	public Action SignalPlayingStateEnter;
+
 	public enum GameState {
 		Title,
 		Playing,
@@ -85,6 +88,7 @@ public class GameManager : MonoBehaviour {
 
 	private void Playing_EnterState() {
 		playerController.OnPlayingEnterState();
+		if (SignalPlayingStateEnter != null) SignalPlayingStateEnter();
 	}
 
 	private void Playing_ExitState() {

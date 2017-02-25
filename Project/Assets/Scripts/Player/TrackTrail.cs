@@ -98,8 +98,9 @@ public class TrackTrail : MonoBehaviour
 		}
 
 		peopleKillSequence.Play().OnComplete(() =>
-			{
+			{				
 				for(int i = 0; i < people.Count; i++) {
+					PersonManager.instance.OnPersonLeftCollectedPeople(people[i]);
 					people[i].Recycle();
 				}
 				people.Clear();
