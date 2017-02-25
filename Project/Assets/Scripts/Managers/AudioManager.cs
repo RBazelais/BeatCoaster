@@ -252,7 +252,6 @@ public class AudioManager : MonoBehaviour
 			track = _drumTrack;
 			break;
 		}
-		Debug.Log (track);
 		return track;
 	}
 }

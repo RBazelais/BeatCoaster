@@ -162,7 +162,6 @@ public class TrackTrail : MonoBehaviour
 	{
 		_trackType = trackType;
 
-		Debug.Log(_trackType);
 		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
 		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
 		if (_shadowSplineTrailRenderer != null)
