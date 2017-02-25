@@ -27,6 +27,9 @@ public class Player_Controller : MonoBehaviour
 	private float _pointPos = 0;
 
 	[SerializeField]
+	private Transform _dropReminder;
+
+	[SerializeField]
 	private TrackTrail _drumTrailRenderer;
 
 	[SerializeField]
@@ -146,66 +149,87 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
-			_playerState = PlayerState.Idle;
-			TriggerDrop();
+		if (ActiveTrails () == 5 && _playerState == PlayerState.Active && PersonManager.instance.GetListenerCount() > 0) {
+			if (!_dropReminder.gameObject.activeSelf)
+				EnableDrop ();
+
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				_playerState = PlayerState.Idle;
+				AudioManager.instance.PlaySound(AudioManager.instance.whiteNoiseClip, 1);
+				TriggerDrop ();
+			}
+		}
+		else
+		{
+			if(_dropReminder.gameObject.activeSelf)
+				DisableDrop();
 		}
 
 		if (Input.GetKeyDown (KeyCode.Z)) {
-			//SetState (PlayerState.GameOver);
-			_playerState = PlayerState.GameOver;
-			OnGameOverEnterState ();
+			//			SetState (PlayerState.GameOver);
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
-
 		}
-			
-		if (_playerState == PlayerState.Active) {
-			bool input = false;
-		
-			if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
-				if (transform.position.y > _yCenter - 4) {
-					if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-						input = true;
-						_yPos -= .065f;
-					}
-				}
 
-				if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
-					if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-						input = true;
-						_yPos += .065f;
-					}
+		bool input = false;
+		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
+			if (transform.position.y > _yCenter - 4) {
+				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+					input = true;
+					_yPos -= .065f;
+				}
+			}
+
+			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
+				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+					input = true;
+					_yPos += .065f;
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
-			_yPos -= .045f;
-			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
+			if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+				input = true;
+				_yPos -= .065f;
+			}
 
-			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
-			_pointPos += 1;
+			if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+				input = true;
+				_yPos += .065f;
+			}
 		}
 	}
 
-	void TriggerDrop() {
-		AudioManager.instance.TriggerDrop();
+	void TriggerDrop ()
+	{
+		AudioManager.instance.TriggerDrop ();
 
-		_bassTrailRenderer.decaySequence.Kill();
-		_clavTrailRenderer.decaySequence.Kill();
-		_drumTrailRenderer.decaySequence.Kill();
-		_keysTrailRenderer.decaySequence.Kill();
-		_pizzTrailRenderer.decaySequence.Kill();
+		_bassTrailRenderer.decaySequence.Kill ();
+		_clavTrailRenderer.decaySequence.Kill ();
+		_drumTrailRenderer.decaySequence.Kill ();
+		_keysTrailRenderer.decaySequence.Kill ();
+		_pizzTrailRenderer.decaySequence.Kill ();
 
-		_bassTrailRenderer.ResetTrailAppearance();
-		_clavTrailRenderer.ResetTrailAppearance();
-		_drumTrailRenderer.ResetTrailAppearance();
-		_keysTrailRenderer.ResetTrailAppearance();
-		_pizzTrailRenderer.ResetTrailAppearance();
+		_bassTrailRenderer.ResetTrailAppearance ();
+		_clavTrailRenderer.ResetTrailAppearance ();
+		_drumTrailRenderer.ResetTrailAppearance ();
+		_keysTrailRenderer.ResetTrailAppearance ();
+		_pizzTrailRenderer.ResetTrailAppearance ();
 
-		for(int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
-			EnemyManager.instance.enemies[i].Recycle();
+		for (int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
+			EnemyManager.instance.enemies [i].Recycle ();
 		}
-		EnemyManager.instance.enemies.Clear();
+		EnemyManager.instance.enemies.Clear ();
+	}
+
+	void EnableDrop ()
+	{
+		_dropReminder.gameObject.SetActive (true);
+		AudioManager.instance.sfxWhiteNoise.Play ();
+	}
+
+	void DisableDrop() {
+		_dropReminder.gameObject.SetActive(false);
+		AudioManager.instance.sfxWhiteNoise.Stop();
 	}
 
 	public IEnumerator PlayDrop() {
