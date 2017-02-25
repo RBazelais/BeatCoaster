@@ -71,6 +71,15 @@ public class EnemyManager : MonoBehaviour
 		
 			AudioManager.TrackTypes trackType = Player_Controller.instance.GetLongestDuration();
 			while (trackType == _lastType) {
+				if(!Player_Controller.instance.GetDrumTrail().active)
+					trackType = AudioManager.TrackTypes.Drums;
+				else if(!Player_Controller.instance.GetKeysTrail().active)
+					trackType = AudioManager.TrackTypes.Keys;
+				else if(!Player_Controller.instance.GetPizzTrail().active)
+					trackType = AudioManager.TrackTypes.Pizz;
+				else if(!Player_Controller.instance.GetClavTrail().active)
+					trackType = AudioManager.TrackTypes.Clav;
+				else
 				trackType = (AudioManager.TrackTypes)Random.Range (0, 5);
 				yield return null;
 			}

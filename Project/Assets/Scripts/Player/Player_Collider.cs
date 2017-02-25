@@ -43,28 +43,20 @@ public class Player_Collider : MonoBehaviour
 
 	void Update ()
 	{
-		if (_currentEnemy != null) {
+		RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
+		if (hits.Length > 0) {
+			_sprite.color = new Color(1,1,1,.85f);
 			if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
-				if (!_currentEnemy.collected) {
-					_currentEnemy.AttemptCollect ();
+				for(int i = 0; i < hits.Length; i++) {
+					var enemy = hits[i].transform.GetComponent<Enemy>();
+					if (!enemy.collected) {
+						enemy.AttemptCollect ();
+					}
 				}
 			}
 		}
+		else {
+			_sprite.color = new Color(1,1,1,.5f);
+		}
 	}
-
-	void OnTriggerEnter2D (Collider2D col)
-	{
-		
-		_currentEnemy = col.GetComponent<Enemy> ();
-		_sprite.color = ColorManager.GetColorForTrackType (_currentEnemy.trackType);
-		_sprite.color = new Color (_sprite.color.r, _sprite.color.g, _sprite.color.b, .5f);
-	}
-
-	void OnTriggerExit2D (Collider2D col)
-	{
-		_sprite.color = new Color (1, 1, 1, .5f);
-		_currentEnemy = null;
-	}
-
-
 }
