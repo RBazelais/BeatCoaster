@@ -11,7 +11,8 @@ public class Player_Controller : MonoBehaviour
 		None,
 		Idle,
 		Active,
-		Drop
+		Drop, 
+		GameOver
 	}
 
 	public static Player_Controller instance;
@@ -92,11 +93,13 @@ public class Player_Controller : MonoBehaviour
 		_bassTrailRenderer.ActivateTrail ();
 	}
 
-	public void StopPlaying ()
-	{
-		DeactivateAllTrails ();
-		Debug.Log ("All Trails Deactivated");
-	}
+	/*
+		public void StopPlaying ()
+		{
+			DeactivateAllTrails ();
+			Debug.Log ("All Trails Deactivated");
+		}
+	*/
 
 	public void SetTrails ()
 	{
@@ -148,13 +151,18 @@ public class Player_Controller : MonoBehaviour
 			TriggerDrop();
 		}
 
-		if(Input.GetKeyDown(KeyCode.Z)){
-			//			SetState (PlayerState.GameOver);
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			//SetState (PlayerState.GameOver);
+			_playerState = PlayerState.GameOver;
+			OnGameOverEnterState ();
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
+
 
 		}
 			
+		if (_playerState == PlayerState.Active) {
 			bool input = false;
+		
 		if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
@@ -169,17 +177,12 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
-		}
-		else if (_playerState == PlayerState.Drop) {
-				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-					input = true;
-					_yPos -= .065f;
-				}
-				
-				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-					input = true;
-					_yPos += .065f;
-				}
+		} else if (_playerState == PlayerState.Drop) {
+			_yPos -= .045f;
+			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
+
+			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
+			_pointPos += 1;
 		}
 	}
 
@@ -215,11 +218,15 @@ public class Player_Controller : MonoBehaviour
 	public void OnGameOverEnterState ()
 	{
 		DeactivateAllTrails ();
-		//		SetState(Player_Controller.PlayerState.GameOver);
+		// Stop playing music 
+		// Pause the game
 	}
 
 	public void OnGameOverUpdateState ()
 	{
+		if (_playerState == PlayerState.GameOver) {
+			//Play Game Over Menu animation
+		}
 
 	}
 
@@ -232,6 +239,8 @@ public class Player_Controller : MonoBehaviour
 		case PlayerState.Drop:
 			break;
 		case PlayerState.Idle:
+			break;
+		case PlayerState.GameOver:
 			break;
 
 		}
