@@ -11,6 +11,8 @@ public class CameraManager : MonoBehaviour {
 	[SerializeField]
 	private Transform _cameraParent;
 
+	private float _shakeIntensity = 1f;
+
 	void Start() {
 		AudioManager.instance.BeatOnUpdate += ShakeCamera;
 	}
@@ -35,8 +37,16 @@ public class CameraManager : MonoBehaviour {
 	}
 
 	void ShakeCamera() {
-		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop || Player_Controller.instance.playerState == Player_Controller.PlayerState.Idle){
-			_mainCamera.DOShakePosition(.15f, 1f, 50);
+		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Idle){
+			_mainCamera.DOShakePosition(.15f, _shakeIntensity, 10);
+			_shakeIntensity += .2f;
+		}
+		else if (Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop) {
+			_shakeIntensity = 1f;
+			_mainCamera.DOShakePosition(.15f, _shakeIntensity, 90);
+		}
+		else {
+			_shakeIntensity = 1f;
 		}
 	}
 }

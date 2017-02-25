@@ -28,15 +28,16 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private AudioSource sfxSource;
 
 	[SerializeField] private AudioSource _sfxWhiteNoise;
+
 	public AudioSource sfxWhiteNoise {
 		get{ return _sfxWhiteNoise; }
 	}
 
 	[SerializeField]
 	private AudioClip _whiteNoiseClip;
-	public AudioClip whiteNoiseClip
-	{
-		get{return _whiteNoiseClip;}
+
+	public AudioClip whiteNoiseClip {
+		get{ return _whiteNoiseClip; }
 	}
 
 	public void PlaySound (AudioClip clip, float volume = 1)
@@ -99,7 +100,7 @@ public class AudioManager : MonoBehaviour
 				_buildTrack.PlayScheduled (nextEventTime);
 				_dropTime = nextEventTime + ((60.0F / bpm * numBeatsPerSegment) * 2f);
 				_dropTrack.PlayScheduled (_dropTime);
-				StartCoroutine(Player_Controller.instance.YieldToDropEnable());
+				StartCoroutine (Player_Controller.instance.YieldToDropEnable ());
 				Debug.Log ("Scheduled source to start at time " + nextEventTime);
 			}
 			if (_initPlay) {
@@ -114,11 +115,11 @@ public class AudioManager : MonoBehaviour
 			if (AudioSettings.dspTime >= _dropTime) {
 				_waitForBuild = false;
 
-				if(Player_Controller.instance.dropHit)
-				PlayDrop();
-				else{
+				if (Player_Controller.instance.dropHit)
+					PlayDrop ();
+				else {
 					_dropTrack.volume = 0;
-					Player_Controller.instance.ResetToBass();
+					Player_Controller.instance.ResetToBass ();
 				}
 			}
 		}
@@ -220,16 +221,15 @@ public class AudioManager : MonoBehaviour
 
 	void VolumeUpAllTracks ()
 	{
-		if (Player_Controller.instance.GetBassTrail ().active && _bassTrack.volume == 0)
-			_bassTrack.volume = 1f;
+		_bassTrack.volume = 1f;
 		if (Player_Controller.instance.GetClavTrail ().active && _clavTrack.volume == 0)
 			_clavTrack.volume = 1f;
 		if (Player_Controller.instance.GetKeysTrail ().active && _keyTrack.volume == 0)
-					_keyTrack.volume = 1f;
+			_keyTrack.volume = 1f;
 		if (Player_Controller.instance.GetPizzTrail ().active && _pizzTrack.volume == 0)
-					_pizzTrack.volume = 1f;
+			_pizzTrack.volume = 1f;
 		if (Player_Controller.instance.GetDrumTrail ().active && _drumTrack.volume == 0)
-					_drumTrack.volume = 1f;
+			_drumTrack.volume = 1f;
 	}
 
 	public AudioSource GetTrack (TrackTypes type)
@@ -252,7 +252,7 @@ public class AudioManager : MonoBehaviour
 			track = _drumTrack;
 			break;
 		}
-		Debug.Log(track);
+		Debug.Log (track);
 		return track;
 	}
 }

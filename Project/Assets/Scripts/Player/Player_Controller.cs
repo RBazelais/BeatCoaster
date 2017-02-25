@@ -236,12 +236,15 @@ public class Player_Controller : MonoBehaviour
 
 		PersonManager.instance.DropPeople();
 
-		yield return new WaitForSeconds(6f);
+		yield return new WaitForSeconds(7.5f);
 
 		ResetToBass();
 	}
 
 	public void ResetToBass() {
+		_dropHit = false;
+		_hitSpaceForDrop = false;
+
 		DisableDropNotification();
 
 		_clavTrailRenderer.DeactivateTrail();
