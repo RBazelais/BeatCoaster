@@ -166,13 +166,6 @@ public class Player_Controller : MonoBehaviour
 				DisableDrop();
 		}
 
-		if (Input.GetKeyDown (KeyCode.Z)) {
-			SetState (PlayerState.GameOver);
-			_playerState = PlayerState.GameOver;
-			GameManager.instance.End_EnterState ();
-
-		}
-
 		bool input = false;
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			if (transform.position.y > _yCenter - 4) {
