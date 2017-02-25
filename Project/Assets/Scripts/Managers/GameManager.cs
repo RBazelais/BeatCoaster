@@ -99,18 +99,16 @@ public class GameManager : MonoBehaviour {
 
 	private void End_ExitState() {
 		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
-		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
-		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
+		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
 		mainCamera.DOOrthoSize(10f, 1f);
 	}
 
 	private void End_UpdateState() {
 		playerController.OnGameOverUpdateState();
 		if (Input.GetKeyDown(KeyCode.Z)){
-			//AudioManager.instance.PlayTracks();
 			SetState(GameState.End);
 			playerController.SetState(Player_Controller.PlayerState.GameOver);
-			//playerController.StopPlaying();
 			Debug.Log ("End Update State Triggered");
 		}
 
