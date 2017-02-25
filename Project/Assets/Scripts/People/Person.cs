@@ -20,6 +20,7 @@ public class Person : MonoBehaviour {
 	private float transferDur = 2f;
 	private int rotateDirSign = 1;
 	private bool readyForNewBeat = true;
+	private float decayVal = 1;
 
 	[SerializeField] private Animator animator;
 
@@ -45,8 +46,12 @@ public class Person : MonoBehaviour {
 		{
 			UpdateWobble();
 			UpdatePosition();
+
+			animator.SetFloat("Track Decay", decayVal);
 		}
 	}
+
+
 
 	private void UpdatePosition() 
 	{
@@ -85,6 +90,10 @@ public class Person : MonoBehaviour {
 			animator.SetBool("isJumping", true);
 			transferTimer = 0;
 		}
+	}
+
+	public void OnTrackDecayChange(float decay) {
+		decayVal = decay;
 	}
 
 	private void UpdateWobble() {

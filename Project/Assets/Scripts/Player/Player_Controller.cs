@@ -11,7 +11,8 @@ public class Player_Controller : MonoBehaviour
 		None,
 		Idle,
 		Active,
-		Drop
+		Drop, 
+		GameOver
 	}
 
 	public static Player_Controller instance;
@@ -42,9 +43,6 @@ public class Player_Controller : MonoBehaviour
 
 	[SerializeField]
 	private Player_Collider _col;
-
-	[SerializeField]
-	private Transform _dropReminder;
 
 	private float _yPos = 0, _lastYPos, _yCenter;
 
@@ -85,9 +83,8 @@ public class Player_Controller : MonoBehaviour
 			instance = this;
 	}
 
-	public void OnEnemyCollected (Enemy enemy)
-	{
-		_col.OnEnemyCollected (enemy);
+	public void OnEnemyCollected(Enemy enemy) {
+		_col.OnEnemyCollected(enemy);
 	}
 
 	public void StartPlaying ()
@@ -96,11 +93,13 @@ public class Player_Controller : MonoBehaviour
 		_bassTrailRenderer.ActivateTrail ();
 	}
 
-	public void StopPlaying ()
-	{
-		DeactivateAllTrails ();
-		Debug.Log ("All Trails Deactivated");
-	}
+	/*
+		public void StopPlaying ()
+		{
+			DeactivateAllTrails ();
+			Debug.Log ("All Trails Deactivated");
+		}
+	*/
 
 	public void SetTrails ()
 	{
@@ -147,106 +146,88 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if (ActiveTrails () == 5 && _playerState == PlayerState.Active && PersonManager.instance.GetListenerCount() > 0) {
-			if (!_dropReminder.gameObject.activeSelf)
-				EnableDrop ();
-
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				_playerState = PlayerState.Idle;
-				AudioManager.instance.PlaySound(AudioManager.instance.whiteNoiseClip, 1);
-				TriggerDrop ();
-			}
-		}
-		else
-		{
-			if(_dropReminder.gameObject.activeSelf)
-				DisableDrop();
+		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
+			_playerState = PlayerState.Idle;
+			TriggerDrop();
 		}
 
 		if (Input.GetKeyDown (KeyCode.Z)) {
-			//			SetState (PlayerState.GameOver);
+			//SetState (PlayerState.GameOver);
+			_playerState = PlayerState.GameOver;
+			OnGameOverEnterState ();
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
+
 
 		}
 			
-		bool input = false;
-		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
-			if (transform.position.y > _yCenter - 4) {
-				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-					input = true;
-					_yPos -= .065f;
+		if (_playerState == PlayerState.Active) {
+			bool input = false;
+		
+			if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
+				if (transform.position.y > _yCenter - 4) {
+					if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+						input = true;
+						_yPos -= .065f;
+					}
 				}
-			}
 
-			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
-				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-					input = true;
-					_yPos += .065f;
+				if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
+					if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+						input = true;
+						_yPos += .065f;
+					}
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
-			if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-				input = true;
-				_yPos -= .065f;
-			}
-				
-			if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-				input = true;
-				_yPos += .065f;
-			}
+			_yPos -= .045f;
+			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
+
+			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
+			_pointPos += 1;
 		}
 	}
 
-	void TriggerDrop ()
-	{
-		AudioManager.instance.TriggerDrop ();
+	void TriggerDrop() {
+		AudioManager.instance.TriggerDrop();
 
-		_bassTrailRenderer.decaySequence.Kill ();
-		_clavTrailRenderer.decaySequence.Kill ();
-		_drumTrailRenderer.decaySequence.Kill ();
-		_keysTrailRenderer.decaySequence.Kill ();
-		_pizzTrailRenderer.decaySequence.Kill ();
+		_bassTrailRenderer.decaySequence.Kill();
+		_clavTrailRenderer.decaySequence.Kill();
+		_drumTrailRenderer.decaySequence.Kill();
+		_keysTrailRenderer.decaySequence.Kill();
+		_pizzTrailRenderer.decaySequence.Kill();
 
-		_bassTrailRenderer.ResetTrailAppearance ();
-		_clavTrailRenderer.ResetTrailAppearance ();
-		_drumTrailRenderer.ResetTrailAppearance ();
-		_keysTrailRenderer.ResetTrailAppearance ();
-		_pizzTrailRenderer.ResetTrailAppearance ();
+		_bassTrailRenderer.ResetTrailAppearance();
+		_clavTrailRenderer.ResetTrailAppearance();
+		_drumTrailRenderer.ResetTrailAppearance();
+		_keysTrailRenderer.ResetTrailAppearance();
+		_pizzTrailRenderer.ResetTrailAppearance();
 
-		for (int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
-			EnemyManager.instance.enemies [i].Recycle ();
+		for(int i = 0; i < EnemyManager.instance.enemies.Count; i++) {
+			EnemyManager.instance.enemies[i].Recycle();
 		}
-		EnemyManager.instance.enemies.Clear ();
+		EnemyManager.instance.enemies.Clear();
 	}
 
-	void EnableDrop ()
-	{
-		_dropReminder.gameObject.SetActive (true);
-		AudioManager.instance.sfxWhiteNoise.Play ();
-	}
-
-	void DisableDrop() {
-		_dropReminder.gameObject.SetActive(false);
-		AudioManager.instance.sfxWhiteNoise.Stop();
-	}
-
-	public IEnumerator PlayDrop ()
-	{
+	public IEnumerator PlayDrop() {
 		SetState (PlayerState.Drop);
 
-		yield return new WaitForSeconds (12f);
+		yield return new WaitForSeconds(12f);
 
-		SetState (PlayerState.Active);
+		SetState(PlayerState.Active);
 	}
 
 	public void OnGameOverEnterState ()
 	{
 		DeactivateAllTrails ();
-		//		SetState(Player_Controller.PlayerState.GameOver);
+		// Stop playing music 
+		// Pause the game
 	}
 
 	public void OnGameOverUpdateState ()
 	{
+		if (_playerState == PlayerState.GameOver) {
+			//Play Game Over Menu animation
+		}
 
 	}
 
@@ -259,6 +240,8 @@ public class Player_Controller : MonoBehaviour
 		case PlayerState.Drop:
 			break;
 		case PlayerState.Idle:
+			break;
+		case PlayerState.GameOver:
 			break;
 
 		}
@@ -315,7 +298,7 @@ public class Player_Controller : MonoBehaviour
 	public void ActivateTrack (AudioManager.TrackTypes type, TrackTrail fromTrail)
 	{
 		TrackTrail track = GetTrack (type);
-		if (!track.active) {
+		if(!track.active) {
 			track.SetActive ();
 			SetTrackOrder ();
 			track.ActivateTrail ();
@@ -373,27 +356,27 @@ public class Player_Controller : MonoBehaviour
 			type = AudioManager.TrackTypes.Bass;
 
 		if (_clavTrailRenderer.decaySequence.IsPlaying ())
-		if (_clavTrailRenderer.decaySequence.Elapsed () > duration) {
+		if (_clavTrailRenderer.decaySequence.Elapsed() > duration) {
 			type = AudioManager.TrackTypes.Clav;
-			duration = _clavTrailRenderer.decaySequence.Elapsed ();
+			duration = _clavTrailRenderer.decaySequence.Elapsed();
 		}
 
 		if (_drumTrailRenderer.decaySequence.IsPlaying ())
-		if (_drumTrailRenderer.decaySequence.Elapsed () > duration) {
+		if (_drumTrailRenderer.decaySequence.Elapsed() > duration) {
 			type = AudioManager.TrackTypes.Drums;
-			duration = _drumTrailRenderer.decaySequence.Elapsed ();
+			duration = _drumTrailRenderer.decaySequence.Elapsed();
 		}
 
 		if (_keysTrailRenderer.decaySequence.IsPlaying ())
-		if (_keysTrailRenderer.decaySequence.Elapsed () > duration) {
+		if (_keysTrailRenderer.decaySequence.Elapsed() > duration) {
 			type = AudioManager.TrackTypes.Keys;
-			duration = _keysTrailRenderer.decaySequence.Elapsed ();
+			duration = _keysTrailRenderer.decaySequence.Elapsed();
 		}
 
 		if (_pizzTrailRenderer.decaySequence.IsPlaying ())
-		if (_pizzTrailRenderer.decaySequence.Elapsed () > duration) {
+		if (_pizzTrailRenderer.decaySequence.Elapsed() > duration) {
 			type = AudioManager.TrackTypes.Pizz;
-			duration = _pizzTrailRenderer.decaySequence.Elapsed ();
+			duration = _pizzTrailRenderer.decaySequence.Elapsed();
 		}
 
 		return type;
