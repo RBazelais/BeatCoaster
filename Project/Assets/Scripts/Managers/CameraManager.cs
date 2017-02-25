@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CameraManager : MonoBehaviour {
 
 	[SerializeField]
 	private Camera _mainCamera;
+
+	void Start() {
+		AudioManager.instance.BeatOnUpdate += ShakeCamera;
+	}
 
 	void LateUpdate ()
 	{
@@ -24,5 +29,11 @@ public class CameraManager : MonoBehaviour {
 	private void UpdateDropPosition() {
 		Vector3 targetPos = new Vector3 (Player_Controller.instance.transform.position.x - 20, Player_Controller.instance.transform.position.y + 17, -10);
 		_mainCamera.transform.position = targetPos; // Vector3.Lerp(_mainCamera.transform.position, targetPos, 3 * Time.deltaTime);
+	}
+
+	void ShakeCamera() {
+		if(Player_Controller.instance.playerState == Player_Controller.PlayerState.Drop){
+			_mainCamera.DOShakePosition(.1f);
+		}
 	}
 }

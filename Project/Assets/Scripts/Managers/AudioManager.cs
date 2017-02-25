@@ -77,14 +77,13 @@ public class AudioManager : MonoBehaviour
 				_waitForBuild = true;
 				_buildTrack.PlayScheduled (nextEventTime);
 				_dropTrack.PlayScheduled (nextEventTime + ((60.0F / bpm * numBeatsPerSegment) * 2f));
-
+				Debug.Log ("Scheduled source to start at time " + nextEventTime);
 			}
 			if (_initPlay) {
 				_initPlay = false;
 				PlayBeats (nextEventTime);
 			}
-
-			Debug.Log ("Scheduled source to start at time " + nextEventTime);
+				
 			nextEventTime += 60.0F / bpm * numBeatsPerSegment;
 		}
 

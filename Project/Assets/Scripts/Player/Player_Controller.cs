@@ -139,26 +139,17 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingUpdateState ()
 	{
-		if (Input.GetKeyDown (KeyCode.Q)) {
-			_playerState = PlayerState.Idle;
-			TriggerDrop();
-		}
-		if (Input.GetKeyDown (KeyCode.E)) {
-			SetState (PlayerState.Active);
-		}
-
 		if(Input.GetKeyDown(KeyCode.Space) && ActiveTrails() == 5 && _playerState == PlayerState.Active){
 			_playerState = PlayerState.Idle;
 			TriggerDrop();
 		}
 
 		if(Input.GetKeyDown(KeyCode.Z)){
-			SetState (PlayerState.GameOver);
+			//SetState (PlayerState.GameOver);
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
 		}
-
-		if (_playerState == PlayerState.Active) {
+			
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
@@ -173,13 +164,11 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
-		} else if (_playerState == PlayerState.Drop) {
-			_yPos -= .045f;
-			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
-
+		if (_playerState == PlayerState.Drop) {
+			_yPos = Mathf.Clamp (_yPos, -1.5f, -.75f);
+		}
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 			_pointPos += 1;
-		}
 	}
 
 	void TriggerDrop() {
@@ -214,7 +203,7 @@ public class Player_Controller : MonoBehaviour
 	public void OnGameOverEnterState ()
 	{
 		DeactivateAllTrails ();
-		SetState(Player_Controller.PlayerState.GameOver);
+		//SetState(Player_Controller.PlayerState.GameOver);
 	}
 
 	public void OnGameOverUpdateState ()
