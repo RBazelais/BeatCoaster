@@ -11,8 +11,7 @@ public class Player_Controller : MonoBehaviour
 		None,
 		Idle,
 		Active,
-		Drop, 
-		GameOver
+		Drop
 	}
 
 	public static Player_Controller instance;
@@ -45,7 +44,6 @@ public class Player_Controller : MonoBehaviour
 	private Player_Collider _col;
 
 	private float _yPos = 0, _lastYPos, _yCenter;
-	private int _xOffset = 0;
 
 	public float yCenter {
 		get {
@@ -148,11 +146,7 @@ public class Player_Controller : MonoBehaviour
 			TriggerDrop();
 		}
 
-		if(Input.GetKeyDown(KeyCode.X)){
-			SetState (PlayerState.GameOver);
-		}
-
-		if (_playerState == PlayerState.Active) {
+		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
@@ -167,15 +161,12 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
-
-			if (Input.GetKey(KeyCode.A)) {
-				input = true;
-//				_xOffset 
-			}
 		} else if (_playerState == PlayerState.Drop) {
-			Mathf.Clamp (_yPos -= .075f, -2, 2);
+			_yPos -= .075f;
+			_yPos = Mathf.Clamp (_yPos, -1, 1);
 
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
+			_pointPos += 1;
 		}
 	}
 
@@ -198,13 +189,11 @@ public class Player_Controller : MonoBehaviour
 			EnemyManager.instance.enemies[i].Recycle();
 		}
 		EnemyManager.instance.enemies.Clear();
-
-		_playerState = PlayerState.Drop;
 	}
 
 	public void OnGameOverEnterState ()
 	{
-		DeactivateAllTrails ();
+
 	}
 
 	public void OnGameOverUpdateState ()
@@ -221,8 +210,6 @@ public class Player_Controller : MonoBehaviour
 		case PlayerState.Drop:
 			break;
 		case PlayerState.Idle:
-			break;
-		case PlayerState.GameOver:
 			break;
 
 		}
@@ -249,10 +236,185 @@ public class Player_Controller : MonoBehaviour
 			_yPos += .025f;
 		}
 
-		if(_playerState == PlayerState.Idle)
-		{
-			_yPos = 0;
-		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
@@ -266,12 +428,13 @@ public class Player_Controller : MonoBehaviour
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
 
-		int segment = Mathf.Max (spline.NbSegments - 15 + _xOffset, 0);
+		int segment = Mathf.Max (spline.NbSegments - 15, 0);
 		float distFromStart = spline.GetSegmentDistanceFromStart (segment);
 
 		Vector3 pos = spline.FindPositionFromDistance (distFromStart);
 
 		Vector3 endPos = spline.FindPositionFromDistance (spline.GetSegmentDistanceFromStart (spline.NbSegments - 1));
+		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
 	}
 
