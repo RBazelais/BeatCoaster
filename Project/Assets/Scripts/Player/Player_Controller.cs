@@ -44,6 +44,7 @@ public class Player_Controller : MonoBehaviour
 	private Player_Collider _col;
 
 	private float _yPos = 0, _lastYPos, _yCenter;
+	private int _xOffset = 0;
 
 	public float yCenter {
 		get {
@@ -161,6 +162,11 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
+
+			if (Input.GetKey(KeyCode.A)) {
+				input = true;
+//				_xOffset 
+			}
 		} else if (_playerState == PlayerState.Drop) {
 			Mathf.Clamp (_yPos -= .075f, -2, 2);
 
@@ -253,13 +259,12 @@ public class Player_Controller : MonoBehaviour
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
 
-		int segment = Mathf.Max (spline.NbSegments - 15, 0);
+		int segment = Mathf.Max (spline.NbSegments - 15 + _xOffset, 0);
 		float distFromStart = spline.GetSegmentDistanceFromStart (segment);
 
 		Vector3 pos = spline.FindPositionFromDistance (distFromStart);
 
 		Vector3 endPos = spline.FindPositionFromDistance (spline.GetSegmentDistanceFromStart (spline.NbSegments - 1));
-		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
 	}
 
