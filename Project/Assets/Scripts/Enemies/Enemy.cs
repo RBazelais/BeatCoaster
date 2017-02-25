@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
 		_highlightSequence.Play();
 	}
 
-	public void AttemptCollect ()
+	public void Collect ()
 	{
 		if (decayingTrail) return;
 
