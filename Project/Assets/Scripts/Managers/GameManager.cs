@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	public enum GameState {
 		Title,
 		Playing,
-		GameOver
+		End
 	}
 
 	private static GameManager _instance;
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject mainMenu;
 	public GameObject inGameData;
 	public Camera mainCamera;
+	public GameObject GameOverMenu;
 
 	private StateMachine stateMachine;
 
@@ -86,13 +87,21 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	private void End_EnterState() {
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		playerController.OnGameOverEnterState();
+		mainCamera.DOOrthoSize(2f, 1f);
+	}
+
 	private void Playing_EnterState() {
 		playerController.OnPlayingEnterState();
 		if (SignalPlayingStateEnter != null) SignalPlayingStateEnter();
 	}
 
 	private void Playing_ExitState() {
-
+		
 	}
 
 	private void Playing_UpdateState() {
@@ -100,7 +109,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void GameOver_EnterState() {
-		playerController.OnGameOverEnterState();
+		
 	}
 
 	private void GameOver_ExitState() {

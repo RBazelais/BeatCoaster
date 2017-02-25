@@ -11,7 +11,8 @@ public class Player_Controller : MonoBehaviour
 		None,
 		Idle,
 		Active,
-		Drop
+		Drop, 
+		GameOver
 	}
 
 	public static Player_Controller instance;
@@ -147,6 +148,10 @@ public class Player_Controller : MonoBehaviour
 			TriggerDrop();
 		}
 
+		if(Input.GetKeyDown(KeyCode.X)){
+			SetState (PlayerState.GameOver);
+		}
+
 		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
@@ -199,7 +204,7 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnGameOverEnterState ()
 	{
-
+		DeactivateAllTrails ();
 	}
 
 	public void OnGameOverUpdateState ()
@@ -216,6 +221,8 @@ public class Player_Controller : MonoBehaviour
 		case PlayerState.Drop:
 			break;
 		case PlayerState.Idle:
+			break;
+		case PlayerState.GameOver:
 			break;
 
 		}
