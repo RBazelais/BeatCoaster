@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -91,21 +91,28 @@ public class GameManager : MonoBehaviour {
 
 	private void End_EnterState() {
 		mainMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
-		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", true);
+		inGameData.gameObject.GetComponent<Animator> ().SetBool ("isActive", false);
 		GameOverMenu.gameObject.GetComponent<Animator> ().SetBool ("isActive", true);
 		playerController.OnGameOverEnterState ();
 		mainCamera.DOOrthoSize (2f, 1f);
 	}
 
-	private void End_UpdateState() {
+	private void End_ExitState() {
+		mainMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		inGameData.gameObject.GetComponent<Animator>().SetBool("isActive", true);
+		GameOverMenu.gameObject.GetComponent<Animator>().SetBool("isActive", false);
+		mainCamera.DOOrthoSize(10f, 1f);
+	}
+		
+	private void End_UpdateState() { //reset the game?
 		playerController.OnGameOverUpdateState();
-		//AudioManager.instance.PlayTracks();
-		SetState(GameState.End);
-//		playerController.SetState(Player_Controller.PlayerState.GameOver);
-		playerController.StopPlaying();
-		Debug.Log ("End Update State Triggered");
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			AudioManager.instance.PlayTracks();
+			SetState(GameState.Playing);
+			playerController.SetState(Player_Controller.PlayerState.Active);
+			playerController.StartPlaying();
 
-
+		}
 	}
 
 	private void Playing_EnterState() {

@@ -11,7 +11,8 @@ public class Player_Controller : MonoBehaviour
 		None,
 		Idle,
 		Active,
-		Drop
+		Drop, 
+		GameOver
 	}
 
 	public static Player_Controller instance;
@@ -44,6 +45,7 @@ public class Player_Controller : MonoBehaviour
 	private Player_Collider _col;
 
 	private float _yPos = 0, _lastYPos, _yCenter;
+	private int _xOffset = 0;
 
 	public float yCenter {
 		get {
@@ -90,12 +92,6 @@ public class Player_Controller : MonoBehaviour
 	{
 		_bassTrailRenderer.SetActive ();
 		_bassTrailRenderer.ActivateTrail ();
-	}
-
-	public void StopPlaying ()
-	{
-		DeactivateAllTrails ();
-		Debug.Log ("All Trails Deactivated");
 	}
 
 	public void SetTrails ()
@@ -156,12 +152,15 @@ public class Player_Controller : MonoBehaviour
 			TriggerDrop();
 		}
 
+<<<<<<< facfb01e805253efd0336d418eb19998efdcb0ce
 		if(Input.GetKeyDown(KeyCode.Z)){
 //			SetState (PlayerState.GameOver);
 			Debug.Log ("PlayerState has been set to GameOver from the OnPlayingEnterState");
 
 		}
 
+=======
+>>>>>>> Fixed End: Enter, Exit and Update
 		if (_playerState == PlayerState.Active) {
 			bool input = false;
 			if (transform.position.y > _yCenter - 4) {
@@ -177,12 +176,20 @@ public class Player_Controller : MonoBehaviour
 					_yPos += .065f;
 				}
 			}
+
+			if (Input.GetKey(KeyCode.A)) {
+				input = true;
+//				_xOffset 
+			}
 		} else if (_playerState == PlayerState.Drop) {
+<<<<<<< facfb01e805253efd0336d418eb19998efdcb0ce
 			_yPos -= .045f;
 			_yPos = Mathf.Clamp (_yPos, -.75f, .75f);
+=======
+			Mathf.Clamp (_yPos -= .075f, -2, 2);
+>>>>>>> Fixed End: Enter, Exit and Update
 
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
-			_pointPos += 1;
 		}
 	}
 
@@ -205,6 +212,8 @@ public class Player_Controller : MonoBehaviour
 			EnemyManager.instance.enemies[i].Recycle();
 		}
 		EnemyManager.instance.enemies.Clear();
+
+		_playerState = PlayerState.Drop;
 	}
 
 	public IEnumerator PlayDrop() {
@@ -217,13 +226,24 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnGameOverEnterState ()
 	{
+<<<<<<< facfb01e805253efd0336d418eb19998efdcb0ce
 		DeactivateAllTrails ();
 //		SetState(Player_Controller.PlayerState.GameOver);
+=======
+		//Turn on Game Over Menu
+>>>>>>> Fixed End: Enter, Exit and Update
 	}
 
 	public void OnGameOverUpdateState ()
 	{
+		if(Input.GetKeyDown(KeyCode.X)){
+			_playerState = PlayerState.GameOver;
 
+		}
+
+		//is audio playing?
+		//if yes pause it 
+		//disable player input except for get key down for next action(retry game)
 	}
 
 	public void SetState (PlayerState state)
@@ -235,6 +255,8 @@ public class Player_Controller : MonoBehaviour
 		case PlayerState.Drop:
 			break;
 		case PlayerState.Idle:
+			break;
+		case PlayerState.GameOver:
 			break;
 
 		}
@@ -261,185 +283,10 @@ public class Player_Controller : MonoBehaviour
 			_yPos += .025f;
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		if(_playerState == PlayerState.Idle)
+		{
+			_yPos = 0;
+		}
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			_yPos = Mathf.Clamp (_yPos, -.6f, .6f);
@@ -449,22 +296,16 @@ public class Player_Controller : MonoBehaviour
 			transform.position = new Vector3 (_pointPos, transform.position.y + _yPos, 0);
 		}
 
-		/*
-			if (_playerState == PlayerState.GameOver) {
-				
-			}
-		*/
 		_pointPos += 1f;
 
 		CatmullRomSpline spline = _bassTrailRenderer.splineTrailRenderer.spline;
 
-		int segment = Mathf.Max (spline.NbSegments - 15, 0);
+		int segment = Mathf.Max (spline.NbSegments - 15 + _xOffset, 0);
 		float distFromStart = spline.GetSegmentDistanceFromStart (segment);
 
 		Vector3 pos = spline.FindPositionFromDistance (distFromStart);
 
 		Vector3 endPos = spline.FindPositionFromDistance (spline.GetSegmentDistanceFromStart (spline.NbSegments - 1));
-		float diff = (endPos - pos).magnitude;
 		_col.transform.position = pos;
 	}
 
@@ -488,8 +329,6 @@ public class Player_Controller : MonoBehaviour
 		PersonManager.instance.TransferPeople (fromTrail, track);
 		}
 	}
-
-
 
 	public void SetTrackOrder ()
 	{

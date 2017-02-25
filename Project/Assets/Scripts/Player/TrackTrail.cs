@@ -76,7 +76,7 @@ public class TrackTrail : MonoBehaviour
 
 		_splineTrailRenderer.vertexColor = ColorManager.GetColorForTrackType (trackType);
 		_capSprite.color = ColorManager.GetColorForTrackType (trackType);
-		AudioManager.instance.GetTrack(_trackType).volume = 1;
+		AudioManager.instance.GetTrack(_trackType).volume = .65f;
 
 		_splineTrailRenderer.Clear ();
 		if (_shadowSplineTrailRenderer != null)
@@ -115,7 +115,7 @@ public class TrackTrail : MonoBehaviour
 
 	public void ResetDecay() {
 		_decaySequence.Kill();
-		AudioManager.instance.GetTrack(_trackType).volume = 1;
+		AudioManager.instance.GetTrack(_trackType).volume = .65f;
 
 		ResetTrailAppearance();
 
