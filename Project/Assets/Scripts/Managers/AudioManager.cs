@@ -27,8 +27,21 @@ public class AudioManager : MonoBehaviour
 
 	[SerializeField] private AudioSource sfxSource;
 
-	public void PlaySound(AudioClip clip, float volume = 1) {
-		sfxSource.PlayOneShot(clip, volume);
+	[SerializeField] private AudioSource _sfxWhiteNoise;
+	public AudioSource sfxWhiteNoise {
+		get{ return _sfxWhiteNoise; }
+	}
+
+	[SerializeField]
+	private AudioClip _whiteNoiseClip;
+	public AudioClip whiteNoiseClip
+	{
+		get{return _whiteNoiseClip;}
+	}
+
+	public void PlaySound (AudioClip clip, float volume = 1)
+	{
+		sfxSource.PlayOneShot (clip, volume);
 	}
 
 	public double bpm {
@@ -103,8 +116,8 @@ public class AudioManager : MonoBehaviour
 
 	void PlayBeats (double eventTime)
 	{
-		_dropTrack.Stop();
-		_buildTrack.Stop();
+		_dropTrack.Stop ();
+		_buildTrack.Stop ();
 
 		_bassTrack.PlayScheduled (eventTime);
 		_clavTrack.PlayScheduled (eventTime);
@@ -112,7 +125,7 @@ public class AudioManager : MonoBehaviour
 		_pizzTrack.PlayScheduled (eventTime);
 		_drumTrack.PlayScheduled (eventTime);
 
-		_bassTrack.volume = 1;
+		_bassTrack.volume = .65f;
 		_clavTrack.volume = 0;
 		_keyTrack.volume = 0;
 		_pizzTrack.volume = 0;
@@ -134,7 +147,7 @@ public class AudioManager : MonoBehaviour
 		_pizzTrack.volume = 0;
 		_drumTrack.volume = 0;
 
-		StartCoroutine(Player_Controller.instance.PlayDrop());
+		StartCoroutine (Player_Controller.instance.PlayDrop ());
 	}
 
 	void OnAudioFilterRead (float[] data, int channels)
@@ -187,25 +200,26 @@ public class AudioManager : MonoBehaviour
 		_initPlay = true;
 	}
 
-	public void RestartBeats() {
-		if(_dropTrack.isPlaying){
-			_dropTrack.Stop();
-			VolumeUpAllTracks();
+	public void RestartBeats ()
+	{
+		if (_dropTrack.isPlaying) {
+			_dropTrack.Stop ();
+			VolumeUpAllTracks ();
 		}
 	}
 
-	void VolumeUpAllTracks()
+	void VolumeUpAllTracks ()
 	{
-		if(Player_Controller.instance.GetBassTrail().active && _bassTrack.volume == 0)
-		_bassTrack.volume = 1;
-		if(Player_Controller.instance.GetClavTrail().active && _bassTrack.volume == 0)
-		_clavTrack.volume = 1;
-		if(Player_Controller.instance.GetKeysTrail().active && _bassTrack.volume == 0)
-		_keyTrack.volume = 1;
-		if(Player_Controller.instance.GetPizzTrail().active && _bassTrack.volume == 0)
-		_pizzTrack.volume = 1;
-		if(Player_Controller.instance.GetDrumTrail().active && _bassTrack.volume == 0)
-		_drumTrack.volume = 1;
+		if (Player_Controller.instance.GetBassTrail ().active && _bassTrack.volume == 0)
+			_bassTrack.volume = .65f;
+		if (Player_Controller.instance.GetClavTrail ().active && _bassTrack.volume == 0)
+			_clavTrack.volume = .65f;
+		if (Player_Controller.instance.GetKeysTrail ().active && _bassTrack.volume == 0)
+					_keyTrack.volume = .65f;
+		if (Player_Controller.instance.GetPizzTrail ().active && _bassTrack.volume == 0)
+					_pizzTrack.volume = .65f;
+		if (Player_Controller.instance.GetDrumTrail ().active && _bassTrack.volume == 0)
+					_drumTrack.volume = .65f;
 	}
 
 	public AudioSource GetTrack (TrackTypes type)
