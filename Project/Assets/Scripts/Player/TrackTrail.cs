@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using DG.Tweening;
 
 public class TrackTrail : MonoBehaviour
@@ -65,6 +66,23 @@ public class TrackTrail : MonoBehaviour
 		}
 	}
 
+	private float _decayVal = 1;
+	public float decayVal {
+		get {
+			return _decayVal;
+		}
+		set {
+			_decayVal = value;
+			OnDecayChange(_decayVal);
+		}
+	}
+
+	private void OnDecayChange(float decay) {
+		for (int i = 0; i < people.Count; i++) {
+			people[i].OnTrackDecayChange(decay);
+		}
+	}
+
 	public void SetActive ()
 	{
 		_active = true;
@@ -94,7 +112,7 @@ public class TrackTrail : MonoBehaviour
 			people[i].Reset();
 			people[i].SetTrail(null, Person.PersonMoveType.Follow);
 			people[i].transform.parent = null;
-			peopleKillSequence.Insert(0, people[i].transform.DOMove(new Vector3(Random.Range(-50,50), 10, 0), .33f).SetRelative(true));
+			peopleKillSequence.Insert(0, people[i].transform.DOMove(new Vector3(UnityEngine.Random.Range(-50,50), 10, 0), .33f).SetRelative(true));
 		}
 
 		peopleKillSequence.Play().OnComplete(() =>
@@ -117,11 +135,13 @@ public class TrackTrail : MonoBehaviour
 		_decaySequence.Kill();
 		AudioManager.instance.GetTrack(_trackType).volume = 1f;
 
+		decayVal = 1;
 		ResetTrailAppearance();
 
 		_decaySequence = DOTween.Sequence ();
 		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
 		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
+		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();
@@ -159,6 +179,7 @@ public class TrackTrail : MonoBehaviour
 		_decaySequence = DOTween.Sequence ();
 		_decaySequence.Insert (0, AudioManager.instance.GetTrack (_trackType).DOFade (0f, 5f));
 		_decaySequence.Insert (0, DOTween.To (() => splineTrailRenderer.vertexColor, x => splineTrailRenderer.vertexColor = x, Color.black, 5f).SetEase(Ease.Linear));
+		_decaySequence.Insert (0, DOTween.To (() => decayVal, x => decayVal = x, 0, 5f));
 		_decaySequence.SetDelay (5f).OnComplete(() => {
 			DeactivateTrail();
 			Player_Controller.instance.SetTrackOrder();

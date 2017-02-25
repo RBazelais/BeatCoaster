@@ -163,18 +163,19 @@ public class Player_Controller : MonoBehaviour
 		if (_playerState == PlayerState.Active) {
 			bool input = false;
 		
-		if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
-			if (transform.position.y > _yCenter - 4) {
-				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-					input = true;
-					_yPos -= .065f;
+			if(_playerState == PlayerState.Active || _playerState == PlayerState.Idle){
+				if (transform.position.y > _yCenter - 4) {
+					if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+						input = true;
+						_yPos -= .065f;
+					}
 				}
-			}
 
-			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
-				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-					input = true;
-					_yPos += .065f;
+				if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
+					if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+						input = true;
+						_yPos += .065f;
+					}
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {

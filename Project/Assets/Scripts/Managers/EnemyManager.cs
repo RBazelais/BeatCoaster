@@ -76,7 +76,7 @@ public class EnemyManager : MonoBehaviour
 			}
 
 			enemy.SetTrackType (trackType);
-			enemy.AddPeople (Random.Range (3, 10));
+			enemy.AddPeople(Random.Range (3, 10));
 			enemy.Activate ();
 
 			_lastType = trackType;
