@@ -6,6 +6,7 @@ using DG.Tweening;
 using WhitDataTypes;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 	public Action SignalPlayingStateEnter;
@@ -123,10 +124,9 @@ public class GameManager : MonoBehaviour {
 
 	private void End_UpdateState() {
 		playerController.OnGameOverUpdateState();
-		playerController.SetState(Player_Controller.PlayerState.GameOver);
-		SetState(GameState.End);
-		Debug.Log ("Game over menu updated");
-
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			SceneManager.LoadScene("Main");
+		}
 	}
 
 	private void Playing_EnterState() {
