@@ -196,22 +196,22 @@ public class Player_Controller : MonoBehaviour
 
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			if (transform.position.y > _yCenter - 4) {
-				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+				if (Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow)) {
 					_yPos -= .065f;
 				}
 			}
 
 			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
-				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+				if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)) {
 					_yPos += .065f;
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
-			if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow)) {
 				_yPos -= .065f;
 			}
 
-			if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
+			if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)) {
 				_yPos += .065f;
 			}
 		}
