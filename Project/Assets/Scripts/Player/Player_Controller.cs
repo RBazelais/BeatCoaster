@@ -95,6 +95,14 @@ public class Player_Controller : MonoBehaviour
 			instance = this;
 	}
 
+	private void OnUpTouch() {
+		_yPos += .065f;
+	}
+
+	private void OnDownTouch() {
+		_yPos -= .065f;
+	}
+
 	public void OnEnemyCollected(Enemy enemy) {
 		_col.OnEnemyCollected(enemy);
 	}
@@ -137,6 +145,18 @@ public class Player_Controller : MonoBehaviour
 		ActivateAllTrails ();
 	}
 
+
+	public void OnDropButtonPressed() {
+		Debug.Log("bha");
+		if(_playerState == PlayerState.Idle)
+		{
+			if(_hitSpaceForDrop)
+			{
+				_dropHit = true;
+			}
+		}
+	}
+
 	public void OnTitleUpdateState ()
 	{
 
@@ -144,8 +164,19 @@ public class Player_Controller : MonoBehaviour
 
 	public void OnPlayingEnterState ()
 	{
+		TouchInput.instance.EnableInput();
+
 		DeactivateAllTrails ();
 		_bassTrailRenderer.ActivateTrail ();
+		TouchInput.instance.SignalUp += OnUpTouch;
+		TouchInput.instance.SignalDown += OnDownTouch;
+	}
+
+	public void OnPlayingExitState() {
+		TouchInput.instance.DisableInput();
+
+		TouchInput.instance.SignalUp -= OnUpTouch;
+		TouchInput.instance.SignalDown -= OnDownTouch;
 	}
 
 	public void OnPlayingUpdateState ()
@@ -163,29 +194,24 @@ public class Player_Controller : MonoBehaviour
 			}
 		}
 
-		bool input = false;
 		if (_playerState == PlayerState.Active || _playerState == PlayerState.Idle) {
 			if (transform.position.y > _yCenter - 4) {
 				if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-					input = true;
 					_yPos -= .065f;
 				}
 			}
 
 			if (transform.position.y < _yCenter + 11.5f - (1 * ActiveTrails ())) {
 				if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-					input = true;
 					_yPos += .065f;
 				}
 			}
 		} else if (_playerState == PlayerState.Drop) {
 			if (Input.GetKey (KeyCode.S) || Input.GetKeyDown (KeyCode.DownArrow)) {
-				input = true;
 				_yPos -= .065f;
 			}
 
 			if (Input.GetKey (KeyCode.W) || Input.GetKeyDown (KeyCode.UpArrow)) {
-				input = true;
 				_yPos += .065f;
 			}
 		}

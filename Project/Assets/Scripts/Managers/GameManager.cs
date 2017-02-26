@@ -100,6 +100,13 @@ public class GameManager : MonoBehaviour {
 		mainCamera.DOOrthoSize(2f, 1f);
 	}
 
+	public void OnMainMenuTapped() {
+		AudioManager.instance.PlayTracks();
+		SetState(GameState.Playing);
+		playerController.SetState(Player_Controller.PlayerState.Active);
+		playerController.StartPlaying();
+	}
+
 	private void Title_UpdateState() {
 		// Wait for player to press spacebar
 		playerController.OnTitleUpdateState();
@@ -139,6 +146,10 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public void OnGameOverMenuTapped() {
+		SceneManager.LoadScene("Main");
+	}
+
 	private void End_UpdateState() {
 		playerController.OnGameOverUpdateState();
 		if (Input.GetKeyDown(KeyCode.Space)) {
@@ -152,7 +163,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Playing_ExitState() {
-		
+		playerController.OnPlayingExitState();
 	}
 
 	private void Playing_UpdateState() {

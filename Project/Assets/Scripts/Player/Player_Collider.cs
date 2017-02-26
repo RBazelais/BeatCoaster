@@ -19,10 +19,20 @@ public class Player_Collider : MonoBehaviour
 	private float beatPunchIntensity = 0.5f;
 
 	private Enemy _currentEnemy;
+	private bool leftButtonTappedThisFrame = false;
 
 	private void Start ()
 	{
 		AudioManager.instance.BeatOnUpdate += OnBeat;
+		TouchInput.instance.SignalLeftButtonTapped += OnLeftButtonTapped;
+	}
+
+	private void OnDestroy() {
+		if (TouchInput.instance != null) TouchInput.instance.SignalLeftButtonTapped -= OnLeftButtonTapped;
+	}
+
+	private void OnLeftButtonTapped() {
+		leftButtonTappedThisFrame = true;
 	}
 
 	private void OnBeat ()
@@ -42,12 +52,16 @@ public class Player_Collider : MonoBehaviour
 		AudioManager.instance.PlaySound (hit, 0.5f);
 	}
 
-	void Update ()
+	void Update() {
+
+	}
+
+	void LateUpdate ()
 	{
 		RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 2.5f, Vector2.zero, Mathf.Infinity);
 		if (hits.Length > 0) {
 			_sprite.color = new Color(1,1,1,.85f);
-			if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
+			if (leftButtonTappedThisFrame || Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
 				bool collected = false;
 				for(int i = 0; i < hits.Length; i++) {
 					var enemy = hits[i].transform.GetComponent<Enemy>();
@@ -65,5 +79,7 @@ public class Player_Collider : MonoBehaviour
 		else {
 			_sprite.color = new Color(1,1,1,.5f);
 		}
+
+		leftButtonTappedThisFrame = false;
 	}
 }
