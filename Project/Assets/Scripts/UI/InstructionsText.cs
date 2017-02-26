@@ -8,9 +8,9 @@ public class InstructionsText : MonoBehaviour {
 
 	private void OnEnable() {
 		if (SystemInfo.deviceType == DeviceType.Handheld) {
-			text.text = "Swipe the right side up and down to move the blue track. Grow your listener count by tapping on the left side. Tap the screen to check them in when you have 5 colors. Check in most listeners before running out of energy.\n\nTap to play";
+			text.text = "Grow your listener count by tapping on the left side. Tap the right to move the blue track up and down. Tap the screen to check them in when you have 5 colors. Check in the most listeners before running out of energy.\n\nTap to play";
 		} else {
-			text.text = "Grow your listener count using arrows/W+S & shift. Press spacebar to check them in when you have 5 colors. Check in most listeners before running out of energy.\n\nPress spacebar to play";
+			text.text = "Grow your listener count by using shift or clicking the left side. Use arrows, W & S, or tap the right to move the blue track up and down. Press spacebar to check them in when you have 5 colors. Check in the most listeners before running out of energy.\n\nClick or press spacebar to play";
 		}
 	}
 }

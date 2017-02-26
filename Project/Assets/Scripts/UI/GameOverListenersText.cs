@@ -14,7 +14,7 @@ public class GameOverInfoText : MonoBehaviour {
 		if (SystemInfo.deviceType == DeviceType.Handheld) {
 			devicePromptText = "Tap to continue";
 		} else {
-			devicePromptText = "Press spacebar to continue";
+			devicePromptText = "Click or press spacebar to continue";
 		}
 		UpdateText ();
 	}
