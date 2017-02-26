@@ -8,34 +8,15 @@ public class GameOverInfoText : MonoBehaviour {
 	private string infoString;
 	private string venueName;
 	private string venueLocation;
+	private string devicePromptText;
 
 	private void OnEnable() {
-		PersonManager.instance.SignalPersonAddedToCollection += OnListenerAdded;
-		PersonManager.instance.SignalPersonRemovedFromCollection += OnListenerRemoved;
-		GameManager.instance.SignalPlayingStateEnter += OnPlayingStateEnter;
-	}
-
-	private void OnDisable() {
-		if (PersonManager.instance != null) {
-			PersonManager.instance.SignalPersonAddedToCollection -= OnListenerAdded;
-			PersonManager.instance.SignalPersonRemovedFromCollection -= OnListenerRemoved;
+		if (SystemInfo.deviceType == DeviceType.Handheld) {
+			devicePromptText = "Tap to continue";
+		} else {
+			devicePromptText = "Press spacebar to continue";
 		}
-		if (GameManager.instance != null) {
-			GameManager.instance.SignalPlayingStateEnter -= OnPlayingStateEnter;
-		}
-	}
-
-	private void OnPlayingStateEnter() {
-		UpdateText();
-	}
-
-	private void OnListenerAdded() {
-		UpdateText();
-	}
-
-	private void OnListenerRemoved() {
-		UpdateText();
-
+		UpdateText ();
 	}
 
 	private void UpdateText() {
@@ -45,7 +26,7 @@ public class GameOverInfoText : MonoBehaviour {
 	private string GetString() {
 
 		if (GameManager.instance.droppedListeners == 0) {
-			infoString = "That's not enough to fill anything. Yikes.\n\nPress spacebar to continue";
+			infoString = "That's not enough to fill anything. Yikes.\n\n";
 		} else if (GameManager.instance.droppedListeners <= 300) {
 			venueName = "the historic, now-closed CBGB";
 			venueLocation = "New York, New York";
@@ -79,8 +60,10 @@ public class GameOverInfoText : MonoBehaviour {
 		}
 
 		if (GameManager.instance.droppedListeners != 0) {
-			infoString = "That's enough to fill " + venueName + " in " + venueLocation + ".\n\nPress spacebar to continue";
+			infoString = "That's enough to fill " + venueName + " in " + venueLocation + ".\n\n";
 		}
+
+		infoString += devicePromptText;
 
 		return infoString;
 	}
